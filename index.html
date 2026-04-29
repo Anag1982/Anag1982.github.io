@@ -167,7 +167,7 @@
     .pub-links a { font-size: 0.8rem; color: #1a56a0; font-weight: 500; }
 
     /* ── Teaching ── */
-    .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .course-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
     .course-card {
       background: #fff;
       border: 1px solid #e5e5e0;
@@ -213,6 +213,9 @@
     .footer-copy { font-size: 0.8rem; color: #aaa; }
 
     /* ── Responsive ── */
+    @media (max-width: 780px) {
+      .course-grid { grid-template-columns: 1fr 1fr; }
+    }
     @media (max-width: 620px) {
       .about-grid { grid-template-columns: 1fr; }
       .photo-placeholder { display: none; }
@@ -244,19 +247,20 @@
       <div class="about-grid">
         <div>
           <h1 class="about-name">Avishek Nag</h1>
-          <p class="about-title">Associate Professor</p>
-          <p class="about-institution">University College Dublin</p>
+          <p class="about-title">Associate Professor · School of Computer Science</p>
+          <p class="about-institution">University College Dublin, Ireland</p>
           <p class="about-bio">
-            I am an Associate Professor at University College Dublin. My research and teaching span [your research areas — e.g., machine learning, network systems, etc.]. I am interested in [key themes or questions that drive your work]. My work has appeared in [key venues].
+            I am an Associate Professor in the School of Computer Science at University College Dublin. I received my BE (Hons) from Jadavpur University (2005), MTech from IIT Kharagpur (2007), and PhD from the University of California, Davis (2012). I have authored over 100 publications across journals, conference proceedings, and book chapters.
           </p>
           <p class="about-bio" style="margin-top:-0.5rem;">
-            I am currently [open to PhD applications / supervising X students / working on X project]. Feel free to get in touch if you share similar interests.
+            My research interests include cross-layer optimisation in wired and wireless networks, network reliability, mathematics of networks (optimisation, graph theory), network virtualisation, software-defined networks, machine learning, data analytics, and quantum communication. I am a Senior Member of IEEE. I am currently supervising several PhD students and welcome enquiries from prospective researchers.
           </p>
           <div class="about-links">
-            <a href="mailto:biddutheiitian@gmail.com" class="btn btn-primary">Contact</a>
-            <a href="#publications" class="btn btn-outline">Publications</a>
-            <a href="cv.pdf" class="btn btn-outline">CV (PDF)</a>
-            <a href="https://scholar.google.com" class="btn btn-outline" target="_blank">Google Scholar</a>
+            <a href="mailto:avishek.nag@ucd.ie" class="btn btn-primary">Contact</a>
+            <a href="https://scholar.google.com/citations?user=edSZ2bQAAAAJ&hl=en" class="btn btn-outline" target="_blank">Google Scholar</a>
+            <a href="https://orcid.org/0000-0003-1702-1492" class="btn btn-outline" target="_blank">ORCID</a>
+            <a href="https://www.linkedin.com/in/avisheknag" class="btn btn-outline" target="_blank">LinkedIn</a>
+            <a href="https://avisheknag.wordpress.com" class="btn btn-outline" target="_blank">Blog</a>
           </div>
         </div>
         <div>
@@ -278,24 +282,24 @@
       <h2 class="section-heading">News &amp; Updates</h2>
       <ul class="news-list">
         <li class="news-item">
-          <span class="news-date">Apr 2026</span>
-          <span class="news-text"><strong>New paper accepted</strong> — [Paper title] accepted at [Conference/Journal]. [Optional one-line description.]</span>
+          <span class="news-date">2026</span>
+          <span class="news-text"><strong>New journal papers</strong> — Two papers published in <em>IEEE Transactions on Green Communications and Networking</em> and <em>Journal of Lightwave Technology</em> on hybrid quantum-classical optical networks.</span>
         </li>
         <li class="news-item">
-          <span class="news-date">Mar 2026</span>
-          <span class="news-text"><strong>Grant awarded</strong> — Received funding from [Funding body] for [Project name].</span>
+          <span class="news-date">2025</span>
+          <span class="news-text"><strong>Grant awarded</strong> — Enterprise Ireland funding (€12,500) received for the 6G-CoDT project: Leveraging 6G for Collaborative Digital Twins in Evolving Scenarios (2025–2027).</span>
         </li>
         <li class="news-item">
-          <span class="news-date">Jan 2026</span>
-          <span class="news-text"><strong>New module</strong> — Delivering [Module name] to [cohort] students in Semester 2, 2025/26.</span>
+          <span class="news-date">2025</span>
+          <span class="news-text"><strong>Promoted to Associate Professor</strong> — Appointed Associate Professor in the School of Computer Science at University College Dublin.</span>
         </li>
         <li class="news-item">
-          <span class="news-date">Nov 2025</span>
-          <span class="news-text"><strong>Invited talk</strong> — Presented at [Conference/Workshop], [Location].</span>
+          <span class="news-date">2023</span>
+          <span class="news-text"><strong>Horizon Europe grant</strong> — Awarded €216,028 as part of the QUADRATURE project on scalable multi-chip quantum architectures (2023–2027).</span>
         </li>
         <li class="news-item">
-          <span class="news-date">Sep 2025</span>
-          <span class="news-text"><strong>PhD student</strong> — Welcome to [Student name] who joins the group as a PhD student.</span>
+          <span class="news-date">2023</span>
+          <span class="news-text"><strong>New modules</strong> — Now coordinating Team Software Project, Distributed Systems, and Software Engineering at UCD.</span>
         </li>
       </ul>
     </div>
@@ -308,49 +312,62 @@
       <ul class="pub-list">
 
         <li class="pub-item">
-          <p class="pub-title">Title of your most recent paper goes here</p>
-          <p class="pub-authors">A. Nag, Co-Author One, Co-Author Two</p>
-          <p class="pub-venue"><strong>Journal / Conference Name</strong>, Year.</p>
+          <p class="pub-title">An Unsupervised Machine Learning to Optimize Hybrid Quantum Noise Clusters for Gaussian Quantum Channel</p>
+          <p class="pub-authors">M. Chakraborty, A. Mukherjee, I. Krikidis, A. Nag, S. Chandra</p>
+          <p class="pub-venue"><strong>IEEE Transactions on Green Communications and Networking</strong>, vol. 10, pp. 440–456, 2026.</p>
           <div class="pub-links">
-            <a href="#">PDF</a>
-            <a href="#">DOI</a>
-            <a href="#">Abstract</a>
+            <a href="https://doi.org/10.1109/TGCN.2025.3587144" target="_blank">DOI</a>
           </div>
         </li>
 
         <li class="pub-item">
-          <p class="pub-title">Title of second paper goes here</p>
-          <p class="pub-authors">A. Nag, Co-Author One</p>
-          <p class="pub-venue"><strong>Journal / Conference Name</strong>, Year.</p>
+          <p class="pub-title">Synergistic Resource Allocation for Hybrid Quantum-Classical Optical Networks: Routing, Wavelength Assignment, and Power Configuration</p>
+          <p class="pub-authors">Y. Liu, X. Yu, Y. Zhao, Y. Cao, A. Nag, J. Zhang</p>
+          <p class="pub-venue"><strong>Journal of Lightwave Technology</strong>, pp. 1–17, 2026.</p>
           <div class="pub-links">
-            <a href="#">PDF</a>
-            <a href="#">DOI</a>
+            <a href="https://doi.org/10.1109/jlt.2026.3673939" target="_blank">DOI</a>
           </div>
         </li>
 
         <li class="pub-item">
-          <p class="pub-title">Title of third paper goes here</p>
-          <p class="pub-authors">Co-Author One, A. Nag, Co-Author Two</p>
-          <p class="pub-venue"><strong>Journal / Conference Name</strong>, Year.</p>
+          <p class="pub-title">Time-Scheduled End-to-End Entanglement Establishment in Memory-Cell-Limited Quantum Networks</p>
+          <p class="pub-authors">Y. Wang, X. Yu, Y. Zhao, Y. Cao, A. Nag, J. Zhang</p>
+          <p class="pub-venue"><strong>IEEE Transactions on Networking</strong>, vol. 33, no. 5, pp. 2224–2240, 2025.</p>
           <div class="pub-links">
-            <a href="#">PDF</a>
-            <a href="#">DOI</a>
+            <a href="https://doi.org/10.1109/ton.2025.3557820" target="_blank">DOI</a>
           </div>
         </li>
 
         <li class="pub-item">
-          <p class="pub-title">Title of fourth paper goes here</p>
-          <p class="pub-authors">A. Nag, Co-Author One, Co-Author Two, Co-Author Three</p>
-          <p class="pub-venue"><strong>Journal / Conference Name</strong>, Year.</p>
+          <p class="pub-title">Advancing 6G: Survey for Explainable AI on Communications and Network Slicing</p>
+          <p class="pub-authors">H. Sun, Y. Liu, A. Al-Tahmeesschi, A. Nag, M. Soleimanpour, B. Canberk, et al.</p>
+          <p class="pub-venue"><strong>IEEE Open Journal of the Communications Society</strong>, vol. 6, pp. 1372–1412, 2025.</p>
           <div class="pub-links">
-            <a href="#">PDF</a>
-            <a href="#">DOI</a>
+            <a href="https://doi.org/10.1109/OJCOMS.2025.3534626" target="_blank">DOI</a>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <p class="pub-title">Optimized Resource Allocation for Cloud-Native 6G Networks: Zero-Touch ML Models in Microservices-Based VNF Deployments</p>
+          <p class="pub-authors">S. B. Chetty, A. Nag, A. Al-Tahmeesschi, Q. Wang, B. Canberk, J. Marquez-Barja, H. Ahmadi</p>
+          <p class="pub-venue"><strong>IEEE Network</strong>, vol. 39, no. 4, pp. 235–243, 2025.</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1109/MNET.2024.3486623" target="_blank">DOI</a>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <p class="pub-title">An Overview on Application of Machine Learning Techniques in Optical Networks</p>
+          <p class="pub-authors">F. Musumeci, C. Rottondi, A. Nag, I. Macaluso, D. Zibar, M. Ruffini, M. Tornatore</p>
+          <p class="pub-venue"><strong>IEEE Communications Surveys &amp; Tutorials</strong>, vol. 21, no. 2, pp. 1383–1408, 2019.</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1109/COMST.2018.2880039" target="_blank">DOI</a>
           </div>
         </li>
 
       </ul>
       <p style="margin-top:1.5rem; font-size:0.875rem; color:#888;">
-        Full list on <a href="https://scholar.google.com" target="_blank">Google Scholar</a>.
+        Full publication list (100+) on <a href="https://scholar.google.com/citations?user=edSZ2bQAAAAJ&hl=en" target="_blank">Google Scholar</a>.
       </p>
     </div>
   </section>
@@ -360,32 +377,44 @@
     <div class="container">
       <h2 class="section-heading">Teaching</h2>
       <p style="font-size:0.925rem; color:#555; margin-bottom:1.6rem;">
-        I teach at both undergraduate and postgraduate level at University College Dublin. Current and recent modules are listed below.
+        I teach at undergraduate and postgraduate level in the School of Computer Science at UCD, and currently supervise seven PhD students. Current modules are listed below.
       </p>
       <div class="course-grid">
 
         <div class="course-card">
-          <p class="course-code">COMP XXXX</p>
-          <p class="course-title">Module Title One</p>
-          <p class="course-meta">Undergraduate · Spring 2026</p>
+          <p class="course-code">Current · 2023–2026</p>
+          <p class="course-title">Team Software Project</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
         </div>
 
         <div class="course-card">
-          <p class="course-code">COMP XXXX</p>
-          <p class="course-title">Module Title Two</p>
-          <p class="course-meta">Postgraduate · Autumn 2025</p>
+          <p class="course-code">Current · 2023–2026</p>
+          <p class="course-title">Distributed Systems</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
         </div>
 
         <div class="course-card">
-          <p class="course-code">COMP XXXX</p>
-          <p class="course-title">Module Title Three</p>
-          <p class="course-meta">Undergraduate · Autumn 2025</p>
+          <p class="course-code">Current · 2023–2026</p>
+          <p class="course-title">Software Engineering</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
         </div>
 
         <div class="course-card">
-          <p class="course-code">COMP XXXX</p>
-          <p class="course-title">Module Title Four</p>
-          <p class="course-meta">Postgraduate · Spring 2025</p>
+          <p class="course-code">Previous · 2017–2024</p>
+          <p class="course-title">Wireless &amp; Digital Communications</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Previous · 2017–2024</p>
+          <p class="course-title">Microcontrollers</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Previous · 2022–2023</p>
+          <p class="course-title">Circuits and Systems</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
         </div>
 
       </div>
@@ -400,29 +429,38 @@
 
         <li class="project-item">
           <p class="project-title">
-            Project / Grant Title One
+            6G-CoDT: Leveraging 6G for Collaborative Digital Twins in Evolving Scenarios
             <span class="badge badge-active">Active</span>
           </p>
-          <p class="project-meta">Funded by [Funding Body] · [Amount] · [Start year]–[End year]</p>
-          <p class="project-desc">Brief description of the project, its goals, and key outcomes or deliverables. Two to three sentences is sufficient.</p>
+          <p class="project-meta">Enterprise Ireland · €12,500 · 2025–2027</p>
+          <p class="project-desc">Investigates how 6G network capabilities can underpin real-time, collaborative digital twin deployments across dynamic and evolving network scenarios.</p>
         </li>
 
         <li class="project-item">
           <p class="project-title">
-            Project / Grant Title Two
+            QUADRATURE: Scalable Multi-Chip Quantum Architectures Enabled by Cryogenic Wireless / Quantum-Coherent Network-in-Package
             <span class="badge badge-active">Active</span>
           </p>
-          <p class="project-meta">Funded by [Funding Body] · [Amount] · [Start year]–[End year]</p>
-          <p class="project-desc">Brief description of the project, its goals, and key outcomes or deliverables. Two to three sentences is sufficient.</p>
+          <p class="project-meta">Horizon Europe · €216,028 · 2023–2027</p>
+          <p class="project-desc">Addresses the fundamental challenge of scaling quantum computing architectures by developing cryogenic wireless and quantum-coherent network-in-package technologies to connect multiple quantum processor chips.</p>
         </li>
 
         <li class="project-item">
           <p class="project-title">
-            Project / Grant Title Three
+            ATLANTIC-eVISION: Cross-Atlantic Experimental Validation of Intelligent SDN-controlled IoT Networks
             <span class="badge badge-completed">Completed</span>
           </p>
-          <p class="project-meta">Funded by [Funding Body] · [Amount] · [Start year]–[End year]</p>
-          <p class="project-desc">Brief description of the project, its goals, and key outcomes or deliverables.</p>
+          <p class="project-meta">Horizon 2020 · €57,128 · 2021–2022</p>
+          <p class="project-desc">Validated intelligent, software-defined networking approaches for IoT across cross-Atlantic EU–US experimental testbeds, demonstrating real-world interoperability and network performance.</p>
+        </li>
+
+        <li class="project-item">
+          <p class="project-title">
+            UCD School Funded Research Scholarships
+            <span class="badge badge-completed">Completed</span>
+          </p>
+          <p class="project-meta">University College Dublin · €161,333 · 2020–2024</p>
+          <p class="project-desc">School-funded PhD scholarships supporting postgraduate research in network systems, quantum communications, and machine learning for networks.</p>
         </li>
 
       </ul>
@@ -435,7 +473,7 @@
       <div class="footer-inner">
         <div>
           <p class="footer-name">Avishek Nag</p>
-          <p class="footer-email">biddutheiitian@gmail.com</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
         </div>
         <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
       </div>
