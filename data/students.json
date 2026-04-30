@@ -2,41 +2,41 @@
   {
     "name": "Amartya Das",
     "degree": "PhD",
-    "since": "2023",
+    "since": "2022",
     "area": "Reconfigurable Intelligent Surfaces and Next-Generation RF Systems",
     "bio": "Amartya's research focuses on the design and characterisation of tunable absorber unit cells for Reconfigurable Intelligent Surfaces (RIS), with applications in energy harvesting, beam steering, and intelligent radar systems. His work on PIN diode-integrated X-band absorbers advances compact, multi-functional RIS platforms for next-generation wireless communications. He is broadly interested in electromagnetic metasurface design and its role in future 6G RF systems.",
     "photo": "students/amartya-das.jpeg",
     "email": "amartya.das@ucdconnect.ie",
-    "linkedin": "https://www.linkedin.com/in/amartya-das-668055b5/"
+    "linkedin": ""
   },
   {
     "name": "Ruining Fan",
     "degree": "PhD",
-    "since": "2025",
+    "since": "2022",
     "area": "Quantum Computing and Machine Learning for Wireless Communications",
     "bio": "Ruining's research spans quantum computing and deep learning for next-generation wireless networks. His work includes the design of Grover's search-inspired Quantum Reinforcement Learning (QRL) frameworks for massive MIMO user scheduling, demonstrating significant gains over classical and quantum neural network baselines. He also works on budget-aware federated learning architectures for communication-efficient channel estimation in hybrid mmWave MIMO systems.",
     "photo": "students/ruining-fan.jpeg",
     "email": "ruining.fan@ucdconnect.ie",
-    "linkedin": "https://www.linkedin.com/in/ruining-fan-96b55031b/"
+    "linkedin": ""
   },
   {
     "name": "Jiawei Chen",
     "degree": "PhD",
-    "since": "2025",
+    "since": "2023",
     "area": "Federated Learning and Channel Estimation for mmWave Massive MIMO",
     "bio": "Jiawei's research focuses on communication-efficient machine learning for wireless systems, with a particular emphasis on federated dual-side channel state information (CSI) estimation in hybrid millimeter-wave massive MIMO. He developed BARRNet, a budget-aware recalibrated refinement network that achieves a superior NMSE–communication tradeoff under standard federated averaging, reducing cumulative communication overhead by up to 28.9% relative to architecture-matched baselines.",
     "photo": "students/jiawei-chen.jpeg",
     "email": "jiawei.chen@ucdconnect.ie",
-    "linkedin": "https://www.linkedin.com/in/jiawei-chen-013bba3ab/"
+    "linkedin": ""
   },
   {
     "name": "Probal Bose",
     "degree": "PhD",
-    "since": "2025",
+    "since": "2023",
     "area": "Financial Technology, High-Frequency Trading and Market Microstructure",
     "bio": "Probal's research sits at the intersection of computer science and financial markets. His PhD investigates how high-frequency trading (HFT) activity generates and exploits short-lived arbitrage opportunities in limit order book dynamics, drawing on mathematical frameworks including Hawkes processes, rough volatility models, and transfer entropy to characterise order flow and price discovery. He is interested in applying data-driven and network-theoretic methods to understand market microstructure in both traditional equity and cryptocurrency markets.",
     "photo": "students/probal-bose.jpeg",
-    "email": "probal.bose@ucdconnect.ie",
-    "linkedin": "https://www.linkedin.com/in/probal-bose-principal-site-reliability-engineer/"
+    "email": "",
+    "linkedin": ""
   }
 ]
