@@ -59,7 +59,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center top;
+      object-position: center 20%;
       display: block;
     }
     .student-photo-placeholder {
@@ -164,6 +164,10 @@
         <span>Photo coming soon</span>
       </div>`;
 
+    function photoError(img) {
+      img.parentElement.innerHTML = PLACEHOLDER_SVG;
+    }
+
     function renderStudent(s) {
       const degreeLabel = `${s.degree} Student · Since ${s.since}`;
       const links = [];
@@ -172,8 +176,7 @@
       const linksHtml = links.length ? `<div class="student-links">${links.join('')}</div>` : '';
 
       const photoHtml = s.photo
-        ? `<img src="${s.photo}" alt="${s.name}"
-             onerror="this.parentElement.innerHTML='${PLACEHOLDER_SVG.replace(/`/g,"'").replace(/\n/g,' ')}'"/>`
+        ? `<img src="${s.photo}" alt="${s.name}" onerror="photoError(this)">`
         : PLACEHOLDER_SVG;
 
       return `
