@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Group — Avishek Nag, UCD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Inter', sans-serif; background: #fafaf8; color: #1a1a1a; line-height: 1.7; }
+    a { color: #1a56a0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e8e8e4;
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .nav-brand { font-family: 'Lora', serif; font-weight: 600; font-size: 1.05rem; color: #1a1a1a; letter-spacing: -0.01em; text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.875rem; font-weight: 500; color: #444; letter-spacing: 0.01em; }
+    .nav-links a:hover, .nav-links a.active { color: #1a56a0; text-decoration: none; }
+
+    /* ── Page header ── */
+    .page-header { padding: 4rem 0 2.5rem; }
+    .page-title { font-family: 'Lora', serif; font-size: 2rem; font-weight: 600; letter-spacing: -0.02em; color: #111; margin-bottom: 0.75rem; }
+    .page-intro { font-size: 0.975rem; color: #444; max-width: 640px; line-height: 1.8; }
+
+    /* ── Section ── */
+    section { padding: 2.5rem 0; border-top: 1px solid #e8e8e4; }
+    .section-heading { font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 600; color: #111; margin-bottom: 1.8rem; letter-spacing: -0.015em; }
+
+    /* ── Student grid ── */
+    .student-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; }
+
+    .student-card {
+      background: #fff;
+      border: 1px solid #e5e5e0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .student-photo-wrap {
+      width: 100%;
+      height: 220px;
+      background: #e4e8f0;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .student-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .student-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #edf0f5;
+    }
+    .student-photo-placeholder svg { opacity: 0.3; }
+    .student-photo-placeholder span { font-size: 0.72rem; color: #aaa; }
+
+    .student-body { padding: 1.3rem 1.4rem; flex: 1; }
+    .student-name { font-size: 1rem; font-weight: 600; color: #111; margin-bottom: 0.2rem; }
+    .student-degree {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+      text-transform: uppercase; color: #1a56a0; margin-bottom: 0.3rem;
+    }
+    .student-area { font-size: 0.875rem; color: #555; font-style: italic; margin-bottom: 0.7rem; }
+    .student-bio { font-size: 0.875rem; color: #444; line-height: 1.75; margin-bottom: 0.8rem; }
+    .student-links { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .student-links a { font-size: 0.8rem; color: #1a56a0; font-weight: 500; }
+
+    /* ── Loading / error states ── */
+    .loading { font-size: 0.9rem; color: #aaa; padding: 1rem 0; }
+    .error-msg { font-size: 0.875rem; color: #b94040; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid #e8e8e4; padding: 2.5rem 0; margin-top: 2rem; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-name { font-family: 'Lora', serif; font-size: 0.95rem; color: #111; }
+    .footer-addr { font-size: 0.85rem; color: #888; }
+    .footer-copy { font-size: 0.8rem; color: #aaa; }
+
+    @media (max-width: 620px) {
+      .student-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-brand">Avishek Nag</a>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#news">News</a></li>
+        <li><a href="index.html#publications">Publications</a></li>
+        <li><a href="index.html#teaching">Teaching</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="research-group.html" class="active">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-title">Research Group</h1>
+      <p class="page-intro">
+        I supervise a group of PhD and Research Masters students working across quantum communications, 6G networks, machine learning, and network optimisation. If you are interested in joining the group, please <a href="mailto:avishek.nag@ucd.ie">get in touch</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Current Students -->
+  <section>
+    <div class="container">
+      <h2 class="section-heading">Current Students</h2>
+      <div id="students-container" class="student-grid">
+        <p class="loading">Loading students…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-addr">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Fallback SVG for missing student photos
+    const PLACEHOLDER_SVG = `
+      <div class="student-photo-placeholder">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Photo coming soon</span>
+      </div>`;
+
+    function renderStudent(s) {
+      const degreeLabel = `${s.degree} Student · Since ${s.since}`;
+      const links = [];
+      if (s.email) links.push(`<a href="mailto:${s.email}">Email</a>`);
+      if (s.linkedin) links.push(`<a href="${s.linkedin}" target="_blank">LinkedIn</a>`);
+      const linksHtml = links.length ? `<div class="student-links">${links.join('')}</div>` : '';
+
+      const photoHtml = s.photo
+        ? `<img src="${s.photo}" alt="${s.name}"
+             onerror="this.parentElement.innerHTML='${PLACEHOLDER_SVG.replace(/`/g,"'").replace(/\n/g,' ')}'"/>`
+        : PLACEHOLDER_SVG;
+
+      return `
+        <div class="student-card">
+          <div class="student-photo-wrap">${photoHtml}</div>
+          <div class="student-body">
+            <p class="student-name">${s.name}</p>
+            <p class="student-degree">${degreeLabel}</p>
+            <p class="student-area">${s.area}</p>
+            <p class="student-bio">${s.bio}</p>
+            ${linksHtml}
+          </div>
+        </div>`;
+    }
+
+    async function loadStudents() {
+      const container = document.getElementById('students-container');
+      try {
+        const res = await fetch('data/students.json');
+        if (!res.ok) throw new Error('fetch failed');
+        const students = await res.json();
+        container.innerHTML = students.map(renderStudent).join('');
+      } catch (e) {
+        container.innerHTML = '<p class="error-msg">Could not load student data. Make sure <code>data/students.json</code> is present in the repository.</p>';
+      }
+    }
+
+    loadStudents();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Amartya Das",
+    "degree": "PhD",
+    "since": "2022",
+    "area": "Quantum Computing and Quantum Hardware",
+    "bio": "Placeholder biography — 2–3 sentences describing Amartya's background, thesis focus, and key research interests.",
+    "photo": "students/amartya-das.jpg",
+    "email": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Ruining Fan",
+    "degree": "PhD",
+    "since": "2022",
+    "area": "Machine Learning for Wireless Communications",
+    "bio": "Placeholder biography — 2–3 sentences describing Ruining's background, thesis focus, and key research interests.",
+    "photo": "students/ruining-fan.jpg",
+    "email": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Jiawei Chen",
+    "degree": "PhD",
+    "since": "2023",
+    "area": "Placeholder Research Area (e.g., Network Optimisation, 6G, Quantum Networks)",
+    "bio": "Placeholder biography — 2–3 sentences describing Jiawei's background, thesis focus, and key research interests.",
+    "photo": "students/jiawei-chen.jpg",
+    "email": "",
+    "linkedin": ""
+  },
+  {
+    "name": "Probal Bose",
+    "degree": "PhD",
+    "since": "2023",
+    "area": "Placeholder Research Area (e.g., Deep Learning, SDN, Optical Networks)",
+    "bio": "Placeholder biography — 2–3 sentences describing Probal's background, thesis focus, and key research interests.",
+    "photo": "students/probal-bose.jpg",
+    "email": "",
+    "linkedin": ""
+  }
+]

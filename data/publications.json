@@ -1,0 +1,866 @@
+[
+  {
+    "title": "An Unsupervised Machine Learning to Optimize Hybrid Quantum Noise Clusters for Gaussian Quantum Channel",
+    "authors": "M. Chakraborty, A. Mukherjee, I. Krikidis, A. Nag, S. Chandra",
+    "venue": "IEEE Transactions on Green Communications and Networking",
+    "details": "vol. 10, pp. 440–456, 2026",
+    "year": 2026,
+    "type": "journal",
+    "doi": "10.1109/TGCN.2025.3587144"
+  },
+  {
+    "title": "Synergistic Resource Allocation for Hybrid Quantum-Classical Optical Networks: Routing, Wavelength Assignment, and Power Configuration",
+    "authors": "Y. Liu, X. Yu, Y. Zhao, Y. Cao, A. Nag, J. Zhang",
+    "venue": "Journal of Lightwave Technology",
+    "details": "pp. 1–17, 2026",
+    "year": 2026,
+    "type": "journal",
+    "doi": "10.1109/jlt.2026.3673939"
+  },
+  {
+    "title": "Quantum-aware Routing and Wavelength Assignment for Classical Traffic in Hybrid Quantum-Classical Optical Networks",
+    "authors": "Y. Liu, X. Yu, Y. Cao, A. Nag, Y. Zhao",
+    "venue": "Optics Express",
+    "details": "vol. 33, no. 24, pp. 50519–50536, 2025",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1364/oe.578673"
+  },
+  {
+    "title": "Time-Scheduled End-to-End Entanglement Establishment in Memory-Cell-Limited Quantum Networks",
+    "authors": "Y. Wang, X. Yu, Y. Zhao, Y. Cao, A. Nag, J. Zhang",
+    "venue": "IEEE Transactions on Networking",
+    "details": "vol. 33, no. 5, pp. 2224–2240, 2025",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1109/ton.2025.3557820"
+  },
+  {
+    "title": "A Systematic Analysis of Meteorological Parameters in Predicting Rainfall Events",
+    "authors": "M. S. Pathan, P. Nadella, Y. Ul Haq, S. Chaudhury, J. Wu, A. Nag, S. Dev",
+    "venue": "IEEE Access",
+    "details": "vol. 13, pp. 111529–111541, 2025",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1109/ACCESS.2025.3573091"
+  },
+  {
+    "title": "Optimized Resource Allocation for Cloud-Native 6G Networks: Zero-Touch ML Models in Microservices-Based VNF Deployments",
+    "authors": "S. B. Chetty, A. Nag, A. Al-Tahmeesschi, Q. Wang, B. Canberk, J. Marquez-Barja, H. Ahmadi",
+    "venue": "IEEE Network",
+    "details": "vol. 39, no. 4, pp. 235–243, 2025",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1109/MNET.2024.3486623"
+  },
+  {
+    "title": "A Hybrid Noise Approach to Modeling of Free-Space Satellite Quantum Communication Channel for Continuous-Variable QKD",
+    "authors": "M. Chakraborty, A. Mukherjee, I. Krikidis, A. Nag, S. Chandra",
+    "venue": "IEEE Transactions on Green Communications and Networking",
+    "details": "vol. 9, no. 3, pp. 1311–1325, 2025",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1109/TGCN.2024.3525297"
+  },
+  {
+    "title": "Advancing 6G: Survey for Explainable AI on Communications and Network Slicing",
+    "authors": "H. Sun, Y. Liu, A. Al-Tahmeesschi, A. Nag, M. Soleimanpour, B. Canberk, et al.",
+    "venue": "IEEE Open Journal of the Communications Society",
+    "details": "vol. 6, pp. 1372–1412, 2025",
+    "year": 2025,
+    "type": "journal",
+    "doi": "10.1109/OJCOMS.2025.3534626"
+  },
+  {
+    "title": "On the Impact of Classical and Quantum Communication Networks Upon Modular Quantum Computing Architecture System Performance",
+    "authors": "P. Escofet, A. Das, S. B. Rached, S. Rodrigo, J. Domingo, F. Sebastiano, et al.",
+    "venue": "Proceedings IEEE Quantum Week 2025 (QCE 2025)",
+    "details": "vol. 1, pp. 984–995, 2025",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.1109/QCE65121.2025.00110"
+  },
+  {
+    "title": "An Explainable AI Framework for Dynamic Resource Management in Vehicular Network Slicing",
+    "authors": "H. Sun, Y. Liu, A. Al-Tahmeesschi, S. Chetty, S. A. R. Zaidi, A. Nag, H. Ahmadi",
+    "venue": "IEEE International Symposium on Personal Indoor and Mobile Radio Communications (PIMRC)",
+    "details": "2025",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.1109/PIMRC62392.2025.11274889"
+  },
+  {
+    "title": "Investigation of a Tunable X-Band Absorber for RIS-Assisted Energy Harvesting Applications",
+    "authors": "A. Das, I. Unal, A. Nag, R. B. Staszewski",
+    "venue": "6th International Conference on Electrical Communication and Computer Engineering (ICECCE 2025)",
+    "details": "2025",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.1109/ICECCE67514.2025.11257987"
+  },
+  {
+    "title": "Quantum Deep Learning for Massive MIMO User Scheduling",
+    "authors": "X. Huang, R. Fan, M. Chakraborty, A. Nag, A. Mukherjee",
+    "venue": "IEEE Vehicular Technology Conference (VTC 2025-Fall)",
+    "details": "2025",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.1109/VTC2025-Fall65116.2025.11310669"
+  },
+  {
+    "title": "On the Achievable Rate of Satellite Quantum Communication Channel using Deep Autoencoder Gaussian Mixture Model",
+    "authors": "M. Chakraborty, S. Chandra, A. Nag, A. Mukherjee",
+    "venue": "IEEE Vehicular Technology Conference (VTC 2025-Fall)",
+    "details": "2025",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.1109/VTC2025-Fall65116.2025.11310249"
+  },
+  {
+    "title": "Demonstration of Hierarchical SDN-based Hybrid Forwarding-Negotiation Relay Strategy for End-to-End Key Provisioning in Satellite QKD Networks",
+    "authors": "J. Liu, X. Yu, Y. Cao, A. Nag, Y. Zhao, J. Zhang",
+    "venue": "23rd International Conference on Optical Communications and Networks (ICOCN 2025)",
+    "details": "pp. 1–4, 2025",
+    "year": 2025,
+    "type": "conference",
+    "doi": "10.1109/icocn67308.2025.11145399"
+  },
+  {
+    "title": "A Task-Generic High-Performance Unsupervised Pre-Training Framework for ECG",
+    "authors": "G. Wang, Q. Wang, A. Nag, D. John",
+    "venue": "IEEE Sensors Journal",
+    "details": "vol. 24, no. 13, pp. 21776–21785, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1109/JSEN.2024.3404141"
+  },
+  {
+    "title": "Autonomic End-to-End Quality-of-Service Assurance over QKD-Secured Optical Networks",
+    "authors": "Q. Zhu, X. Yu, Z. Wang, Y. Zhao, A. Nag, S. Wang, et al.",
+    "venue": "Optics Express",
+    "details": "vol. 32, no. 10, pp. 18317–18333, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1364/OE.516443"
+  },
+  {
+    "title": "Biphase Routing Scheme for Optimal Throughput in Large-Scale Optical Satellite Networks",
+    "authors": "Y. Ning, Y. Zhao, A. Nag, H. Wang, J. Zhang",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 16, no. 5, pp. 553–564, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1364/JOCN.514819"
+  },
+  {
+    "title": "QKD Key Provisioning with Multi-Level Pool Slicing for End-to-End Security Services in Optical Networks",
+    "authors": "Q. Zhu, X. Yu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "IEEE Transactions on Network Science and Engineering",
+    "details": "vol. 11, no. 2, pp. 2153–2169, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1109/TNSE.2023.3338734"
+  },
+  {
+    "title": "Dynamic Slicing of Multidimensional Resources in DCI-EON with Penalty-Aware Deep Reinforcement Learning",
+    "authors": "M. Lian, Y. Zhao, Y. Li, A. Nag, J. Zhang",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 16, no. 2, pp. 112–126, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1364/JOCN.502374"
+  },
+  {
+    "title": "A DDPG-Based Zero-Touch Dynamic Prioritization to Address Starvation of Services for Deploying Microservices-Based VNFs",
+    "authors": "S. B. Chetty, H. Ahmadi, A. Nag",
+    "venue": "IEEE Transactions on Machine Learning in Communications and Networking",
+    "details": "vol. 2, pp. 526–545, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1109/TMLCN.2024.3386152"
+  },
+  {
+    "title": "ECG Biometric Authentication Using Self-Supervised Learning for IoT Edge Sensors",
+    "authors": "G. Wang, S. Shanker, A. Nag, Y. Lian, D. John",
+    "venue": "IEEE Journal of Biomedical and Health Informatics",
+    "details": "vol. 28, no. 11, pp. 6606–6618, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1109/JBHI.2024.3455803"
+  },
+  {
+    "title": "Hybrid Quantum Noise Model to Compute Gaussian Quantum Channel Capacity",
+    "authors": "M. Chakraborty, A. Mukherjee, A. Nag, S. Chandra",
+    "venue": "IEEE Access",
+    "details": "vol. 12, pp. 14671–14689, 2024",
+    "year": 2024,
+    "type": "journal",
+    "doi": "10.1109/ACCESS.2024.3355789"
+  },
+  {
+    "title": "Digital Twins for 6G: Fundamental Theory, Technology and Applications",
+    "authors": "H. Ahmadi, T. Q. Duong, A. Nag, V. Sharma, B. Canberk, O. A. Dobre",
+    "venue": "IET (Book)",
+    "details": "2024",
+    "year": 2024,
+    "type": "book",
+    "doi": "10.1049/PBTE109E"
+  },
+  {
+    "title": "Intelligent Communication Networks: Research and Applications",
+    "authors": "R. Mahapatra, S. Bhattacharyya, A. Nag",
+    "venue": "CRC Press (Book)",
+    "details": "2024",
+    "year": 2024,
+    "type": "book",
+    "doi": "10.1201/9781003303114"
+  },
+  {
+    "title": "Dynamic Decomposition of Service Function Chain Using a Deep Reinforcement Learning Approach",
+    "authors": "S. B. Chetty, H. Ahmadi, M. Tornatore, A. Nag",
+    "venue": "Digital Twins for 6G: Fundamental Theory, Technology and Applications (Book Chapter)",
+    "details": "pp. 203–235, 2024",
+    "year": 2024,
+    "type": "book-chapter",
+    "doi": "10.1049/pbte109e_ch8"
+  },
+  {
+    "title": "Digital Twins for Resilient and Reliable 6G Networks",
+    "authors": "F. Alaklabi, A. Al-Tahmeesschi, A. Nag, H. Ahmadi",
+    "venue": "Digital Twins for 6G: Fundamental Theory, Technology and Applications (Book Chapter)",
+    "details": "pp. 1–25, 2024",
+    "year": 2024,
+    "type": "book-chapter",
+    "doi": "10.1049/pbte109e_ch1"
+  },
+  {
+    "title": "Hybrid Quantum Noise Approximation and Pattern Analysis on Parameterized Component Distributions",
+    "authors": "M. Chakraborty, A. Mukherjee, I. Krikidis, A. Nag, S. Chandra",
+    "venue": "2024 IEEE Middle East Conference on Communications and Networking (MECOM 2024)",
+    "details": "pp. 251–256, 2024",
+    "year": 2024,
+    "type": "conference",
+    "doi": "10.1109/MECOM61498.2024.10881051"
+  },
+  {
+    "title": "Fidelity-Guaranteed Entanglement Routing in Heterogeneous Multi-Domain Quantum Networks",
+    "authors": "Y. Wang, X. Yu, Y. Zhao, Y. Cao, A. Nag, J. Zhang",
+    "venue": "2024 IEEE Opto-Electronics and Communications Conference (OECC)",
+    "details": "pp. 1–3, 2024",
+    "year": 2024,
+    "type": "conference",
+    "doi": "10.1109/oecc54135.2024.10975651"
+  },
+  {
+    "title": "From Unilateral Adaptive to Bilateral Synergistic Routing and Wavelength Assignment: Enabling End-to-End QKD over Classical Optical Networks",
+    "authors": "Y. Liu, X. Yu, Y. Zhao, Q. Zhu, A. Nag, J. Zhang",
+    "venue": "ICC 2024 – IEEE International Conference on Communications",
+    "details": "pp. 497–502, 2024",
+    "year": 2024,
+    "type": "conference",
+    "doi": "10.1109/icc51166.2024.10622746"
+  },
+  {
+    "title": "Power-Scheduled Routing Strategy for Quantum Key Distribution over Classical Optical Networks",
+    "authors": "Y. Liu, X. Yu, Y. Zhao, A. Nag",
+    "venue": "2024 International Conference on Computing, Networking and Communications (ICNC)",
+    "details": "pp. 382–386, 2024",
+    "year": 2024,
+    "type": "conference",
+    "doi": "10.1109/icnc59896.2024.10556172"
+  },
+  {
+    "title": "Resource Allocation in Quantum-Key-Distribution-Secured Datacenter Networks With Cloud-Edge Collaboration",
+    "authors": "Q. Zhu, X. Yu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "IEEE Internet of Things Journal",
+    "details": "vol. 10, no. 12, pp. 10916–10932, 2023",
+    "year": 2023,
+    "type": "journal",
+    "doi": "10.1109/JIOT.2023.3242725"
+  },
+  {
+    "title": "Cognitive Software Defined Networking and Network Function Virtualization and Applications",
+    "authors": "S. Sharma, A. Nag",
+    "venue": "Future Internet",
+    "details": "vol. 15, no. 2, 2023",
+    "year": 2023,
+    "type": "journal",
+    "doi": "10.3390/fi15020078"
+  },
+  {
+    "title": "Dynamic Prioritization and Adaptive Scheduling Using Deep Deterministic Policy Gradient for Deploying Microservice-Based VNFs",
+    "authors": "S. B. Chetty, H. Ahmadi, A. Nag",
+    "venue": "IEEE International Conference on Communications (ICC 2023)",
+    "details": "vol. 2023-May, pp. 1487–1493, 2023",
+    "year": 2023,
+    "type": "conference",
+    "doi": "10.1109/ICC45041.2023.10278718"
+  },
+  {
+    "title": "Hilbert-Huang-Transform Based Features for Accent Classification of Non-Native English Speakers",
+    "authors": "D. Walsh, S. Dev, A. Nag",
+    "venue": "2023 34th Irish Signals and Systems Conference (ISSC 2023)",
+    "details": "2023",
+    "year": 2023,
+    "type": "conference",
+    "doi": "10.1109/ISSC59246.2023.10162075"
+  },
+  {
+    "title": "Time-Scheduled End-to-End Entanglement Establishment in Memory-Cells-Limited Quantum Networks",
+    "authors": "Y. Wang, X. Yu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "2023 Asia Communications and Photonics Conference (ACP/POEM 2023)",
+    "details": "2023",
+    "year": 2023,
+    "type": "conference",
+    "doi": "10.1109/ACP/POEM59049.2023.10368812"
+  },
+  {
+    "title": "Unsupervised Pre-Training Using Masked Autoencoders for ECG Analysis",
+    "authors": "G. Wang, Q. Wang, G. N. Iyer, A. Nag, D. John",
+    "venue": "2023 IEEE Biomedical Circuits and Systems Conference (BioCAS 2023)",
+    "details": "2023",
+    "year": 2023,
+    "type": "conference",
+    "doi": "10.1109/BioCAS58349.2023.10388636"
+  },
+  {
+    "title": "Pre-Established Entanglement Distribution Algorithm in Quantum Networks",
+    "authors": "Y. Wang, X. Yu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 14, no. 12, pp. 1020–1033, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1364/JOCN.465432"
+  },
+  {
+    "title": "DMCNet: Diversified Model Combination Network for Understanding Engagement from Video Screengrabs",
+    "authors": "S. Batra, H. Wang, A. Nag, P. Brodeur, M. Checkley, A. Klinkert, S. Dev",
+    "venue": "Systems and Soft Computing",
+    "details": "vol. 4, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1016/j.sasc.2022.200039"
+  },
+  {
+    "title": "Analyzing the Impact of Feature Selection on the Accuracy of Heart Disease Prediction",
+    "authors": "M. S. Pathan, A. Nag, M. M. Pathan, S. Dev",
+    "venue": "Healthcare Analytics",
+    "details": "vol. 2, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1016/j.health.2022.100060"
+  },
+  {
+    "title": "Research on Identity Authentication System of Internet of Things Based on Blockchain Technology",
+    "authors": "L. Yanhui, Z. Jianbiao, M. S. Pathan, Y. Yijian, Z. Puzhe, S. Maroc, A. Nag",
+    "venue": "Journal of King Saud University – Computer and Information Sciences",
+    "details": "vol. 34, no. 10, pp. 10365–10377, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1016/j.jksuci.2022.10.027"
+  },
+  {
+    "title": "Cross-Atlantic Experiments on EU-US Test-Beds",
+    "authors": "S. Sharma, A. Nag, B. Ramamurthy",
+    "venue": "IEEE Networking Letters",
+    "details": "vol. 4, no. 3, pp. 108–112, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1109/lnet.2022.3177712"
+  },
+  {
+    "title": "Secret-Key Provisioning With Collaborative Routing in Partially-Trusted-Relay-Based QKD-Secured Optical Networks",
+    "authors": "X. Yu, Y. Liu, X. Zou, Y. Cao, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "Journal of Lightwave Technology",
+    "details": "vol. 40, no. 12, pp. 3530–3545, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1109/JLT.2022.3153992"
+  },
+  {
+    "title": "Spectrum-Entropy-Minimized Routing and Spectrum Allocation in IP over Mixed-Fixed/Flex-Grid Optical Networks",
+    "authors": "X. Yu, L. Lu, Q. Zhu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "Photonics",
+    "details": "vol. 9, no. 6, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.3390/photonics9060428"
+  },
+  {
+    "title": "Routing and Secret Key Assignment for Secure Multicast Services in Quantum Satellite Networks",
+    "authors": "X. He, L. Li, D. Han, Y. Zhao, A. Nag, W. Wang, et al.",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 14, no. 4, pp. 190–203, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1364/JOCN.445621"
+  },
+  {
+    "title": "Future Wireless Networking Experiments Escaping Simulations",
+    "authors": "S. Sharma, S. Urumkar, G. Fontanesi, B. Ramamurthy, A. Nag",
+    "venue": "Future Internet",
+    "details": "vol. 14, no. 4, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.3390/fi14040120"
+  },
+  {
+    "title": "An Efficient Detour Computation Scheme for Electric Vehicles to Support Smart Cities' Electrification",
+    "authors": "C. Mansfield, J. Hodgkiss, S. Djahel, A. Nag",
+    "venue": "Electronics",
+    "details": "vol. 11, no. 5, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.3390/electronics11050803"
+  },
+  {
+    "title": "Dynamic Decomposition of Service Function Chain Using a Deep Reinforcement Learning Approach",
+    "authors": "S. B. Chetty, H. Ahmadi, M. Tornatore, A. Nag",
+    "venue": "IEEE Access",
+    "details": "vol. 10, pp. 111254–111271, 2022",
+    "year": 2022,
+    "type": "journal",
+    "doi": "10.1109/ACCESS.2022.3215744"
+  },
+  {
+    "title": "Sync-Sequence Based Synchronization Scheme in QKD-Secured Access Networks",
+    "authors": "A. Liu, X. Yu, Q. Zhu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "20th International Conference on Optical Communications and Networks (ICOCN 2022)",
+    "details": "2022",
+    "year": 2022,
+    "type": "conference",
+    "doi": "10.1109/ICOCN55511.2022.9901084"
+  },
+  {
+    "title": "Security Requirements for Vehicle-to-Everything (V2X) Communications Integrated with Blockchain",
+    "authors": "E. Jayatunga, A. Nag, A. D. Jurcut",
+    "venue": "2022 4th International Conference on Blockchain Computing and Applications (BCCA 2022)",
+    "details": "pp. 208–213, 2022",
+    "year": 2022,
+    "type": "conference",
+    "doi": "10.1109/BCCA55292.2022.9922372"
+  },
+  {
+    "title": "Efficient Rainfall Prediction Using a Dimensionality Reduction Method",
+    "authors": "M. S. Pathan, A. Nag, S. Dev",
+    "venue": "International Geoscience and Remote Sensing Symposium (IGARSS 2022)",
+    "details": "pp. 6737–6740, 2022",
+    "year": 2022,
+    "type": "conference",
+    "doi": "10.1109/IGARSS46834.2022.9884849"
+  },
+  {
+    "title": "Recovery Scheme with Resource Abstraction in Multi-Domain Quantum-Key-Distribution Networks",
+    "authors": "J. Lv, X. Yu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "OECC/PSC 2022 – 27th Optoelectronics and Communications Conference",
+    "details": "2022",
+    "year": 2022,
+    "type": "conference",
+    "doi": "10.23919/OECC/PSC53152.2022.9850171"
+  },
+  {
+    "title": "Networked Twins and Twins of Networks: An Overview on the Relationship between Digital Twins and 6G",
+    "authors": "H. Ahmadi, A. Nag, Z. Khar, K. Sayrafian, S. Rahardja",
+    "venue": "IEEE Communications Standards Magazine",
+    "details": "vol. 5, no. 4, pp. 154–160, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1109/MCOMSTD.0001.2000041"
+  },
+  {
+    "title": "Analysis of French Phonetic Idiosyncrasies for Accent Recognition",
+    "authors": "P. Berjon, A. Nag, S. Dev",
+    "venue": "Soft Computing Letters",
+    "details": "vol. 3, 100018, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1016/j.socl.2021.100018"
+  },
+  {
+    "title": "Virtual Network Provisioning over Mixed-Fixed/Flexible-Grid Optical Infrastructures",
+    "authors": "X. Yu, L. Lu, Y. Zhao, F. Wang, A. Nag, X. Li, J. Zhang",
+    "venue": "Electronics",
+    "details": "vol. 10, no. 17, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.3390/electronics10172067"
+  },
+  {
+    "title": "Multi-Path-Based Quasi-Real-Time Key Provisioning in Quantum-Key-Distribution Enabled Optical Networks (QKD-ON)",
+    "authors": "X. Yu, X. Liu, Y. Liu, A. Nag, X. Zou, Y. Zhao, J. Zhang",
+    "venue": "Optics Express",
+    "details": "vol. 29, no. 14, pp. 21225–21239, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1364/OE.425562"
+  },
+  {
+    "title": "Spectrum Allocation Scheme Considering Spectrum Slicing in Elastic Optical Networks",
+    "authors": "N. Kitsuwan, K. Akaki, P. Pavarangkoon, A. Nag",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 13, no. 7, pp. 169–181, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1364/JOCN.422915"
+  },
+  {
+    "title": "Auxiliary-Graph-Based Energy-Efficient Traffic Grooming in IP-Over-Fixed/Flex-Grid Optical Networks",
+    "authors": "Q. Zhu, X. Yu, Y. Zhao, A. Nag, J. Zhang",
+    "venue": "Journal of Lightwave Technology",
+    "details": "vol. 39, no. 10, pp. 3011–3024, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1109/JLT.2021.3057389"
+  },
+  {
+    "title": "Towards a Blockchain Assisted Patient Owned System for Electronic Health Records",
+    "authors": "T. Fatokun, A. Nag, S. Sharma",
+    "venue": "Electronics",
+    "details": "vol. 10, no. 5, pp. 1–14, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.3390/electronics10050580"
+  },
+  {
+    "title": "Virtual Network Function Embedding under Nodal Outage using Deep Q-Learning",
+    "authors": "S. B. Chetty, H. Ahmadi, S. Sharma, A. Nag",
+    "venue": "Future Internet",
+    "details": "vol. 13, no. 3, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.3390/fi13030082"
+  },
+  {
+    "title": "Routing, Core and Wavelength Allocation in Multi-Core-Fiber-Based QKD-Enabled Optical Networks",
+    "authors": "X. Yu, S. Li, Y. Zhao, Y. Cao, A. Nag, J. Zhang",
+    "venue": "IEEE Access",
+    "details": "vol. 9, pp. 99842–99852, 2021",
+    "year": 2021,
+    "type": "journal",
+    "doi": "10.1109/ACCESS.2021.3096879"
+  },
+  {
+    "title": "Continuous User Authentication Using IoT Wearable Sensors",
+    "authors": "C. Smyth, G. Wang, R. Panicker, A. Nag, B. Cardiff, D. John",
+    "venue": "2021 IEEE International Symposium on Circuits and Systems (ISCAS)",
+    "details": "pp. 1–5, 2021",
+    "year": 2021,
+    "type": "conference",
+    "doi": "10.1109/iscas51556.2021.9401741"
+  },
+  {
+    "title": "Analyzing Impact of Time on Early Detection of Rainfall Event",
+    "authors": "M. S. Pathan, M. Jain, A. Nag, T. A. Skaif, S. Dev",
+    "venue": "Progress in Electromagnetics Research Symposium (PIERS 2021)",
+    "details": "pp. 1985–1989, 2021",
+    "year": 2021,
+    "type": "conference",
+    "doi": "10.1109/PIERS53385.2021.9695104"
+  },
+  {
+    "title": "Identifying Stroke Indicators Using Rough Sets",
+    "authors": "M. S. Pathan, J. Zhang, D. John, A. Nag, S. Dev",
+    "venue": "IEEE Access",
+    "details": "vol. 8, pp. 210318–210327, 2020",
+    "year": 2020,
+    "type": "journal",
+    "doi": "10.1109/ACCESS.2020.3039439"
+  },
+  {
+    "title": "Elastic Optical Network with Spectrum Slicing for Fragmented Bandwidth Allocation",
+    "authors": "N. Kitsuwan, P. Pavarangkoon, A. Nag",
+    "venue": "Optical Switching and Networking",
+    "details": "vol. 38, 2020",
+    "year": 2020,
+    "type": "journal",
+    "doi": "10.1016/j.osn.2020.100583"
+  },
+  {
+    "title": "Key-Recycling Strategies in Quantum-Key-Distribution Networks",
+    "authors": "X. Li, Y. Zhao, A. Nag, X. Yu, J. Zhang",
+    "venue": "Applied Sciences",
+    "details": "vol. 10, no. 11, 2020",
+    "year": 2020,
+    "type": "journal",
+    "doi": "10.3390/app10113734"
+  },
+  {
+    "title": "Distributed Subkey-Relay-Tree-Based Secure Multicast Scheme in Quantum Data Center Networks",
+    "authors": "K. Dong, Y. Zhao, A. Nag, X. Yu, J. Zhang",
+    "venue": "Optical Engineering",
+    "details": "vol. 59, no. 6, 2020",
+    "year": 2020,
+    "type": "journal",
+    "doi": "10.1117/1.OE.59.6.065102"
+  },
+  {
+    "title": "Tree-Topology-Based Quantum-Key-Relay Strategy for Secure Multicast Services",
+    "authors": "K. Dong, Y. Zhao, T. Yang, Y. Li, A. Nag, X. Yu, J. Zhang",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 12, no. 5, pp. 120–132, 2020",
+    "year": 2020,
+    "type": "journal",
+    "doi": "10.1364/JOCN.385554"
+  },
+  {
+    "title": "Auxiliary Graph Based Routing, Wavelength, and Time-Slot Assignment in Metro Quantum Optical Networks with a Novel Node Structure",
+    "authors": "K. Dong, Y. Zhao, X. Yu, A. Nag, J. Zhang",
+    "venue": "Optics Express",
+    "details": "vol. 28, no. 5, pp. 5936–5952, 2020",
+    "year": 2020,
+    "type": "journal",
+    "doi": "10.1364/OE.380329"
+  },
+  {
+    "title": "Towards Explainable Artificial Intelligence for Network Function Virtualization",
+    "authors": "S. Sharma, A. Nag, L. Cordeiro, O. Ayoub, M. Tornatore, M. Nekovee",
+    "venue": "CoNEXT 2020 – 16th International Conference on Emerging Networking Experiments and Technologies",
+    "details": "pp. 558–559, 2020",
+    "year": 2020,
+    "type": "conference",
+    "doi": "10.1145/3386367.3431673"
+  },
+  {
+    "title": "Towards AI-Enabled Microservice Architecture for Network Function Virtualization",
+    "authors": "M. Nekovee, S. Sharma, N. Uniyal, A. Nag, R. Nejabati, D. Simeonidou",
+    "venue": "2020 8th International Conference on Communications and Networking (ComNet2020)",
+    "details": "2020",
+    "year": 2020,
+    "type": "conference",
+    "doi": "10.1109/ComNet47917.2020.9306098"
+  },
+  {
+    "title": "Blockchain for 5G and IoT: Opportunities and Challenges",
+    "authors": "T. M. Hewa, A. Kalla, A. Nag, M. E. Ylianttila, M. Liyanage",
+    "venue": "2020 8th International Conference on Communications and Networking (ComNet2020)",
+    "details": "2020",
+    "year": 2020,
+    "type": "conference",
+    "doi": "10.1109/ComNet47917.2020.9306082"
+  },
+  {
+    "title": "B-VNF: Blockchain-Enhanced Architecture for VNF Orchestration in MEC-5G Networks",
+    "authors": "R. A. Mishra, A. Kalla, K. Shukla, A. Nag, M. Liyanage",
+    "venue": "2020 IEEE 3rd 5G World Forum (5GWF 2020)",
+    "details": "pp. 229–234, 2020",
+    "year": 2020,
+    "type": "conference",
+    "doi": "10.1109/5GWF49715.2020.9221075"
+  },
+  {
+    "title": "Quantum-Key-Distribution (QKD) Networks Enabled by Software-Defined Networks (SDN)",
+    "authors": "H. Wang, Y. Zhao, A. Nag",
+    "venue": "Applied Sciences",
+    "details": "vol. 9, no. 10, 2019",
+    "year": 2019,
+    "type": "journal",
+    "doi": "10.3390/app9102081"
+  },
+  {
+    "title": "An Overview on Application of Machine Learning Techniques in Optical Networks",
+    "authors": "F. Musumeci, C. Rottondi, A. Nag, I. Macaluso, D. Zibar, M. Ruffini, M. Tornatore",
+    "venue": "IEEE Communications Surveys &amp; Tutorials",
+    "details": "vol. 21, no. 2, pp. 1383–1408, 2019",
+    "year": 2019,
+    "type": "journal",
+    "doi": "10.1109/COMST.2018.2880039"
+  },
+  {
+    "title": "Protection Schemes for Key Service in Optical Networks Secured by Quantum Key Distribution (QKD)",
+    "authors": "H. Wang, Y. Zhao, X. Yu, Z. Ma, J. Wang, A. Nag, et al.",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 11, no. 3, pp. 67–78, 2019",
+    "year": 2019,
+    "type": "journal",
+    "doi": "10.1364/JOCN.11.000067"
+  },
+  {
+    "title": "Resilient Quantum Key Distribution (QKD)-Integrated Optical Networks with Secret-Key Recovery Strategy",
+    "authors": "H. Wang, Y. Zhao, X. Yu, A. Nag, Z. Ma, J. Wang, et al.",
+    "venue": "IEEE Access",
+    "details": "vol. 7, pp. 60079–60090, 2019",
+    "year": 2019,
+    "type": "journal",
+    "doi": "10.1109/ACCESS.2019.2915378"
+  },
+  {
+    "title": "Blockchain-over-Optical Networks: A Trusted VNF Management Proposition for 5G Optical Networks",
+    "authors": "A. Nag, A. Kalla, M. Liyanage",
+    "venue": "Asia Communications and Photonics Conference (ACP 2019)",
+    "details": "2019",
+    "year": 2019,
+    "type": "conference",
+    "doi": ""
+  },
+  {
+    "title": "Fall Detection with Privacy as Standard",
+    "authors": "D. Kelly, D. Delaney, A. Nag",
+    "venue": "2019 International Conference on High Performance Computing and Simulation (HPCS 2019)",
+    "details": "pp. 63–69, 2019",
+    "year": 2019,
+    "type": "conference",
+    "doi": "10.1109/HPCS48598.2019.9188066"
+  },
+  {
+    "title": "Automatic Configuration of OpenFlow in Wireless Mobile Ad Hoc Networks",
+    "authors": "S. Sharma, A. Nag, P. Stynes, M. Nekovee",
+    "venue": "2019 International Conference on High Performance Computing and Simulation (HPCS 2019)",
+    "details": "pp. 367–373, 2019",
+    "year": 2019,
+    "type": "conference",
+    "doi": "10.1109/HPCS48598.2019.9188200"
+  },
+  {
+    "title": "The Network As a Computer: A Framework for Distributed Computing over IoT Mesh Networks",
+    "authors": "E. Di Pascale, I. Macaluso, A. Nag, M. Kelly, L. Doyle",
+    "venue": "IEEE Internet of Things Journal",
+    "details": "vol. 5, no. 3, pp. 2107–2119, 2018",
+    "year": 2018,
+    "type": "journal",
+    "doi": "10.1109/JIOT.2018.2823978"
+  },
+  {
+    "title": "Experimental Evaluation of SAPC-R: An Adaptive Power Control Protocol for Mobile Sensors",
+    "authors": "D. Basu, G. S. Gupta, Y. Zhang, A. Nag, L. Doyle",
+    "venue": "2018 International Symposium on Networks, Computers and Communications (ISNCC 2018)",
+    "details": "2018",
+    "year": 2018,
+    "type": "conference",
+    "doi": "10.1109/ISNCC.2018.8531046"
+  },
+  {
+    "title": "A Neural-Network-Based Realization of In-Network Computation for the Internet of Things",
+    "authors": "N. Kaminski, I. Macaluso, E. Di Pascale, A. Nag, J. Brady, M. Kelly, et al.",
+    "venue": "IEEE International Conference on Communications (ICC 2017)",
+    "details": "2017",
+    "year": 2017,
+    "type": "conference",
+    "doi": "10.1109/ICC.2017.7996821"
+  },
+  {
+    "title": "Integrating Wireless BBUs with Optical OFDM Flexible-Grid Transponders in a C-RAN Architecture",
+    "authors": "A. Nag, Y. Zhang, L. A. Da Silva, L. Doyle, M. Ruffini",
+    "venue": "2017 Optical Fiber Communications Conference and Exhibition (OFC 2017)",
+    "details": "2017",
+    "year": 2017,
+    "type": "conference",
+    "doi": ""
+  },
+  {
+    "title": "Exploiting Dual Homing in Access Networks to Improve Resiliency in Core Networks",
+    "authors": "A. Nag, M. Furdek, P. Monti, L. Wosinska, M. Ruffini",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 8, no. 11, pp. 854–862, 2016",
+    "year": 2016,
+    "type": "journal",
+    "doi": "10.1364/JOCN.8.000854"
+  },
+  {
+    "title": "Computing for Rural Empowerment: Enabled by Last-Mile Telecommunications",
+    "authors": "S. Nandi, S. Thota, A. Nag, S. Divyasukhananda, P. Goswami, A. Aravindakshan, et al.",
+    "venue": "IEEE Communications Magazine",
+    "details": "vol. 54, no. 6, pp. 101–108, 2016",
+    "year": 2016,
+    "type": "journal",
+    "doi": ""
+  },
+  {
+    "title": "N:1 Protection Design for Minimizing OLTs in Resilient Dual-Homed Long-Reach Passive Optical Network",
+    "authors": "A. Nag, D. B. Payne, M. Ruffini",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 8, no. 2, pp. 93–99, 2016",
+    "year": 2016,
+    "type": "journal",
+    "doi": "10.1364/JOCN.8.000093"
+  },
+  {
+    "title": "New Concept in Long-Reach PON Planning: BER-Aware Wavelength Allocation",
+    "authors": "L. Shi, A. Nag, D. Datta, B. Mukherjee",
+    "venue": "Optical Switching and Networking",
+    "details": "vol. 10, no. 4, pp. 475–480, 2013",
+    "year": 2013,
+    "type": "journal",
+    "doi": "10.1016/j.osn.2013.03.002"
+  },
+  {
+    "title": "On the Effect of Channel Spacing, Launch Power, and Regenerator Placement on the Design of Mixed-Line-Rate Optical Networks",
+    "authors": "A. Nag, M. Tornatore, B. Mukherjee",
+    "venue": "Optical Switching and Networking",
+    "details": "vol. 10, no. 4, pp. 301–311, 2013",
+    "year": 2013,
+    "type": "journal",
+    "doi": "10.1016/j.osn.2013.03.004"
+  },
+  {
+    "title": "Robust Design of Spectrum-Efficient Green Optical Backbone Networks",
+    "authors": "A. Nag, T. Wang, B. Mukherjee",
+    "venue": "Journal of Lightwave Technology",
+    "details": "vol. 31, no. 7, pp. 1138–1144, 2013",
+    "year": 2013,
+    "type": "journal",
+    "doi": "10.1109/JLT.2013.2245301"
+  },
+  {
+    "title": "Routing and Wavelength Assignment in WDM Networks with Mixed Line Rates",
+    "authors": "A. Nag, M. Tornatore, M. Liu, B. Mukherjee",
+    "venue": "Optical Networks (Book Chapter, Springer US)",
+    "details": "pp. 53–77, 2013",
+    "year": 2013,
+    "type": "book-chapter",
+    "doi": "10.1007/978-1-4614-5671-1_4"
+  },
+  {
+    "title": "Energy-Efficient and Cost-Efficient Capacity Upgrade in Mixed-Line-Rate Optical Networks",
+    "authors": "A. Nag, M. Tornatore, B. Mukherjee",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 4, no. 12, pp. 1018–1025, 2012",
+    "year": 2012,
+    "type": "journal",
+    "doi": "10.1364/JOCN.4.001018"
+  },
+  {
+    "title": "Mixed-Line-Rate Optical Network Design with Wavebanding",
+    "authors": "S. Ferdousi, A. Nag, A. Reaz, M. Tornatore, B. Mukherjee",
+    "venue": "Optical Switching and Networking",
+    "details": "vol. 9, no. 4, pp. 286–296, 2012",
+    "year": 2012,
+    "type": "journal",
+    "doi": "10.1016/j.osn.2012.04.003"
+  },
+  {
+    "title": "On the Design of Energy-Efficient Mixed-Line-Rate (MLR) Optical Networks",
+    "authors": "P. Chowdhury, M. Tornatore, A. Nag, E. Ip, T. Wang, B. Mukherjee",
+    "venue": "Journal of Lightwave Technology",
+    "details": "vol. 30, no. 1, pp. 130–139, 2012",
+    "year": 2012,
+    "type": "journal",
+    "doi": "10.1109/JLT.2011.2177441"
+  },
+  {
+    "title": "Optical Network Design with Mixed Line Rates and Multiple Modulation Formats",
+    "authors": "A. Nag, M. Tornatore, B. Mukherjee",
+    "venue": "Journal of Lightwave Technology",
+    "details": "vol. 28, no. 4, pp. 466–475, 2010",
+    "year": 2010,
+    "type": "journal",
+    "doi": "10.1109/JLT.2009.2034396"
+  },
+  {
+    "title": "Telecom Mesh Network Upgrade to Manage Traffic Growth",
+    "authors": "R. Roy, A. Nag, B. Mukherjee",
+    "venue": "Journal of Optical Communications and Networking",
+    "details": "vol. 2, no. 5, pp. 256–265, 2010",
+    "year": 2010,
+    "type": "journal",
+    "doi": "10.1364/JOCN.2.000256"
+  },
+  {
+    "title": "Optical Network Design with Mixed Line Rates",
+    "authors": "A. Nag, M. Tornatore",
+    "venue": "Optical Switching and Networking",
+    "details": "vol. 6, no. 4, pp. 227–234, 2009",
+    "year": 2009,
+    "type": "journal",
+    "doi": "10.1016/j.osn.2009.08.010"
+  }
+]
