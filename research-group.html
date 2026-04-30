@@ -92,10 +92,12 @@
     .student-links a { font-size: 0.8rem; color: #1a56a0; font-weight: 500; }
 
     /* ── Alumni list ── */
-    .alumni-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-    .alumni-list li { font-size: 0.95rem; }
-    .alumni-list a { color: #1a56a0; font-weight: 500; }
-    .alumni-list a:hover { text-decoration: underline; }
+    .alumni-list { list-style: none; display: flex; flex-direction: column; gap: 1.4rem; }
+    .alumni-item-name { font-size: 0.975rem; font-weight: 600; color: #111; margin-bottom: 0.15rem; }
+    .alumni-item-name a { color: #1a56a0; }
+    .alumni-item-name a:hover { text-decoration: underline; }
+    .alumni-item-role { font-size: 0.82rem; color: #888; margin-bottom: 0.4rem; }
+    .alumni-item-bio { font-size: 0.875rem; color: #444; line-height: 1.75; }
 
     /* ── Loading / error states ── */
     .loading { font-size: 0.9rem; color: #aaa; padding: 1rem 0; }
@@ -157,9 +159,31 @@
     <div class="container">
       <h2 class="section-heading">Alumni</h2>
       <ul class="alumni-list">
-        <li><a href="https://www.linkedin.com/in/swarna-chetty/" target="_blank" rel="noopener">Dr Swarna Chetty</a></li>
-        <li><a href="https://www.linkedin.com/in/guoxinwang/" target="_blank" rel="noopener">Dr Guoxin Wang</a></li>
-        <li><a href="https://www.linkedin.com/in/dr-mouli-chakraborty-242871179/" target="_blank" rel="noopener">Dr Mouli Chakraborty</a></li>
+
+        <li>
+          <p class="alumni-item-name">
+            <a href="https://www.linkedin.com/in/swarna-chetty/" target="_blank" rel="noopener">Dr Swarna Bindu Chetty</a>
+          </p>
+          <p class="alumni-item-role">Research Associate, University of York, UK &nbsp;·&nbsp; PhD 2019–2023</p>
+          <p class="alumni-item-bio">Named among the Top 100 Women in 6G globally (2025), Swarna's doctoral research focused on AI-driven next-generation communications. She is currently developing AI-powered Radio Access Network (RAN) intelligent controllers for 5G telecom infrastructure on the UK government-funded YO-RAN project.</p>
+        </li>
+
+        <li>
+          <p class="alumni-item-name">
+            <a href="https://www.linkedin.com/in/guoxinwang/" target="_blank" rel="noopener">Dr Guoxin Wang</a>
+          </p>
+          <p class="alumni-item-role">Research Associate, Trinity College Dublin &nbsp;·&nbsp; PhD 2019–2024</p>
+          <p class="alumni-item-bio">Recruited through UCD's MoU with the China Scholarship Council, Guoxin's research focused on self- and unsupervised learning for physiological time-series (ECG), wearable sensing and edge AI, and efficient model deployment via quantisation and pruning.</p>
+        </li>
+
+        <li>
+          <p class="alumni-item-name">
+            <a href="https://www.linkedin.com/in/dr-mouli-chakraborty-242871179/" target="_blank" rel="noopener">Dr Mouli Chakraborty</a>
+          </p>
+          <p class="alumni-item-role">Research Associate, Queen's University Belfast &nbsp;·&nbsp; PhD 2020–2025</p>
+          <p class="alumni-item-bio">Mouli's research spans mathematical aspects of quantum communication, quantum information processing, quantum computing, machine learning, satellite-based quantum communication, and quantum machine learning. Her work was recognised with the IEEE Antennas and Propagation Society Graduate Fellowship — Quantum Technologies Initiative 2021.</p>
+        </li>
+
       </ul>
     </div>
   </section>
