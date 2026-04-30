@@ -6,13 +6,13 @@
     "area": "Quantum Computing and Quantum Hardware",
     "bio": "Placeholder biography — 2–3 sentences describing Amartya's background, thesis focus, and key research interests.",
     "photo": "students/amartya-das.jpg",
-    "email": "",
-    "linkedin": ""
+    "email": "amartya.das@ucdconnect.ie",
+    "linkedin": "https://www.linkedin.com/in/amartya-das-668055b5/"
   },
   {
     "name": "Ruining Fan",
     "degree": "PhD",
-    "since": "2022",
+    "since": "2025",
     "area": "Machine Learning for Wireless Communications",
     "bio": "Placeholder biography — 2–3 sentences describing Ruining's background, thesis focus, and key research interests.",
     "photo": "students/ruining-fan.jpg",
@@ -36,7 +36,7 @@
     "area": "Placeholder Research Area (e.g., Deep Learning, SDN, Optical Networks)",
     "bio": "Placeholder biography — 2–3 sentences describing Probal's background, thesis focus, and key research interests.",
     "photo": "students/probal-bose.jpg",
-    "email": "",
+    "email": "probal.bose@ucdconnect.ie",
     "linkedin": ""
   }
 ]
