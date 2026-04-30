@@ -91,6 +91,12 @@
     .student-links { display: flex; gap: 0.8rem; flex-wrap: wrap; }
     .student-links a { font-size: 0.8rem; color: #1a56a0; font-weight: 500; }
 
+    /* ── Alumni list ── */
+    .alumni-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .alumni-list li { font-size: 0.95rem; }
+    .alumni-list a { color: #1a56a0; font-weight: 500; }
+    .alumni-list a:hover { text-decoration: underline; }
+
     /* ── Loading / error states ── */
     .loading { font-size: 0.9rem; color: #aaa; padding: 1rem 0; }
     .error-msg { font-size: 0.875rem; color: #b94040; }
@@ -143,6 +149,18 @@
       <div id="students-container" class="student-grid">
         <p class="loading">Loading students…</p>
       </div>
+    </div>
+  </section>
+
+  <!-- Alumni -->
+  <section>
+    <div class="container">
+      <h2 class="section-heading">Alumni</h2>
+      <ul class="alumni-list">
+        <li><a href="https://www.linkedin.com/in/swarna-chetty/" target="_blank" rel="noopener">Dr Swarna Chetty</a></li>
+        <li><a href="https://www.linkedin.com/in/guoxinwang/" target="_blank" rel="noopener">Dr Guoxin Wang</a></li>
+        <li><a href="https://www.linkedin.com/in/dr-mouli-chakraborty-242871179/" target="_blank" rel="noopener">Dr Mouli Chakraborty</a></li>
+      </ul>
     </div>
   </section>
 
