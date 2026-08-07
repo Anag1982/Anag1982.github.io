@@ -3,52 +3,536 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Newsletters — Avishek Nag</title>
-  <meta name="description" content="Newsletter series by Avishek Nag, Associate Professor at University College Dublin. One series per book, explaining the mathematics behind machine learning, quantum computing, and the ideas that run the modern world." />
-  <link rel="canonical" href="https://avisheknag.one/newsletter/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Newsletters — Avishek Nag" />
-  <meta property="og:description" content="One newsletter series per book: the mathematics behind machine learning, quantum computing, and the ideas that run the modern world." />
-  <meta property="og:url" content="https://avisheknag.one/newsletter/" />
+  <title>Avishek Nag — Associate Professor, UCD</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fafaf8;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+    a { color: #1a56a0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+
+    /* ── Layout ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Navigation ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250, 250, 248, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e8e8e4;
+    }
+    nav .container {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-brand {
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #1a1a1a;
+      letter-spacing: -0.01em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #444;
+      letter-spacing: 0.01em;
+    }
+    .nav-links a:hover { color: #1a56a0; text-decoration: none; }
+
+    /* ── Hero / About ── */
+    #about { padding: 5rem 0 4rem; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 3rem;
+      align-items: start;
+    }
+    .about-name {
+      font-family: 'Lora', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+      color: #111;
+    }
+    .about-title {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 0.2rem;
+    }
+    .about-institution {
+      font-size: 0.95rem;
+      color: #1a56a0;
+      font-weight: 500;
+      margin-bottom: 1.6rem;
+    }
+    .about-bio {
+      font-size: 0.975rem;
+      color: #333;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .about-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-primary {
+      background: #1a56a0;
+      color: #fff;
+      border: 1px solid #1a56a0;
+    }
+    .btn-primary:hover { background: #154a8c; text-decoration: none; }
+    .btn-outline {
+      background: transparent;
+      color: #1a56a0;
+      border: 1px solid #1a56a0;
+    }
+    .btn-outline:hover { background: #eef3fb; text-decoration: none; }
+    .profile-photo {
+      width: 180px;
+      height: 220px;
+      border-radius: 6px;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .photo-placeholder {
+      width: 180px; height: 180px;
+      border-radius: 6px;
+      background: #e4e8f0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.4rem;
+      border: 2px dashed #c5ccd8;
+    }
+    .photo-placeholder svg { opacity: 0.4; }
+    .photo-placeholder span { font-size: 0.72rem; color: #999; }
+
+    /* ── Section commons ── */
+    section { padding: 3.5rem 0; border-top: 1px solid #e8e8e4; }
+    .section-heading {
+      font-family: 'Lora', serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.015em;
+    }
+
+    /* ── News ── */
+    .news-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .news-item { display: flex; gap: 1.2rem; align-items: baseline; }
+    .news-date {
+      font-size: 0.8rem;
+      color: #888;
+      white-space: nowrap;
+      min-width: 90px;
+      padding-top: 0.05rem;
+    }
+    .news-text { font-size: 0.925rem; color: #333; }
+    .news-text strong { color: #111; font-weight: 500; }
+
+    /* ── Publications ── */
+    .pub-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+    .pub-item {}
+    .pub-title { font-size: 0.95rem; font-weight: 500; color: #111; margin-bottom: 0.25rem; }
+    .pub-authors { font-size: 0.85rem; color: #555; margin-bottom: 0.2rem; }
+    .pub-venue {
+      font-size: 0.85rem;
+      color: #888;
+      font-style: italic;
+    }
+    .pub-venue strong { font-style: normal; color: #666; font-weight: 500; }
+    .pub-links { margin-top: 0.4rem; display: flex; gap: 0.8rem; align-items: center; }
+    .pub-links a { font-size: 0.8rem; color: #1a56a0; font-weight: 500; }
+
+    /* ── Publications: year grouping ── */
+    .pub-toolbar {
+      display: flex; align-items: baseline; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+      margin: -0.5rem 0 1.2rem;
+    }
+    .pub-count { font-size: 0.85rem; color: #888; }
+    .pub-toggle {
+      font-size: 0.8rem; font-weight: 500; color: #1a56a0;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: inherit; letter-spacing: 0.01em;
+    }
+    .pub-toggle:hover { text-decoration: underline; }
+
+    .pub-year { border-top: 1px solid #ececE8; }
+    .pub-year:first-of-type { border-top: none; }
+    .pub-year > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex; align-items: baseline; gap: 0.6rem;
+      padding: 0.85rem 0;
+      -webkit-user-select: none; user-select: none;
+    }
+    .pub-year > summary::-webkit-details-marker { display: none; }
+    .pub-year > summary::before {
+      content: "";
+      flex: none;
+      width: 0; height: 0;
+      border-left: 5px solid #b4b4ae;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      transform: translateY(-1px);
+      transition: transform 0.15s ease;
+    }
+    .pub-year[open] > summary::before { transform: translateY(-1px) rotate(90deg); }
+    .pub-year-label {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem; font-weight: 600; color: #111;
+      letter-spacing: -0.01em;
+    }
+    .pub-year-count { font-size: 0.78rem; color: #999; }
+    .pub-year > .pub-list { padding: 0.2rem 0 1.6rem 1.1rem; }
+
+    .pub-type {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: #7a7a72; background: #f0f0ea;
+      border-radius: 3px; padding: 0.1rem 0.4rem;
+      vertical-align: 1px;
+    }
+
+    /* ── Books ── */
+    .book-group + .book-group { margin-top: 2.6rem; }
+    .book-group-label {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: #8a8a80;
+      margin-bottom: 1.4rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ececE8;
+    }
+    .book-list { list-style: none; display: flex; flex-direction: column; gap: 2.2rem; }
+    .book-item {
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .book-cover {
+      width: 104px;
+      border-radius: 3px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+      background: #ececE8;
+    }
+    .book-body { min-width: 0; }
+    .book-title {
+      font-family: 'Lora', serif;
+      font-size: 1.08rem; font-weight: 600; color: #111;
+      line-height: 1.35; letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+    }
+    .book-title a { color: #111; }
+    .book-title a:hover { color: #1a56a0; text-decoration: none; }
+    .book-subtitle {
+      font-size: 0.9rem; color: #555; line-height: 1.55;
+      margin-bottom: 0.55rem;
+    }
+    .book-meta {
+      font-size: 0.8rem; color: #8a8a80;
+      margin-bottom: 0.75rem;
+      line-height: 1.7;
+    }
+    .book-meta .sep { color: #ccc; padding: 0 0.4rem; }
+    .book-role {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: #1a56a0; background: #eef3fb;
+      border-radius: 3px; padding: 0.1rem 0.4rem;
+      margin-right: 0.55rem;
+    }
+    .book-blurb { font-size: 0.875rem; color: #555; line-height: 1.75; margin-bottom: 0.7rem; }
+    .book-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .book-links a { font-size: 0.8rem; font-weight: 500; }
+
+    /* ── Writing (blogs & newsletter) ── */
+    .writing-list { list-style: none; display: flex; flex-direction: column; gap: 1.7rem; }
+    .writing-title { font-size: 0.95rem; font-weight: 500; color: #111; margin-bottom: 0.22rem; line-height: 1.5; }
+    .writing-title a { color: #111; }
+    .writing-title a:hover { color: #1a56a0; text-decoration: none; }
+    .writing-meta { font-size: 0.8rem; color: #8a8a80; margin-bottom: 0.35rem; }
+    .writing-meta .sep { color: #ccc; padding: 0 0.4rem; }
+    .writing-outlet { color: #666; font-weight: 500; }
+    .writing-desc { font-size: 0.875rem; color: #555; line-height: 1.75; }
+    .writing-links { margin-top: 0.45rem; }
+    .writing-links a { font-size: 0.8rem; font-weight: 500; }
+
+    /* ── Teaching ── */
+    .course-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+    .course-card {
+      background: #fff;
+      border: 1px solid #e5e5e0;
+      border-radius: 6px;
+      padding: 1.2rem 1.4rem;
+    }
+    .course-code { font-size: 0.75rem; font-weight: 600; color: #1a56a0; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .course-title { font-size: 0.95rem; font-weight: 500; color: #111; margin-bottom: 0.3rem; }
+    .course-meta { font-size: 0.82rem; color: #888; }
+
+    /* ── Projects / Grants ── */
+    .project-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+    .project-item {}
+    .project-title { font-size: 0.95rem; font-weight: 500; color: #111; margin-bottom: 0.25rem; }
+    .project-meta { font-size: 0.85rem; color: #555; margin-bottom: 0.2rem; }
+    .project-desc { font-size: 0.875rem; color: #666; line-height: 1.7; }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .badge-active { background: #e6f4ea; color: #2d7a3a; }
+    .badge-completed { background: #f0f0f0; color: #777; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid #e8e8e4;
+      padding: 2.5rem 0;
+      margin-top: 2rem;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-name { font-family: 'Lora', serif; font-size: 0.95rem; color: #111; }
+    .footer-email { font-size: 0.85rem; color: #888; }
+    .footer-copy { font-size: 0.8rem; color: #aaa; }
+
+    /* ── Responsive ── */
+    @media (max-width: 780px) {
+      .course-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .photo-placeholder { display: none; }
+      .course-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1rem; }
+      .about-name { font-size: 1.9rem; }
+      .book-item { grid-template-columns: 84px minmax(0, 1fr); gap: 1.1rem; }
+      .book-cover { width: 84px; }
+      .book-title { font-size: 1rem; }
+      .pub-year > .pub-list { padding-left: 0; }
+    }
+
+    /* Nav wraps rather than overflowing once there are more links */
+    @media (max-width: 900px) {
+      nav .container { height: auto; padding-top: 0.5rem; padding-bottom: 0.5rem; flex-wrap: wrap; }
+      .nav-links { flex-wrap: wrap; gap: 0.4rem 1.1rem; }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- Navigation -->
   <nav>
     <div class="container">
-      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <span class="nav-brand">Avishek Nag</span>
       <ul class="nav-links">
-        <li><a href="/#about">About</a></li>
-        <li><a href="/#publications">Publications</a></li>
-        <li><a href="/#books">Books</a></li>
-        <li><a href="/newsletter/" class="current">Newsletter</a></li>
-        <li><a href="/#teaching">Teaching</a></li>
-        <li><a href="/research-group.html">Research Group</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#books">Books</a></li>
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#teaching">Teaching</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="research-group.html">Research Group</a></li>
       </ul>
     </div>
   </nav>
 
-  <div class="container">
-    <p class="crumb"><a href="/">Home</a><span class="sep">·</span>Newsletter</p>
+  <!-- About -->
+  <section id="about" style="border-top:none;">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <h1 class="about-name">Avishek Nag</h1>
+          <p class="about-title">Associate Professor · School of Computer Science</p>
+          <p class="about-institution">University College Dublin, Ireland</p>
+          <p class="about-bio">
+            I am an Associate Professor in the School of Computer Science at University College Dublin. I received my BE (Hons) from Jadavpur University (2005), MTech from IIT Kharagpur (2007), and PhD from the University of California, Davis (2012). I have authored over 100 publications across journals, conference proceedings, and book chapters.
+          </p>
+          <p class="about-bio" style="margin-top:-0.5rem;">
+            My research interests include cross-layer optimisation in wired and wireless networks, network reliability, mathematics of networks (optimisation, graph theory), network virtualisation, software-defined networks, machine learning, data analytics, and quantum communication. I am a Senior Member of IEEE. I am currently supervising several PhD students and welcome enquiries from prospective researchers.
+          </p>
+          <div class="about-links">
+            <a href="mailto:avishek.nag@ucd.ie" class="btn btn-primary">Contact</a>
+            <a href="https://scholar.google.com/citations?user=edSZ2bQAAAAJ&hl=en" class="btn btn-outline" target="_blank">Google Scholar</a>
+            <a href="https://orcid.org/0000-0003-1702-1492" class="btn btn-outline" target="_blank">ORCID</a>
+            <a href="https://www.linkedin.com/in/avisheknag" class="btn btn-outline" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+        <div>
+          <img src="3358-386.jpg" alt="Avishek Nag" class="profile-photo" />
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <header class="page-head">
-      <h1 class="page-title">Newsletters</h1>
-      <p class="page-intro">
-        Each of my books has a newsletter series attached to it. The series are written to stand
-        on their own: you never need the book to follow one. They take the material in order,
-        one idea per issue, in plain language and with code you can run. Everything published
-        here is free to read.
+  <!-- News -->
+  <section id="news">
+    <div class="container">
+      <h2 class="section-heading">News &amp; Updates</h2>
+      <ul id="news-container" class="news-list">
+        <li class="news-item"><span class="news-date" style="color:#ccc;">···</span><span class="news-text" style="color:#ccc;">Loading…</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications">
+    <div class="container">
+      <h2 class="section-heading">Publications</h2>
+      <div class="pub-toolbar">
+        <span id="pub-count" class="pub-count">&nbsp;</span>
+        <button id="pub-toggle" class="pub-toggle" type="button" hidden>Expand all years</button>
+      </div>
+      <div id="pub-container">
+        <p class="pub-item" style="color:#ccc;">Loading…</p>
+      </div>
+      <p style="margin-top:1.8rem; font-size:0.875rem; color:#888;">
+        Citation counts and the complete record are on <a href="https://scholar.google.com/citations?user=edSZ2bQAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>.
       </p>
-    </header>
+    </div>
+  </section>
 
-    <ul id="series-container" class="series-list">
-      <li style="color:#ccc;">Loading…</li>
-    </ul>
-  </div>
+  <!-- Authored Books -->
+  <section id="books">
+    <div class="container">
+      <h2 class="section-heading">Authored Books</h2>
+      <div id="books-container">
+        <p style="color:#ccc; font-size:0.925rem;">Loading…</p>
+      </div>
+    </div>
+  </section>
 
+  <!-- Blogs and Newsletter -->
+  <section id="writing" hidden>
+    <div class="container">
+      <h2 class="section-heading">Blogs and Newsletter</h2>
+      <p id="writing-intro" class="writing-desc" style="margin-bottom:1.8rem; max-width:62ch;" hidden></p>
+      <ul id="writing-container" class="writing-list"></ul>
+    </div>
+  </section>
+
+  <!-- Teaching -->
+  <section id="teaching">
+    <div class="container">
+      <h2 class="section-heading">Teaching</h2>
+      <p style="font-size:0.925rem; color:#555; margin-bottom:1.6rem;">
+        I teach at the postgraduate level in the School of Computer Science at UCD, and currently supervise four PhD students. Current modules are listed below.
+      </p>
+      <div class="course-grid">
+
+        <div class="course-card">
+          <p class="course-code">Current · 2023–2026</p>
+          <p class="course-title"><a href="https://hub.ucd.ie/usis/!W_HU_MENU.P_PUBLISH?p_tag=MODULE&MODULE=COMP47250" target="_blank">Team Software Project</a></p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Current · 2023–2026</p>
+          <p class="course-title"><a href="https://hub.ucd.ie/usis/!W_HU_MENU.P_PUBLISH?p_tag=MODULE&MODULE=COMP41720" target="_blank">Distributed Systems</a></p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Current · 2023–2026</p>
+          <p class="course-title"><a href="https://hub.ucd.ie/usis/!W_HU_MENU.P_PUBLISH?p_tag=MODULE&MODULE=COMP41670" target="_blank">Software Engineering</a></p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Previous · 2017–2024</p>
+          <p class="course-title">Wireless &amp; Digital Communications</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Previous · 2017–2024</p>
+          <p class="course-title">Microcontrollers</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+        <div class="course-card">
+          <p class="course-code">Previous · 2022–2023</p>
+          <p class="course-title">Circuits and Systems</p>
+          <p class="course-meta">School of Computer Science · UCD</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects / Grants -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-heading">Projects &amp; Grants</h2>
+      <ul class="project-list">
+
+        <li class="project-item">
+          <p class="project-title">
+            <a href="https://www.quadrature-project.eu/" target="_blank" rel="noopener">QUADRATURE: Scalable Multi-Chip Quantum Architectures Enabled by Cryogenic Wireless / Quantum-Coherent Network-in-Package</a>
+            <span class="badge badge-active">Active</span>
+          </p>
+          <p class="project-meta">Horizon Europe · €216,028 · 2023–2027</p>
+          <p class="project-desc">Addresses the fundamental challenge of scaling quantum computing architectures by developing cryogenic wireless and quantum-coherent network-in-package technologies to connect multiple quantum processor chips.</p>
+        </li>
+
+        <li class="project-item">
+          <p class="project-title">
+            ATLANTIC-eVISION: Cross-Atlantic Experimental Validation of Intelligent SDN-controlled IoT Networks
+            <span class="badge badge-completed">Completed</span>
+          </p>
+          <p class="project-meta">Horizon 2020 · €57,128 · 2021–2022</p>
+          <p class="project-desc">Validated intelligent, software-defined networking approaches for IoT across cross-Atlantic EU–US experimental testbeds, demonstrating real-world interoperability and network performance.</p>
+        </li>
+
+        <li class="project-item">
+          <p class="project-title">
+            UCD School Funded Research Scholarships
+            <span class="badge badge-completed">Completed</span>
+          </p>
+          <p class="project-meta">University College Dublin · €161,333 · 2020–2024</p>
+          <p class="project-desc">School-funded PhD scholarships supporting postgraduate research in network systems, quantum communications, and machine learning for networks.</p>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-inner">
@@ -62,56 +546,205 @@
   </footer>
 
   <script>
-    const STATUS_LABEL = { active: 'Active', planned: 'Coming soon', paused: 'Paused' };
+    /* ── News loader ── */
+    async function loadNews() {
+      const el = document.getElementById('news-container');
+      try {
+        const res = await fetch('data/news.json');
+        if (!res.ok) throw new Error();
+        const items = await res.json();
+        el.innerHTML = items.map(n => `
+          <li class="news-item">
+            <span class="news-date">${n.date}</span>
+            <span class="news-text"><strong>${n.title}</strong> — ${n.text}</span>
+          </li>`).join('');
+      } catch {
+        el.innerHTML = '<li class="news-item"><span class="news-text" style="color:#aaa;">Could not load news. Edit <code>data/news.json</code> in your repository.</span></li>';
+      }
+    }
 
-    function seriesEntry(s) {
-      const issues = s.issues || [];
-      const count = issues.length;
-      const statusTag = s.status === 'active'
-        ? '<span class="tag tag-active">Active</span>'
-        : `<span class="tag tag-planned">${STATUS_LABEL[s.status] || 'Coming soon'}</span>`;
+    /* ── Publications loader (grouped by year) ── */
+    const OPEN_RECENT_YEARS = 2;   // most recent N years expanded on load
+    const TYPE_LABEL = {
+      journal: 'Journal',
+      conference: 'Conference',
+      book: 'Book',
+      'book-chapter': 'Book chapter',
+      preprint: 'Preprint',
+      report: 'Report'
+    };
 
-      const meta = [
-        s.cadence,
-        count ? `${count} ${count === 1 ? 'issue' : 'issues'}` : 'No issues yet'
-      ].filter(Boolean).join('<span class="sep">·</span>');
-
-      const titleHtml = count
-        ? `<a href="/newsletter/${s.key}/">${s.name}</a>`
-        : s.name;
-
-      const links = [];
-      if (count) links.push(`<a href="/newsletter/${s.key}/">Read the series</a>`);
-      if (s.bookLink) links.push(`<a href="${s.bookLink}" target="_blank" rel="noopener">The book on Amazon</a>`);
-      if (s.notebooks) links.push(`<a href="${s.notebooks}" target="_blank" rel="noopener">Companion notebooks</a>`);
-
+    function pubEntry(p) {
+      const type = TYPE_LABEL[p.type] || '';
       return `
-        <li class="series-item">
-          ${s.cover ? `<img class="series-cover" src="/${s.cover}" alt="Cover of ${s.book}" loading="lazy" />` : '<div class="series-cover" style="height:150px;"></div>'}
-          <div>
-            <p class="series-name">${titleHtml}</p>
-            <p class="series-meta">${statusTag}<span class="tag tag-book">${s.book}</span><br />${meta}</p>
-            <p class="series-desc">${s.description || ''}</p>
-            ${links.length ? `<div class="series-links">${links.join('')}</div>` : ''}
+        <li class="pub-item">
+          <p class="pub-title">${p.title}</p>
+          <p class="pub-authors">${p.authors}</p>
+          <p class="pub-venue"><strong>${p.venue}</strong>${p.details ? ', ' + p.details : ''}.</p>
+          <div class="pub-links">
+            ${type ? `<span class="pub-type">${type}</span>` : ''}
+            ${p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>` : ''}
           </div>
         </li>`;
     }
 
-    async function loadSeries() {
-      const el = document.getElementById('series-container');
+    async function loadPublications() {
+      const el = document.getElementById('pub-container');
+      const countEl = document.getElementById('pub-count');
+      const toggleEl = document.getElementById('pub-toggle');
       try {
-        const res = await fetch('/data/newsletters.json');
+        const res = await fetch('data/publications.json');
         if (!res.ok) throw new Error();
-        const data = await res.json();
-        const all = data.series || [];
-        const order = { active: 0, paused: 1, planned: 2 };
-        all.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
-        el.innerHTML = all.map(seriesEntry).join('');
+        const pubs = await res.json();
+
+        const years = [...new Set(pubs.map(p => p.year))].sort((a, b) => b - a);
+        el.innerHTML = years.map((y, i) => {
+          const items = pubs.filter(p => p.year === y);
+          return `
+            <details class="pub-year"${i < OPEN_RECENT_YEARS ? ' open' : ''}>
+              <summary>
+                <span class="pub-year-label">${y}</span>
+                <span class="pub-year-count">${items.length} ${items.length === 1 ? 'item' : 'items'}</span>
+              </summary>
+              <ul class="pub-list">${items.map(pubEntry).join('')}</ul>
+            </details>`;
+        }).join('');
+
+        countEl.textContent = `${pubs.length} publications across ${years.length} years — ${years[years.length - 1]}–${years[0]}.`;
+
+        const groups = () => [...el.querySelectorAll('details.pub-year')];
+        const sync = () => {
+          const allOpen = groups().every(d => d.open);
+          toggleEl.textContent = allOpen ? 'Collapse all years' : 'Expand all years';
+        };
+        toggleEl.hidden = false;
+        toggleEl.addEventListener('click', () => {
+          const allOpen = groups().every(d => d.open);
+          groups().forEach(d => { d.open = !allOpen; });
+          sync();
+        });
+        el.addEventListener('toggle', sync, true);
+        sync();
       } catch {
-        el.innerHTML = '<li style="color:#aaa;">Could not load the series list. Check <code>data/newsletters.json</code>.</li>';
+        el.innerHTML = '<p style="color:#aaa;">Could not load publications. Edit <code>data/publications.json</code> in your repository.</p>';
       }
     }
-    loadSeries();
+
+    /* ── Books loader ── */
+    const BOOK_GROUPS = [
+      { key: 'authored', label: 'Authored' },
+      { key: 'edited',   label: 'Edited Volumes' }
+    ];
+
+    /* Keep short two-word facts ("June 2024") off a line break. Never applied to
+       long strings — that would create an unbreakable run and overflow small screens. */
+    const nb = s => (String(s).length <= 18 ? String(s).replace(/ /g, ' ') : String(s));
+
+    function bookEntry(b) {
+      const line1 = [b.series, b.publisher].filter(Boolean)
+        .join('<span class="sep">·</span>');
+      const line2 = [b.date || (b.year ? String(b.year) : ''), b.format].filter(Boolean)
+        .map(nb).join('<span class="sep">·</span>');
+      const meta = [line1, line2].filter(Boolean).join('<br />');
+
+      return `
+        <li class="book-item">
+          <a href="${b.link}" target="_blank" rel="noopener">
+            <img class="book-cover" src="${b.cover}" alt="Cover of ${b.title}" loading="lazy" />
+          </a>
+          <div class="book-body">
+            <p class="book-title"><a href="${b.link}" target="_blank" rel="noopener">${b.title}</a></p>
+            ${b.subtitle ? `<p class="book-subtitle">${b.subtitle}</p>` : ''}
+            <p class="book-meta">${b.role ? `<span class="book-role">${b.role}</span>` : ''}${meta}${b.editors ? `<br />Editors: ${b.editors}` : ''}</p>
+            ${b.blurb ? `<p class="book-blurb">${b.blurb}</p>` : ''}
+            <div class="book-links">
+              <a href="${b.link}" target="_blank" rel="noopener">View on Amazon</a>
+              ${b.doi ? `<a href="https://doi.org/${b.doi}" target="_blank" rel="noopener">DOI</a>` : ''}
+            </div>
+          </div>
+        </li>`;
+    }
+
+    async function loadBooks() {
+      const el = document.getElementById('books-container');
+      try {
+        const res = await fetch('data/books.json');
+        if (!res.ok) throw new Error();
+        const books = await res.json();
+        if (!books.length) { document.getElementById('books').hidden = true; return; }
+
+        el.innerHTML = BOOK_GROUPS.map(g => {
+          const items = books
+            .filter(b => (b.category || 'authored') === g.key)
+            .sort((a, b) => (b.year || 0) - (a.year || 0));
+          if (!items.length) return '';
+          return `
+            <div class="book-group">
+              <p class="book-group-label">${g.label}</p>
+              <ul class="book-list">${items.map(bookEntry).join('')}</ul>
+            </div>`;
+        }).join('');
+      } catch {
+        el.innerHTML = '<p style="color:#aaa; font-size:0.925rem;">Could not load books. Edit <code>data/books.json</code> in your repository.</p>';
+      }
+    }
+
+    /* ── Blogs & newsletter loader (section stays hidden until there is content) ── */
+    /* Accepts either an ISO date ("2026-07-14") or free text ("July 2026"). */
+    function displayDate(d) {
+      if (!d) return '';
+      const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(String(d).trim());
+      if (!m) return d;
+      const months = ['January','February','March','April','May','June',
+                      'July','August','September','October','November','December'];
+      const month = months[Number(m[2]) - 1];
+      if (!month) return d;
+      return (m[3] ? Number(m[3]) + ' ' : '') + month + ' ' + m[1];
+    }
+
+    function writingEntry(w) {
+      const date = displayDate(w.date);
+      const meta = [date, w.outlet ? `<span class="writing-outlet">${w.outlet}</span>` : '']
+        .filter(Boolean).join('<span class="sep">·</span>');
+      const title = w.link
+        ? `<a href="${w.link}" target="_blank" rel="noopener">${w.title}</a>`
+        : w.title;
+      return `
+        <li class="writing-item">
+          <p class="writing-title">${title}</p>
+          ${meta ? `<p class="writing-meta">${meta}</p>` : ''}
+          ${w.description ? `<p class="writing-desc">${w.description}</p>` : ''}
+          ${w.link ? `<p class="writing-links"><a href="${w.link}" target="_blank" rel="noopener">Read</a></p>` : ''}
+        </li>`;
+    }
+
+    async function loadWriting() {
+      const section = document.getElementById('writing');
+      const el = document.getElementById('writing-container');
+      const introEl = document.getElementById('writing-intro');
+      try {
+        const res = await fetch('data/blogs.json');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const intro = Array.isArray(data) ? null : data.intro;
+        const items = Array.isArray(data) ? data : (data.items || []);
+        if (!items.length) return;              // nothing published yet — leave section hidden
+
+        if (intro) { introEl.innerHTML = intro; introEl.hidden = false; }
+        el.innerHTML = items
+          .slice()
+          .sort((a, b) => String(b.sort || b.date || '').localeCompare(String(a.sort || a.date || '')))
+          .map(writingEntry).join('');
+        section.hidden = false;
+      } catch {
+        /* leave the section hidden rather than showing an error to visitors */
+      }
+    }
+
+    loadNews();
+    loadPublications();
+    loadBooks();
+    loadWriting();
   </script>
 
 </body>
