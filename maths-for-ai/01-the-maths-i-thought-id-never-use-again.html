@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The mathematics I thought I would never use again — The Maths Underneath, Issue 1</title>
+  <meta name="description" content="Ten years ago I set out to retrain in machine learning and found, past the notation, mathematics I already knew. Why the fundamentals outlast the frameworks, and what this fortnightly series will do." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-ai/01-the-maths-i-thought-id-never-use-again.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The mathematics I thought I would never use again" />
+  <meta property="og:description" content="Ten years ago I set out to retrain in machine learning and found, past the notation, mathematics I already knew. Why the fundamentals outlast the frameworks." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-ai/01-the-maths-i-thought-id-never-use-again.html" />
+  <meta property="article:published_time" content="2026-08-07" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The mathematics I thought I would never use again",
+    "datePublished": "2026-08-07",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Maths Underneath" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-ai/01-the-maths-i-thought-id-never-use-again.html",
+    "description": "Ten years ago I set out to retrain in machine learning and found, past the notation, mathematics I already knew."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-ai/">The Maths Underneath</a><span class="sep">·</span>Issue 1
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Maths Underneath · Issue 1</p>
+      <h1 class="article-title">The mathematics I thought I would never use again</h1>
+      <p class="article-meta">
+        <time datetime="2026-08-07">7 August 2026</time><span class="sep">·</span>5 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">About ten years ago I was a post-doctoral researcher at Trinity College Dublin, reading job advertisements. Almost every position I wanted asked for machine learning. I had a reasonable record in telecommunications and I could write software, but the interesting roles, in industry and increasingly in academia, were going to people who could build and reason about models. So I decided to retrain, for the plainest reason there is. I wanted to stay employable.</p>
+
+      <p>The first few weeks went badly.</p>
+
+      <p>I opened well-regarded papers and hit walls of notation. Gradients of losses. Expectations over distributions. Matrix factorizations. All of it looked dense and unfamiliar, and I assumed I was looking at a new field with a new language that I would have to learn from nothing. I set aside a long stretch of evenings and braced myself.</p>
+
+      <p>Then something happened that changed how I have thought about the subject ever since.</p>
+
+      <p>As I pushed past the jargon, I kept meeting mathematics I already knew. The gradient descent that trains every model is the derivative from school calculus, used to walk downhill. The embeddings everyone talks about are vectors, and the transformations applied to them are matrices, both from first-year engineering linear algebra. The loss functions I was told to memorise turned out to be maximum likelihood, which is probability. The singular value decomposition sitting behind recommendation systems and dimensionality reduction was the same eigenvalue mathematics I had used years earlier for signals.</p>
+
+      <p>The notation was new. The ideas underneath were not.</p>
+
+      <p>I am not the only person to have had this experience, and it is worth noting that the field's own textbooks say so quite openly. The canonical <em>Deep Learning</em> text by Goodfellow, Bengio and Courville does not begin with neural networks at all. Its first part is applied mathematics: linear algebra, probability, numerical computation. The authors of <em>Mathematics for Machine Learning</em> open their book by observing that machine learning builds on the language of mathematics, and that for many capable people the gap between school mathematics and a machine-learning textbook is simply too wide to cross without help. The subject announces where it starts. Most of us skip that part and go straight to the models, and then wonder why the models feel arbitrary.</p>
+
+      <h2>The claim I want to make</h2>
+
+      <p>The tools of machine learning are easy to acquire and quick to go out of date. Frameworks change every couple of years, and a competent engineer can pick up a new one in a fortnight. Deploying a model, wiring a pipeline, calling an API: these are learnable skills, and they are not where the difficulty lives.</p>
+
+      <p>The fundamentals behave differently. The mathematics that explains why a model learns, why a loss function takes the shape it does, and why a method fails on your particular data does not expire. It is what lets you read next year's paper, debug the model that will not train, and keep working when the tools you know are replaced.</p>
+
+      <p>Ten years on I am an academic again, at University College Dublin. The frameworks I first learned are long gone. The mathematics has not moved.</p>
+
+      <p>I should be careful about how far I take this. Knowing the mathematics will not by itself make you a good practitioner, and I am not suggesting anyone abandon the engineering. Data collection, evaluation, and the plain discipline of shipping something that works are their own skills, and none of them are replaced by understanding an equation. What the mathematics gives you is diagnosis. When the loss curve does something strange at three in the morning, the person who knows what the loss is actually measuring has somewhere to start.</p>
+
+      <h2>What this newsletter is</h2>
+
+      <p>Every fortnight I will take one idea from the mathematics that machine learning runs on and explain it properly. The format will stay the same each time, because I think the sequence matters:</p>
+
+      <p>First the situation, in plain language, with no symbols. Then a picture, because most of these ideas are geometric before they are algebraic and seeing them once is worth a page of prose. Then the mathematics, one equation, unpacked term by term. Then the code, a handful of lines of NumPy you can run yourself, with the output printed so you can check that the equation did what I claimed it would.</p>
+
+      <p>That last step is the one I care most about. Mathematics you can execute is mathematics you can trust. If you can change a number, rerun the cell, and watch the result move the way the formula says it should, the idea stops being something you believe on my authority and becomes something you know.</p>
+
+      <p>The plan for the coming issues runs roughly in the order the subject itself builds. Vectors and what it means to turn a row of data into a point in space. Cosine similarity, which is the formula quietly deciding that two users have the same taste. Matrices as transformations rather than tables of numbers. Least squares. Eigenvalues and the decomposition behind image compression. Then derivatives, the chain rule and backpropagation, which is less mysterious than its reputation. After that, probability: distributions, Bayes, and where loss functions actually come from. Later, information theory, the mathematics of getting a model to explain its own decisions, and Kolmogorov-Arnold networks, a recent architecture you can almost read like a formula.</p>
+
+      <p>No proofs. No prerequisites beyond school algebra and the ability to write a for-loop.</p>
+
+      <h2>Who this is for</h2>
+
+      <p>It is for the person I was in that Trinity office. Someone who can code, who last thought seriously about mathematics some years ago, and who is tired of using methods they cannot explain. If you have ever copied a loss function from a tutorial without knowing why that particular expression, or nodded along to a paper's third equation, this is written for you.</p>
+
+      <p>Next issue I will start where the subject starts, with a single vector, and show why turning your data into geometry is the move that makes everything afterwards possible.</p>
+
+      <p>I hope this saves you the weeks of discouragement I went through, and shows you sooner what took me too long to see. For most of machine learning, the mathematics is not a wall in front of you. You have been standing on the far side of it all along.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">Follow along with the code</p>
+      <p>
+        The notebooks that accompany this series are free and open in your browser with nothing to
+        install. The full sequence, with all the figures and worked examples, is collected in the
+        book <em>Maths for AI</em>. The newsletter stands on its own, and you never need the book
+        to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://github.com/biddu/maths-for-ai-notebooks" target="_blank" rel="noopener">Companion notebooks</a>
+        <a class="btn btn-outline" href="https://www.amazon.co.uk/dp/B0H7QM2BB6" target="_blank" rel="noopener">Maths for AI on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-ai/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <span>&larr; Nothing earlier</span>
+      <span>Issue 2 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

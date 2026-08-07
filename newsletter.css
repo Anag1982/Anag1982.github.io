@@ -1,0 +1,181 @@
+/* ── Newsletter section — matches the palette and type of the main site ── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fafaf8;
+  color: #1a1a1a;
+  line-height: 1.7;
+}
+a { color: #1a56a0; text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+
+.container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+.container-narrow { max-width: 700px; margin: 0 auto; padding: 0 2rem; }
+
+/* ── Navigation (mirrors the main site) ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250, 250, 248, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e8e8e4;
+}
+nav .container {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-brand {
+  font-family: 'Lora', serif; font-weight: 600; font-size: 1.05rem;
+  color: #1a1a1a; letter-spacing: -0.01em;
+}
+.nav-brand a { color: #1a1a1a; }
+.nav-brand a:hover { text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 0.875rem; font-weight: 500; color: #444; letter-spacing: 0.01em; }
+.nav-links a:hover { color: #1a56a0; text-decoration: none; }
+.nav-links a.current { color: #1a56a0; }
+
+/* ── Breadcrumb ── */
+.crumb { font-size: 0.8rem; color: #8a8a80; padding-top: 2.2rem; }
+.crumb a { color: #8a8a80; }
+.crumb a:hover { color: #1a56a0; text-decoration: none; }
+.crumb .sep { color: #ccc; padding: 0 0.45rem; }
+
+/* ── Page header ── */
+.page-head { padding: 1.4rem 0 2.6rem; }
+.page-title {
+  font-family: 'Lora', serif; font-size: 2.1rem; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.25; color: #111; margin-bottom: 0.6rem;
+}
+.page-intro { font-size: 0.975rem; color: #555; line-height: 1.8; max-width: 62ch; }
+
+/* ── Series cards (hub) ── */
+.series-list { list-style: none; display: flex; flex-direction: column; gap: 2.4rem; }
+.series-item {
+  display: grid; grid-template-columns: 104px minmax(0, 1fr);
+  gap: 1.5rem; align-items: start;
+}
+.series-cover { width: 104px; border-radius: 3px; box-shadow: 0 1px 6px rgba(0,0,0,0.14); background: #ececE8; }
+.series-name {
+  font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600;
+  color: #111; line-height: 1.35; letter-spacing: -0.01em; margin-bottom: 0.25rem;
+}
+.series-name a { color: #111; }
+.series-name a:hover { color: #1a56a0; text-decoration: none; }
+.series-meta { font-size: 0.8rem; color: #8a8a80; margin-bottom: 0.6rem; }
+.series-meta .sep { color: #ccc; padding: 0 0.4rem; }
+.series-desc { font-size: 0.875rem; color: #555; line-height: 1.75; margin-bottom: 0.7rem; }
+.series-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.series-links a { font-size: 0.8rem; font-weight: 500; }
+
+.tag {
+  display: inline-block; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  border-radius: 3px; padding: 0.1rem 0.4rem; margin-right: 0.55rem;
+}
+.tag-active { color: #2d7a3a; background: #e6f4ea; }
+.tag-planned { color: #7a7a72; background: #f0f0ea; }
+.tag-book { color: #1a56a0; background: #eef3fb; }
+
+/* ── Issue list (series archive) ── */
+.issue-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.issue-item { padding: 1.5rem 0; border-top: 1px solid #ececE8; }
+.issue-item:first-child { border-top: none; }
+.issue-num {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #8a8a80; margin-bottom: 0.3rem;
+}
+.issue-title { font-size: 1.02rem; font-weight: 500; color: #111; line-height: 1.5; margin-bottom: 0.3rem; }
+.issue-title a { color: #111; }
+.issue-title a:hover { color: #1a56a0; text-decoration: none; }
+.issue-meta { font-size: 0.8rem; color: #8a8a80; margin-bottom: 0.45rem; }
+.issue-meta .sep { color: #ccc; padding: 0 0.4rem; }
+.issue-summary { font-size: 0.875rem; color: #555; line-height: 1.75; }
+
+.empty-note {
+  font-size: 0.9rem; color: #888; background: #f4f4f0;
+  border: 1px solid #ececE8; border-radius: 6px; padding: 1.1rem 1.3rem;
+}
+
+/* ── Article ── */
+.article-head { padding: 1.2rem 0 2rem; border-bottom: 1px solid #e8e8e4; margin-bottom: 2.4rem; }
+.article-kicker {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #1a56a0; margin-bottom: 0.7rem;
+}
+.article-title {
+  font-family: 'Lora', serif; font-size: 2.15rem; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.22; color: #111; margin-bottom: 0.8rem;
+}
+.article-meta { font-size: 0.82rem; color: #8a8a80; }
+.article-meta .sep { color: #ccc; padding: 0 0.45rem; }
+
+.article-body { font-family: 'Lora', serif; font-size: 1.06rem; line-height: 1.85; color: #262626; }
+.article-body p { margin-bottom: 1.35rem; }
+.article-body h2 {
+  font-family: 'Lora', serif; font-size: 1.35rem; font-weight: 600;
+  color: #111; letter-spacing: -0.015em;
+  margin: 2.6rem 0 1rem; line-height: 1.35;
+}
+.article-body em { font-style: italic; }
+.article-body strong { font-weight: 600; color: #111; }
+.article-body a { font-weight: 500; }
+.article-body .lede { font-size: 1.12rem; color: #1a1a1a; }
+.article-body blockquote {
+  border-left: 3px solid #d8dde6; padding-left: 1.2rem;
+  color: #555; font-style: italic; margin: 0 0 1.35rem;
+}
+.article-sign {
+  font-family: 'Lora', serif; font-style: italic; color: #666;
+  font-size: 0.975rem; line-height: 1.6; margin-top: 2.2rem;
+}
+
+/* ── Call-to-action block ── */
+.cta {
+  background: #fff; border: 1px solid #e5e5e0; border-radius: 8px;
+  padding: 1.5rem 1.7rem; margin: 2.8rem 0 0;
+  font-family: 'Inter', sans-serif;
+}
+.cta-title { font-size: 0.95rem; font-weight: 600; color: #111; margin-bottom: 0.5rem; }
+.cta p { font-size: 0.9rem; color: #555; line-height: 1.7; margin-bottom: 0.9rem; }
+.cta p:last-child { margin-bottom: 0; }
+.cta-links { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 0.2rem; }
+.btn {
+  display: inline-block; padding: 0.45rem 1.1rem; border-radius: 4px;
+  font-size: 0.85rem; font-weight: 500; letter-spacing: 0.01em;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-primary { background: #1a56a0; color: #fff; border: 1px solid #1a56a0; }
+.btn-primary:hover { background: #154a8c; text-decoration: none; }
+.btn-outline { background: transparent; color: #1a56a0; border: 1px solid #1a56a0; }
+.btn-outline:hover { background: #eef3fb; text-decoration: none; }
+
+/* ── Prev / next ── */
+.issue-nav {
+  display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+  border-top: 1px solid #e8e8e4; margin-top: 3rem; padding-top: 1.6rem;
+  font-size: 0.85rem;
+}
+.issue-nav span { color: #bbb; }
+
+/* ── Footer ── */
+footer { border-top: 1px solid #e8e8e4; padding: 2.5rem 0; margin-top: 3.5rem; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-name { font-family: 'Lora', serif; font-size: 0.95rem; color: #111; }
+.footer-email { font-size: 0.85rem; color: #888; }
+.footer-copy { font-size: 0.8rem; color: #aaa; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  nav .container { height: auto; padding-top: 0.5rem; padding-bottom: 0.5rem; flex-wrap: wrap; }
+  .nav-links { flex-wrap: wrap; gap: 0.4rem 1.1rem; }
+}
+@media (max-width: 620px) {
+  .article-title { font-size: 1.7rem; }
+  .page-title { font-size: 1.7rem; }
+  .article-body { font-size: 1.02rem; }
+  .series-item { grid-template-columns: 84px minmax(0, 1fr); gap: 1.1rem; }
+  .series-cover { width: 84px; }
+}
