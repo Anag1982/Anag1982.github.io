@@ -272,18 +272,6 @@
     .book-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
     .book-links a { font-size: 0.8rem; font-weight: 500; }
 
-    /* ── Writing (blogs & newsletter) ── */
-    .writing-list { list-style: none; display: flex; flex-direction: column; gap: 1.7rem; }
-    .writing-title { font-size: 0.95rem; font-weight: 500; color: #111; margin-bottom: 0.22rem; line-height: 1.5; }
-    .writing-title a { color: #111; }
-    .writing-title a:hover { color: #1a56a0; text-decoration: none; }
-    .writing-meta { font-size: 0.8rem; color: #8a8a80; margin-bottom: 0.35rem; }
-    .writing-meta .sep { color: #ccc; padding: 0 0.4rem; }
-    .writing-outlet { color: #666; font-weight: 500; }
-    .writing-desc { font-size: 0.875rem; color: #555; line-height: 1.75; }
-    .writing-links { margin-top: 0.45rem; }
-    .writing-links a { font-size: 0.8rem; font-weight: 500; }
-
     /* ── Teaching ── */
     .course-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
     .course-card {
@@ -365,7 +353,6 @@
         <li><a href="#publications">Publications</a></li>
         <li><a href="#books">Books</a></li>
         <li><a href="/newsletter/">Newsletter</a></li>
-        <li><a href="#writing">Writing</a></li>
         <li><a href="#teaching">Teaching</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="research-group.html">Research Group</a></li>
@@ -435,15 +422,6 @@
       <div id="books-container">
         <p style="color:#ccc; font-size:0.925rem;">Loading…</p>
       </div>
-    </div>
-  </section>
-
-  <!-- Blogs and Newsletter -->
-  <section id="writing" hidden>
-    <div class="container">
-      <h2 class="section-heading">Blogs and Newsletter</h2>
-      <p id="writing-intro" class="writing-desc" style="margin-bottom:1.8rem; max-width:62ch;" hidden></p>
-      <ul id="writing-container" class="writing-list"></ul>
     </div>
   </section>
 
@@ -703,49 +681,9 @@
       return (m[3] ? Number(m[3]) + ' ' : '') + month + ' ' + m[1];
     }
 
-    function writingEntry(w) {
-      const date = displayDate(w.date);
-      const meta = [date, w.outlet ? `<span class="writing-outlet">${w.outlet}</span>` : '']
-        .filter(Boolean).join('<span class="sep">·</span>');
-      const title = w.link
-        ? `<a href="${w.link}" target="_blank" rel="noopener">${w.title}</a>`
-        : w.title;
-      return `
-        <li class="writing-item">
-          <p class="writing-title">${title}</p>
-          ${meta ? `<p class="writing-meta">${meta}</p>` : ''}
-          ${w.description ? `<p class="writing-desc">${w.description}</p>` : ''}
-          ${w.link ? `<p class="writing-links"><a href="${w.link}" target="_blank" rel="noopener">Read</a></p>` : ''}
-        </li>`;
-    }
-
-    async function loadWriting() {
-      const section = document.getElementById('writing');
-      const el = document.getElementById('writing-container');
-      const introEl = document.getElementById('writing-intro');
-      try {
-        const res = await fetch('data/blogs.json');
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        const intro = Array.isArray(data) ? null : data.intro;
-        const items = Array.isArray(data) ? data : (data.items || []);
-        if (!items.length) return;              // nothing published yet — leave section hidden
-
-        if (intro) { introEl.innerHTML = intro; introEl.hidden = false; }
-        el.innerHTML = items
-          .slice()
-          .sort((a, b) => String(b.sort || b.date || '').localeCompare(String(a.sort || a.date || '')))
-          .map(writingEntry).join('');
-        section.hidden = false;
-      } catch {
-        /* leave the section hidden rather than showing an error to visitors */
-      }
-    }
-
     loadNews();
     loadPublications();
     loadBooks();
-    loadWriting();
   </script>
 
 </body>
