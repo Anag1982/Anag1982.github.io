@@ -1,4 +1,13 @@
 {
-  "intro": "",
-  "items": []
+  "intro": "Each of my books has a newsletter series attached to it, written to stand on its own. <a href=\"/newsletter/\">Browse all series</a>.",
+  "items": [
+    {
+      "title": "The mathematics I thought I would never use again",
+      "date": "2026-08-07",
+      "sort": "2026-08-07",
+      "outlet": "The Maths Underneath · Issue 1",
+      "description": "Ten years ago I set out to retrain in machine learning and found, past the notation, mathematics I already knew. Why the fundamentals outlast the frameworks, and what this fortnightly series will do.",
+      "link": "/newsletter/maths-for-ai/01-the-maths-i-thought-id-never-use-again.html"
+    }
+  ]
 }

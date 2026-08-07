@@ -1,0 +1,52 @@
+{
+  "series": [
+    {
+      "key": "maths-for-ai",
+      "name": "The Maths Underneath",
+      "book": "Maths for AI",
+      "bookLink": "https://www.amazon.co.uk/dp/B0H7QM2BB6",
+      "cover": "books/maths-for-ai.jpg",
+      "tagline": "The mathematics behind machine learning, one idea at a time.",
+      "description": "A fortnightly series on the mathematics that machine learning actually runs on. Each issue takes one idea, explains it in plain language, draws it, states the mathematics, and shows it running in a few lines of NumPy. No proofs, no prerequisites beyond school algebra.",
+      "cadence": "Fortnightly",
+      "status": "active",
+      "notebooks": "https://github.com/biddu/maths-for-ai-notebooks",
+      "issues": [
+        {
+          "number": 1,
+          "title": "The mathematics I thought I would never use again",
+          "slug": "01-the-maths-i-thought-id-never-use-again",
+          "date": "2026-08-07",
+          "readingTime": "5 min",
+          "summary": "Ten years ago I set out to retrain in machine learning and found, past the notation, mathematics I already knew. Why the fundamentals outlast the frameworks, and what this series will do every fortnight."
+        }
+      ]
+    },
+    {
+      "key": "maths-for-quantum-computing",
+      "name": "Amplitudes",
+      "book": "Maths for Quantum Computing",
+      "bookLink": "https://www.amazon.co.uk/dp/B0H7XVWYXN",
+      "cover": "books/maths-for-quantum-computing.jpg",
+      "tagline": "The linear algebra behind quantum computing, taught NumPy-first.",
+      "description": "A series on the mathematics of quantum computing for developers who are strong in Python and light on the linear algebra. Complex numbers, state vectors, and quantum algorithms, each built in NumPy before it is shown once in Qiskit.",
+      "cadence": "Fortnightly",
+      "status": "planned",
+      "notebooks": "",
+      "issues": []
+    },
+    {
+      "key": "six-ideas-that-run-the-world",
+      "name": "Six Ideas",
+      "book": "Six Ideas That Run the World",
+      "bookLink": "https://www.amazon.co.uk/dp/B0H9P9B5FX",
+      "cover": "books/six-ideas-that-run-the-world.jpg",
+      "tagline": "Rockets, AI, medicine and cryptography, derived from school mathematics.",
+      "description": "A series that takes the ideas quietly running the modern world and derives them in full, using nothing beyond strong school-level mathematics. Where the real research runs past the syllabus, it says so plainly.",
+      "cadence": "Monthly",
+      "status": "planned",
+      "notebooks": "",
+      "issues": []
+    }
+  ]
+}
