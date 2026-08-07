@@ -1,8 +1,18 @@
 [
   {
+    "date": "July 2026",
+    "title": "Three new books published",
+    "text": "<em>Maths for Quantum Computing</em> and <em>Maths for AI</em> (the first two volumes of the <em>Mathematics for Everything</em> series), and <em>Six Ideas That Run the World</em>, are now available."
+  },
+  {
+    "date": "April 2026",
+    "title": "Two papers at IEEE WCNC 2026",
+    "text": "Work on finite-regime QKD entropy analysis and Grover-inspired quantum reinforcement learning for massive MIMO scheduling presented at WCNC 2026."
+  },
+  {
     "date": "2026",
     "title": "New journal papers",
-    "text": "Two papers published in <em>IEEE Transactions on Green Communications and Networking</em> and <em>Journal of Lightwave Technology</em> on hybrid quantum-classical optical networks."
+    "text": "Papers published in <em>IEEE Transactions on Green Communications and Networking</em> and the <em>Journal of Lightwave Technology</em> on hybrid quantum-classical optical networks."
   },
   {
     "date": "2025",

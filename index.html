@@ -163,8 +163,126 @@
       font-style: italic;
     }
     .pub-venue strong { font-style: normal; color: #666; font-weight: 500; }
-    .pub-links { margin-top: 0.4rem; display: flex; gap: 0.8rem; }
+    .pub-links { margin-top: 0.4rem; display: flex; gap: 0.8rem; align-items: center; }
     .pub-links a { font-size: 0.8rem; color: #1a56a0; font-weight: 500; }
+
+    /* ── Publications: year grouping ── */
+    .pub-toolbar {
+      display: flex; align-items: baseline; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+      margin: -0.5rem 0 1.2rem;
+    }
+    .pub-count { font-size: 0.85rem; color: #888; }
+    .pub-toggle {
+      font-size: 0.8rem; font-weight: 500; color: #1a56a0;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: inherit; letter-spacing: 0.01em;
+    }
+    .pub-toggle:hover { text-decoration: underline; }
+
+    .pub-year { border-top: 1px solid #ececE8; }
+    .pub-year:first-of-type { border-top: none; }
+    .pub-year > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex; align-items: baseline; gap: 0.6rem;
+      padding: 0.85rem 0;
+      -webkit-user-select: none; user-select: none;
+    }
+    .pub-year > summary::-webkit-details-marker { display: none; }
+    .pub-year > summary::before {
+      content: "";
+      flex: none;
+      width: 0; height: 0;
+      border-left: 5px solid #b4b4ae;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      transform: translateY(-1px);
+      transition: transform 0.15s ease;
+    }
+    .pub-year[open] > summary::before { transform: translateY(-1px) rotate(90deg); }
+    .pub-year-label {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem; font-weight: 600; color: #111;
+      letter-spacing: -0.01em;
+    }
+    .pub-year-count { font-size: 0.78rem; color: #999; }
+    .pub-year > .pub-list { padding: 0.2rem 0 1.6rem 1.1rem; }
+
+    .pub-type {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: #7a7a72; background: #f0f0ea;
+      border-radius: 3px; padding: 0.1rem 0.4rem;
+      vertical-align: 1px;
+    }
+
+    /* ── Books ── */
+    .book-group + .book-group { margin-top: 2.6rem; }
+    .book-group-label {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: #8a8a80;
+      margin-bottom: 1.4rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ececE8;
+    }
+    .book-list { list-style: none; display: flex; flex-direction: column; gap: 2.2rem; }
+    .book-item {
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .book-cover {
+      width: 104px;
+      border-radius: 3px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+      background: #ececE8;
+    }
+    .book-body { min-width: 0; }
+    .book-title {
+      font-family: 'Lora', serif;
+      font-size: 1.08rem; font-weight: 600; color: #111;
+      line-height: 1.35; letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+    }
+    .book-title a { color: #111; }
+    .book-title a:hover { color: #1a56a0; text-decoration: none; }
+    .book-subtitle {
+      font-size: 0.9rem; color: #555; line-height: 1.55;
+      margin-bottom: 0.55rem;
+    }
+    .book-meta {
+      font-size: 0.8rem; color: #8a8a80;
+      margin-bottom: 0.75rem;
+      line-height: 1.7;
+    }
+    .book-meta .sep { color: #ccc; padding: 0 0.4rem; }
+    .book-role {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: #1a56a0; background: #eef3fb;
+      border-radius: 3px; padding: 0.1rem 0.4rem;
+      margin-right: 0.55rem;
+    }
+    .book-blurb { font-size: 0.875rem; color: #555; line-height: 1.75; margin-bottom: 0.7rem; }
+    .book-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .book-links a { font-size: 0.8rem; font-weight: 500; }
+
+    /* ── Writing (blogs & newsletter) ── */
+    .writing-list { list-style: none; display: flex; flex-direction: column; gap: 1.7rem; }
+    .writing-title { font-size: 0.95rem; font-weight: 500; color: #111; margin-bottom: 0.22rem; line-height: 1.5; }
+    .writing-title a { color: #111; }
+    .writing-title a:hover { color: #1a56a0; text-decoration: none; }
+    .writing-meta { font-size: 0.8rem; color: #8a8a80; margin-bottom: 0.35rem; }
+    .writing-meta .sep { color: #ccc; padding: 0 0.4rem; }
+    .writing-outlet { color: #666; font-weight: 500; }
+    .writing-desc { font-size: 0.875rem; color: #555; line-height: 1.75; }
+    .writing-links { margin-top: 0.45rem; }
+    .writing-links a { font-size: 0.8rem; font-weight: 500; }
 
     /* ── Teaching ── */
     .course-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
@@ -222,6 +340,16 @@
       .course-grid { grid-template-columns: 1fr; }
       .nav-links { gap: 1rem; }
       .about-name { font-size: 1.9rem; }
+      .book-item { grid-template-columns: 84px minmax(0, 1fr); gap: 1.1rem; }
+      .book-cover { width: 84px; }
+      .book-title { font-size: 1rem; }
+      .pub-year > .pub-list { padding-left: 0; }
+    }
+
+    /* Nav wraps rather than overflowing once there are more links */
+    @media (max-width: 900px) {
+      nav .container { height: auto; padding-top: 0.5rem; padding-bottom: 0.5rem; flex-wrap: wrap; }
+      .nav-links { flex-wrap: wrap; gap: 0.4rem 1.1rem; }
     }
   </style>
 </head>
@@ -235,6 +363,8 @@
         <li><a href="#about">About</a></li>
         <li><a href="#news">News</a></li>
         <li><a href="#publications">Publications</a></li>
+        <li><a href="#books">Books</a></li>
+        <li><a href="#writing">Writing</a></li>
         <li><a href="#teaching">Teaching</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="research-group.html">Research Group</a></li>
@@ -283,13 +413,36 @@
   <!-- Publications -->
   <section id="publications">
     <div class="container">
-      <h2 class="section-heading">Selected Publications</h2>
-      <ul id="pub-container" class="pub-list">
-        <li class="pub-item" style="color:#ccc;">Loading…</li>
-      </ul>
-      <p style="margin-top:1.5rem; font-size:0.875rem; color:#888;">
-        Full publication list (100+) on <a href="https://scholar.google.com/citations?user=edSZ2bQAAAAJ&hl=en" target="_blank">Google Scholar</a>.
+      <h2 class="section-heading">Publications</h2>
+      <div class="pub-toolbar">
+        <span id="pub-count" class="pub-count">&nbsp;</span>
+        <button id="pub-toggle" class="pub-toggle" type="button" hidden>Expand all years</button>
+      </div>
+      <div id="pub-container">
+        <p class="pub-item" style="color:#ccc;">Loading…</p>
+      </div>
+      <p style="margin-top:1.8rem; font-size:0.875rem; color:#888;">
+        Citation counts and the complete record are on <a href="https://scholar.google.com/citations?user=edSZ2bQAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>.
       </p>
+    </div>
+  </section>
+
+  <!-- Authored Books -->
+  <section id="books">
+    <div class="container">
+      <h2 class="section-heading">Authored Books</h2>
+      <div id="books-container">
+        <p style="color:#ccc; font-size:0.925rem;">Loading…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blogs and Newsletter -->
+  <section id="writing" hidden>
+    <div class="container">
+      <h2 class="section-heading">Blogs and Newsletter</h2>
+      <p id="writing-intro" class="writing-desc" style="margin-bottom:1.8rem; max-width:62ch;" hidden></p>
+      <ul id="writing-container" class="writing-list"></ul>
     </div>
   </section>
 
@@ -410,27 +563,188 @@
       }
     }
 
-    /* ── Publications loader ── */
+    /* ── Publications loader (grouped by year) ── */
+    const OPEN_RECENT_YEARS = 2;   // most recent N years expanded on load
+    const TYPE_LABEL = {
+      journal: 'Journal',
+      conference: 'Conference',
+      book: 'Book',
+      'book-chapter': 'Book chapter',
+      preprint: 'Preprint',
+      report: 'Report'
+    };
+
+    function pubEntry(p) {
+      const type = TYPE_LABEL[p.type] || '';
+      return `
+        <li class="pub-item">
+          <p class="pub-title">${p.title}</p>
+          <p class="pub-authors">${p.authors}</p>
+          <p class="pub-venue"><strong>${p.venue}</strong>${p.details ? ', ' + p.details : ''}.</p>
+          <div class="pub-links">
+            ${type ? `<span class="pub-type">${type}</span>` : ''}
+            ${p.doi ? `<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>` : ''}
+          </div>
+        </li>`;
+    }
+
     async function loadPublications() {
       const el = document.getElementById('pub-container');
+      const countEl = document.getElementById('pub-count');
+      const toggleEl = document.getElementById('pub-toggle');
       try {
         const res = await fetch('data/publications.json');
         if (!res.ok) throw new Error();
         const pubs = await res.json();
-        el.innerHTML = pubs.map(p => `
-          <li class="pub-item">
-            <p class="pub-title">${p.title}</p>
-            <p class="pub-authors">${p.authors}</p>
-            <p class="pub-venue"><strong>${p.venue}</strong>${p.details ? ', ' + p.details : ''}.</p>
-            ${p.doi ? `<div class="pub-links"><a href="https://doi.org/${p.doi}" target="_blank">DOI</a></div>` : ''}
-          </li>`).join('');
+
+        const years = [...new Set(pubs.map(p => p.year))].sort((a, b) => b - a);
+        el.innerHTML = years.map((y, i) => {
+          const items = pubs.filter(p => p.year === y);
+          return `
+            <details class="pub-year"${i < OPEN_RECENT_YEARS ? ' open' : ''}>
+              <summary>
+                <span class="pub-year-label">${y}</span>
+                <span class="pub-year-count">${items.length} ${items.length === 1 ? 'item' : 'items'}</span>
+              </summary>
+              <ul class="pub-list">${items.map(pubEntry).join('')}</ul>
+            </details>`;
+        }).join('');
+
+        countEl.textContent = `${pubs.length} publications across ${years.length} years — ${years[years.length - 1]}–${years[0]}.`;
+
+        const groups = () => [...el.querySelectorAll('details.pub-year')];
+        const sync = () => {
+          const allOpen = groups().every(d => d.open);
+          toggleEl.textContent = allOpen ? 'Collapse all years' : 'Expand all years';
+        };
+        toggleEl.hidden = false;
+        toggleEl.addEventListener('click', () => {
+          const allOpen = groups().every(d => d.open);
+          groups().forEach(d => { d.open = !allOpen; });
+          sync();
+        });
+        el.addEventListener('toggle', sync, true);
+        sync();
       } catch {
-        el.innerHTML = '<li class="pub-item" style="color:#aaa;">Could not load publications. Edit <code>data/publications.json</code> in your repository.</li>';
+        el.innerHTML = '<p style="color:#aaa;">Could not load publications. Edit <code>data/publications.json</code> in your repository.</p>';
+      }
+    }
+
+    /* ── Books loader ── */
+    const BOOK_GROUPS = [
+      { key: 'authored', label: 'Authored' },
+      { key: 'edited',   label: 'Edited Volumes' }
+    ];
+
+    /* Keep short two-word facts ("June 2024") off a line break. Never applied to
+       long strings — that would create an unbreakable run and overflow small screens. */
+    const nb = s => (String(s).length <= 18 ? String(s).replace(/ /g, ' ') : String(s));
+
+    function bookEntry(b) {
+      const line1 = [b.series, b.publisher].filter(Boolean)
+        .join('<span class="sep">·</span>');
+      const line2 = [b.date || (b.year ? String(b.year) : ''), b.format].filter(Boolean)
+        .map(nb).join('<span class="sep">·</span>');
+      const meta = [line1, line2].filter(Boolean).join('<br />');
+
+      return `
+        <li class="book-item">
+          <a href="${b.link}" target="_blank" rel="noopener">
+            <img class="book-cover" src="${b.cover}" alt="Cover of ${b.title}" loading="lazy" />
+          </a>
+          <div class="book-body">
+            <p class="book-title"><a href="${b.link}" target="_blank" rel="noopener">${b.title}</a></p>
+            ${b.subtitle ? `<p class="book-subtitle">${b.subtitle}</p>` : ''}
+            <p class="book-meta">${b.role ? `<span class="book-role">${b.role}</span>` : ''}${meta}${b.editors ? `<br />Editors: ${b.editors}` : ''}</p>
+            ${b.blurb ? `<p class="book-blurb">${b.blurb}</p>` : ''}
+            <div class="book-links">
+              <a href="${b.link}" target="_blank" rel="noopener">View on Amazon</a>
+              ${b.doi ? `<a href="https://doi.org/${b.doi}" target="_blank" rel="noopener">DOI</a>` : ''}
+            </div>
+          </div>
+        </li>`;
+    }
+
+    async function loadBooks() {
+      const el = document.getElementById('books-container');
+      try {
+        const res = await fetch('data/books.json');
+        if (!res.ok) throw new Error();
+        const books = await res.json();
+        if (!books.length) { document.getElementById('books').hidden = true; return; }
+
+        el.innerHTML = BOOK_GROUPS.map(g => {
+          const items = books
+            .filter(b => (b.category || 'authored') === g.key)
+            .sort((a, b) => (b.year || 0) - (a.year || 0));
+          if (!items.length) return '';
+          return `
+            <div class="book-group">
+              <p class="book-group-label">${g.label}</p>
+              <ul class="book-list">${items.map(bookEntry).join('')}</ul>
+            </div>`;
+        }).join('');
+      } catch {
+        el.innerHTML = '<p style="color:#aaa; font-size:0.925rem;">Could not load books. Edit <code>data/books.json</code> in your repository.</p>';
+      }
+    }
+
+    /* ── Blogs & newsletter loader (section stays hidden until there is content) ── */
+    /* Accepts either an ISO date ("2026-07-14") or free text ("July 2026"). */
+    function displayDate(d) {
+      if (!d) return '';
+      const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(String(d).trim());
+      if (!m) return d;
+      const months = ['January','February','March','April','May','June',
+                      'July','August','September','October','November','December'];
+      const month = months[Number(m[2]) - 1];
+      if (!month) return d;
+      return (m[3] ? Number(m[3]) + ' ' : '') + month + ' ' + m[1];
+    }
+
+    function writingEntry(w) {
+      const date = displayDate(w.date);
+      const meta = [date, w.outlet ? `<span class="writing-outlet">${w.outlet}</span>` : '']
+        .filter(Boolean).join('<span class="sep">·</span>');
+      const title = w.link
+        ? `<a href="${w.link}" target="_blank" rel="noopener">${w.title}</a>`
+        : w.title;
+      return `
+        <li class="writing-item">
+          <p class="writing-title">${title}</p>
+          ${meta ? `<p class="writing-meta">${meta}</p>` : ''}
+          ${w.description ? `<p class="writing-desc">${w.description}</p>` : ''}
+          ${w.link ? `<p class="writing-links"><a href="${w.link}" target="_blank" rel="noopener">Read</a></p>` : ''}
+        </li>`;
+    }
+
+    async function loadWriting() {
+      const section = document.getElementById('writing');
+      const el = document.getElementById('writing-container');
+      const introEl = document.getElementById('writing-intro');
+      try {
+        const res = await fetch('data/blogs.json');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const intro = Array.isArray(data) ? null : data.intro;
+        const items = Array.isArray(data) ? data : (data.items || []);
+        if (!items.length) return;              // nothing published yet — leave section hidden
+
+        if (intro) { introEl.innerHTML = intro; introEl.hidden = false; }
+        el.innerHTML = items
+          .slice()
+          .sort((a, b) => String(b.sort || b.date || '').localeCompare(String(a.sort || a.date || '')))
+          .map(writingEntry).join('');
+        section.hidden = false;
+      } catch {
+        /* leave the section hidden rather than showing an error to visitors */
       }
     }
 
     loadNews();
     loadPublications();
+    loadBooks();
+    loadWriting();
   </script>
 
 </body>
