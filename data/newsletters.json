@@ -19,6 +19,14 @@
           "date": "2026-08-07",
           "readingTime": "5 min",
           "summary": "Ten years ago I set out to retrain in machine learning and found, past the notation, mathematics I already knew. Why the fundamentals outlast the frameworks, and what this series will do every fortnight."
+        },
+        {
+          "number": 2,
+          "title": "Your data is already geometry",
+          "slug": "02-your-data-is-already-geometry",
+          "date": "2026-08-21",
+          "readingTime": "7 min",
+          "summary": "A row of data is a point in space, and the distance between two points measures how unalike two things are. Vectors, distance, and the scaling mistake that quietly ruins it."
         }
       ]
     },
