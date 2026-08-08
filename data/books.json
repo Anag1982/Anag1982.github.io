@@ -1,5 +1,19 @@
 [
   {
+    "title": "Distributed Systems Thinking",
+    "subtitle": "Architectural Judgment for the AI-Assisted Engineer",
+    "role": "Author",
+    "series": null,
+    "publisher": "Independently published",
+    "year": 2026,
+    "date": "August 2026",
+    "format": "Kindle Edition · 183 pages",
+    "cover": "books/distributed-systems-thinking.jpg",
+    "link": "https://www.amazon.com/dp/B0HDG88RCB",
+    "blurb": "Fourteen chapters on the part of software engineering that does not transfer to the machine: deciding what a system should be, and being able to say why. Coupling and the architecture quantum, synchronous contracts, event-driven design, resilience and cost, each worked through a single production RAG platform built up across the whole book. It offers no model solutions, only tradeoffs with the price attached.",
+    "category": "authored"
+  },
+  {
     "title": "Six Ideas That Run the World",
     "subtitle": "The School Maths and Science Behind Rockets, AI, Medicine and Everything Next — Derived in Full, Nothing Skipped",
     "role": "Author",

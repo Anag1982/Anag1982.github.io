@@ -1,5 +1,10 @@
 [
   {
+    "date": "August 2026",
+    "title": "New book published",
+    "text": "<em>Distributed Systems Thinking: Architectural Judgment for the AI-Assisted Engineer</em> is now available. Built from the COMP41720 masters module at UCD, it argues that AI has made implementation cheap and left architectural judgment as the part an engineer still has to do."
+  },
+  {
     "date": "July 2026",
     "title": "Three new books published",
     "text": "<em>Maths for Quantum Computing</em> and <em>Maths for AI</em> (the first two volumes of the <em>Mathematics for Everything</em> series), and <em>Six Ideas That Run the World</em>, are now available."
