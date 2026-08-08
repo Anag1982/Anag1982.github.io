@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Every LLM call is a distributed transaction — The Expensive Answers, Issue 1</title>
+  <meta name="description" content="The five decades of engineering hiding inside 1.4 seconds. One AI answer, walked hop by hop, and why distributed systems knowledge applies in full to the systems being built now." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/distributed-systems-thinking/01-every-llm-call-is-a-distributed-transaction.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Every LLM call is a distributed transaction" />
+  <meta property="og:description" content="The five decades of engineering hiding inside 1.4 seconds. One AI answer, walked hop by hop." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/distributed-systems-thinking/01-every-llm-call-is-a-distributed-transaction.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/distributed-systems-thinking/img/fig-01-anatomy-of-an-llm-call.png" />
+  <meta property="article:published_time" content="2026-07-23" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Every LLM call is a distributed transaction",
+    "datePublished": "2026-07-23",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Expensive Answers" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/distributed-systems-thinking/01-every-llm-call-is-a-distributed-transaction.html",
+    "description": "The five decades of engineering hiding inside 1.4 seconds."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/distributed-systems-thinking/">The Expensive Answers</a><span class="sep">·</span>Issue 1
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Expensive Answers · Issue 1</p>
+      <h1 class="article-title">Every LLM call is a distributed transaction</h1>
+      <p class="article-subtitle">The five decades of engineering hiding inside 1.4 seconds</p>
+      <p class="article-meta">
+        <time datetime="2026-07-23">23 July 2026</time><span class="sep">·</span>4 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">At 09:14 on a Tuesday, a consultant typed a question into a chat window: &ldquo;What did we agree with the regulator about data retention on this engagement?&rdquo; The first words of the answer appeared 1.4 seconds later. The full answer took another five seconds, arrived with three citations, and was correct. She checked one clause against the second citation and moved on with her morning.</p>
+
+      <p>Nothing about this feels remarkable anymore. The ordinariness is the achievement, and it is worth taking apart.</p>
+
+      <p>Between the Enter key and the first word of the answer, her question crossed an office network, passed through a load balancer, and was authenticated at a gateway that also checked and decremented a usage quota. A search ran against her firm&rsquo;s document index; the best passages were ranked and assembled into a prompt. A scheduler queued the request, batched it with strangers&rsquo; requests, and placed it on a cluster of GPU servers, where a model too large for any single machine produced the answer one token at a time. Six or seven services touched the request. Each one sits behind a network boundary. Each boundary can fail outright, fail partially, or simply run slow. None of them did.</p>
+
+      <figure class="figure-wide">
+        <div class="figure-scroll">
+          <a href="/newsletter/distributed-systems-thinking/img/fig-01-anatomy-of-an-llm-call.png" target="_blank" rel="noopener">
+            <img src="/newsletter/distributed-systems-thinking/img/fig-01-anatomy-of-an-llm-call.png" alt="One LLM API call drawn as six hops: client, load balancer, API gateway, scheduler, inference pod and the streamed response, with the distributed systems problem annotated beneath each hop and a timeline from 0 ms to the last token" loading="lazy" />
+          </a>
+        </div>
+        <figcaption>The same request drawn out. Every hop is a network boundary, and beneath each one sits the distributed systems problem it has to solve.</figcaption>
+      </figure>
+
+      <p>That last sentence is my whole subject.</p>
+
+      <p>Walk the request again, slowly, and notice what is hiding at each hop. The gateway decremented a counter. That counter is shared state: every request in the building is racing to update it, and at the end of the month it becomes a bill, so it must not drift. A number that must be correct, updated concurrently, from many machines. There is a whole literature about numbers like that, and none of it was written by AI companies.</p>
+
+      <p>The retrieval stage ran under a budget, 250 milliseconds or so, and the budget matters because nothing visible had happened yet. Everything before the first token is ordinary latency engineering, the kind we have practised for thirty years.</p>
+
+      <p>The model&rsquo;s weights were sharded across several machines because they fit on none. As the answer grew, the accumulated context sat in a cache on those particular machines, which quietly pinned the request to them. The request had a home, and moving it was expensive. Distributed systems people have a word for this kind of trouble: state.</p>
+
+      <p>And the answer streamed. Streaming is not decoration. The full answer took over six seconds, and six seconds staring at a spinner feels broken, while six seconds of text arriving steadily feels alive. Generation latency is so large that it cannot be hidden, so the industry stopped hiding it and shaped the experience around it. A protocol choice is managing your perception.</p>
+
+      <p>Now the accounting. The request held state in four places. It spent real money, mostly in GPU seconds. And it could have stopped partway at any boundary: quota decremented but no answer produced, answer produced but usage never recorded, half an answer streamed and the connection lost. Someone had to decide, in advance, what &ldquo;done&rdquo; means in each of those endings, who pays for the incomplete ones, and what the retry rules are, because a careless retry answers the question twice and bills it twice.</p>
+
+      <p>A request that crosses many machines, holds state in several places, spends metered money, and can complete partially is a distributed transaction, whatever the marketing calls it. That claim comes with an obligation: five decades of distributed systems knowledge applies in full to the AI systems being built right now. The four classical challenges, concurrency, partial failure, latency, and heterogeneity, all touched that one request. The systems behind modern AI did not repeal them. They industrialised them.</p>
+
+      <p>Here is why I think this matters more each month, not less. A good part of the system that answered her was itself written with AI assistance: the gateway code, the retry logic, much of the retrieval service. The tools produced the code quickly and most of it was fine. Deciding which parts were not fine, and why, was done by people. As generation gets cheaper, that reviewing judgment gets more valuable, not less. The tools will keep improving; the timings in this piece are indicative and will date. The judgment will not.</p>
+
+      <p>I teach a masters module on distributed systems at UCD, one of the larger ones in our School, and two years ago I rebuilt it around exactly this argument: architectural judgment, not implementation, as the durable skill. That module, and everything I learned redesigning it for the AI era, became a book. This piece is the opening of its first chapter, and the rest of this series works through the same argument one piece at a time.</p>
+
+      <p>A question for you, and I do read replies: think of your last AI-related outage or surprise bill. Which boundary did it start at? I am collecting these, anonymised, and the good ones will make the next edition sharper.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters on the same argument, built around one production RAG platform and
+        finishing on the 5G and 6G edge. The newsletter stands on its own, and you never need the
+        book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HDG88RCB" target="_blank" rel="noopener">Distributed Systems Thinking on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/distributed-systems-thinking/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <span>&larr; Nothing earlier</span>
+      <span>Issue 2 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

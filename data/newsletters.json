@@ -31,6 +31,28 @@
       ]
     },
     {
+      "key": "distributed-systems-thinking",
+      "name": "The Expensive Answers",
+      "book": "Distributed Systems Thinking",
+      "bookLink": "https://www.amazon.com/dp/B0HDG88RCB",
+      "cover": "books/distributed-systems-thinking.jpg",
+      "tagline": "Architectural judgment in the AI era, one decision at a time.",
+      "description": "A weekly series on the judgment that does not transfer to the machine: deciding what a system should be, and being able to say why. Each issue takes one architectural decision out of a working system, walks it hop by hop, and prices the tradeoff instead of declaring a winner.",
+      "cadence": "Weekly",
+      "status": "active",
+      "notebooks": "",
+      "issues": [
+        {
+          "number": 1,
+          "title": "Every LLM call is a distributed transaction",
+          "slug": "01-every-llm-call-is-a-distributed-transaction",
+          "date": "2026-07-23",
+          "readingTime": "4 min",
+          "summary": "A consultant waits 1.4 seconds for an answer. In that time her question crosses six network boundaries, races every other request in the building to update a billing counter, and streams back through every hop it came from. Why five decades of distributed systems knowledge applies in full."
+        }
+      ]
+    },
+    {
       "key": "maths-for-quantum-computing",
       "name": "Amplitudes",
       "book": "Maths for Quantum Computing",

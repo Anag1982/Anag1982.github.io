@@ -161,6 +161,28 @@ nav .container {
   border-radius: 3px; padding: 0.1em 0.35em; font-size: 0.86em;
 }
 
+/* ── Article subtitle ── */
+.article-subtitle {
+  font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 400;
+  color: #555; line-height: 1.6; margin: -0.35rem 0 0.85rem; max-width: 54ch;
+}
+
+/* ── Wide diagrams: legible on a phone ── */
+.article-body figure a { display: block; }
+.article-body figure .figure-scroll { display: block; }
+@media (max-width: 640px) {
+  .article-body figure.figure-wide .figure-scroll {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border: 1px solid #ececE8; border-radius: 6px; background: #fff;
+  }
+  .article-body figure.figure-wide .figure-scroll img {
+    width: auto; max-width: none; height: 250px; border: 0; border-radius: 0;
+  }
+  .article-body figure.figure-wide figcaption::after {
+    content: " Swipe the diagram to see all of it, or tap it to open full size.";
+  }
+}
+
 /* ── Call-to-action block ── */
 .cta {
   background: #fff; border: 1px solid #e5e5e0; border-radius: 8px;
