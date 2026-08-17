@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maths for Post-Quantum Cryptography — Avishek Nag</title>
+  <meta name="description" content="Maths for Post-Quantum Cryptography: Lattices, Learning With Errors and the NIST Standards. Mathematics for Everything, Book 4, by Avishek Nag." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1f2328; --muted: #57606a; --rule: #d8dbe0;
+      --accent: #8c2f1c; --gold: #e0a341; --link: #1a56a0;
+      --bg-soft: #f6f5f3;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; color: var(--ink);
+           line-height: 1.65; font-size: 16px; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1.25rem; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .topbar { border-bottom: 1px solid var(--rule); padding: 0.8rem 0;
+              font-size: 0.9rem; }
+    .topbar a { color: var(--muted); }
+
+    .hero { background: var(--accent); color: #f6ece2; padding: 3rem 0; }
+    .hero .container { display: grid; grid-template-columns: 240px 1fr;
+                       gap: 2.6rem; align-items: center; }
+    .hero img { width: 100%; border-radius: 3px;
+                box-shadow: 0 6px 26px rgba(0,0,0,0.35); }
+    .hero .kicker { font-size: 0.78rem; letter-spacing: 0.14em;
+                    text-transform: uppercase; opacity: 0.85;
+                    margin-bottom: 0.6rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 700; line-height: 1.2; }
+    .hero p.sub { margin-top: 0.7rem; font-size: 1.02rem; opacity: 0.94;
+                  font-style: italic; }
+    .hero p.author { margin-top: 1.1rem; font-size: 0.94rem; opacity: 0.9; }
+    .buy { margin-top: 1.5rem; display: flex; gap: 0.7rem; flex-wrap: wrap; }
+    .buy a {
+      display: inline-block; padding: 0.55rem 1.1rem; border-radius: 5px;
+      font-size: 0.9rem; font-weight: 600; text-decoration: none;
+    }
+    .buy a.primary { background: var(--gold); color: #3a2a00; }
+    .buy a.ghost { border: 1.5px solid rgba(246,236,226,0.65); color: #f6ece2; }
+    .buy a:hover { filter: brightness(1.06); text-decoration: none; }
+
+    main { padding: 2.6rem 0 4rem; }
+    section + section { margin-top: 2.4rem; }
+    h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem;
+         padding-bottom: 0.35rem; border-bottom: 2px solid var(--ink); }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2.2rem; }
+    ul.tight { margin: 0.4rem 0 0 1.15rem; }
+    ul.tight li { margin-bottom: 0.45rem; font-size: 0.95rem; }
+    p.body { font-size: 0.97rem; max-width: 46rem; margin-bottom: 0.8rem; }
+    .panel { background: var(--bg-soft); border-left: 3px solid var(--accent);
+             padding: 1rem 1.2rem; font-size: 0.93rem; max-width: 46rem; }
+    footer { border-top: 1px solid var(--rule); padding: 1.4rem 0 2.4rem;
+             font-size: 0.85rem; color: var(--muted); }
+    @media (max-width: 700px) {
+      .hero .container { grid-template-columns: 1fr; }
+      .hero img { max-width: 220px; }
+      .cols { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar"><div class="container">
+  <a href="/">&larr; anag1982.github.io</a>
+</div></div>
+
+<header class="hero">
+  <div class="container">
+    <img src="/books/maths-for-pqc.jpg" alt="Cover of Maths for Post-Quantum Cryptography" />
+    <div>
+      <p class="kicker">Mathematics for Everything · Book 4</p>
+      <h1>Maths for Post-Quantum Cryptography</h1>
+      <p class="sub">Lattices, Learning With Errors and the NIST Standards</p>
+      <p class="author">Avishek Nag · Associate Professor, School of
+        Electrical &amp; Electronic Engineering, University College Dublin</p>
+      <div class="buy">
+        <!-- Swap these for the live Amazon links after KDP publishing.
+             Kindle/paperback/hardcover share one detail page, so one link
+             is enough once the ASIN exists. -->
+        <a class="primary" href="#buy">Amazon — coming soon</a>
+        <a class="ghost" href="https://github.com/Anag1982/maths-for-pqc">Companion labs (GitHub)</a>
+        <a class="ghost" href="/pqc/standards/">Standards tracker</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section>
+    <h2>Why this book exists</h2>
+    <p class="body">Four jurisdictions have put dates on the post-quantum
+      migration: US federal key establishment by 2030 and signatures by 2031,
+      the UK complete by 2035, the EU and Australia on their own clocks. The
+      standards those deadlines point at — FIPS&nbsp;203, 204 and 205 — were
+      published in 2024. The nearest thing to a canonical textbook was
+      published in 2009, before the NIST competition existed.</p>
+    <p class="body">This book closes that gap, and it closes it by building
+      rather than asserting. It starts at modular arithmetic and ends inside
+      the standards themselves, read clause by clause. Nothing is assumed
+      beyond undergraduate algebra, matrix arithmetic, and the ability to
+      read Python.</p>
+  </section>
+
+  <section>
+    <div class="cols">
+      <div>
+        <h2>What you get</h2>
+        <ul class="tight">
+          <li>Why Shor breaks RSA and ECDH but leaves lattices standing — and
+              why &ldquo;Grover halves AES&rdquo; is misleading in practice</li>
+          <li>Lattices, SIS and LWE, and the number-theoretic transform,
+              built from nothing</li>
+          <li>ML-KEM, ML-DSA, SLH-DSA and FALCON, derived line by line
+              against the standards</li>
+          <li>Code-based and hash-based alternatives given equal weight, not
+              a footnote</li>
+          <li>How to <em>verify</em> a NIST security category rather than
+              trust one</li>
+          <li>196 exercises with complete solutions, and 16 runnable labs
+              whose every numerical claim is tested in CI</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Who it is for</h2>
+        <ul class="tight">
+          <li><b>Security engineers</b> with a migration to deliver and hard
+              questions to answer about it</li>
+          <li><b>Postgraduates</b> entering the field who need the
+              mathematics properly, not by allusion</li>
+          <li><b>Lecturers</b> building a module — the book maps onto a
+              twelve-lecture semester, with a reading map included</li>
+          <li><b>Decision-makers</b> — Chapters 1, 15 and 16 are a complete,
+              self-contained forty-page argument about what is true, what it
+              costs, and how much of the urgency is real</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Honest about what nobody can tell you</h2>
+    <p class="body">&ldquo;Hard&rdquo; is a claim about the best published
+      attack, not a theorem. This book says so, repeatedly, and shows it
+      happening: the Castryck–Decru break of SIDH, and — three weeks before
+      this book went to press — the withdrawal of a NIST Round&nbsp;3
+      signature candidate after a key-recovery attack found by an AI system
+      and confirmed by a human within hours.</p>
+    <div class="panel">
+      Several claims in this book are anchored to standards that were still
+      moving at press time. Every affected chapter carries a dated note, and
+      the <a href="/pqc/standards/">standards tracker</a> maintains the live
+      status of all of them — so a reader with any printing can see exactly
+      what has changed since.
+    </div>
+  </section>
+
+  <section id="buy">
+    <h2>Editions</h2>
+    <ul class="tight">
+      <li><b>Kindle</b> — reflowable, with full MathML mathematics</li>
+      <li><b>Paperback</b> — 6&Prime;&times;9&Prime;, 320 pages, black &amp; white</li>
+      <li><b>Hardcover</b> — 6&Prime;&times;9&Prime;, case laminate</li>
+    </ul>
+    <p class="body" style="margin-top:0.8rem">Amazon links will appear here
+      at launch. The <a href="https://github.com/Anag1982/maths-for-pqc">
+      companion repository</a> is free and open now — every lab in the book,
+      committed already-executed, re-run in CI on every change.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    © Avishek Nag · <a href="/">Home</a> ·
+    <a href="/pqc/standards/">Standards tracker</a> ·
+    <a href="https://github.com/Anag1982/maths-for-pqc">Companion labs</a>
+  </div>
+</footer>
+
+</body>
+</html>
