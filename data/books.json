@@ -9,7 +9,7 @@
     "date": "2026",
     "format": "Kindle · Paperback · Hardcover · 320 pages",
     "cover": "books/maths-for-pqc.jpg",
-    "link": "https://anag1982.github.io/pqc/",
+    "link": "https://www.amazon.com/dp/B0HFLYZQ3B/",
     "blurb": "Four jurisdictions have put dates on the post-quantum migration; the standards they point at were published in 2024, and the nearest thing to a canonical textbook in 2009. This book closes that gap by building rather than asserting: from modular arithmetic to FIPS 203, 204 and 205 read clause by clause, with 196 exercises, full solutions, and 16 runnable labs whose every numerical claim is tested in continuous integration.",
     "category": "authored"
   },
