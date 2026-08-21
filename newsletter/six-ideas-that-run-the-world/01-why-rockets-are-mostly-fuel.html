@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why rockets are mostly fuel — Six Ideas, Issue 1</title>
+  <meta name="description" content="The Saturn V was about 93 percent propellant, and no clever engineering can change that. The rocket equation derived from school momentum, and why staging is a requirement, not a design choice." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/01-why-rockets-are-mostly-fuel.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Why rockets are mostly fuel" />
+  <meta property="og:description" content="The rocket equation derived from school momentum, and why staging is a requirement, not a design choice." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/01-why-rockets-are-mostly-fuel.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/img/fig-01-mass-ratio.png" />
+  <meta property="article:published_time" content="2026-08-21" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Why rockets are mostly fuel",
+    "datePublished": "2026-08-21",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Six Ideas" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/six-ideas-that-run-the-world/01-why-rockets-are-mostly-fuel.html",
+    "description": "The rocket equation derived from school momentum, and why staging is a requirement, not a design choice."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/six-ideas-that-run-the-world/">Six Ideas</a><span class="sep">·</span>Issue 1
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Six Ideas · Issue 1</p>
+      <h1 class="article-title">Why rockets are mostly fuel</h1>
+      <p class="article-meta">
+        <time datetime="2026-08-21">21 August 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">On 21 July 1969, the ascent stage of the Apollo 11 lunar module lifted two men off the Moon. It carried about 2,350 kilograms of propellant. Empty, the stage itself weighed only a little over 2,000 kilograms. Half the vehicle, near enough, was fuel, and that was the easy case. The Moon has no air to push through and one sixth of Earth&rsquo;s gravity to climb against.</p>
+
+      <p>The machine that had put them there was far worse. At launch the Saturn V weighed roughly 2,900 tonnes. About 2,700 tonnes of that was propellant. The part that finally reached the Moon was around 45 tonnes. More than nine tenths of the rocket existed only to move the last small fraction of it.</p>
+
+      <p>That ratio is not a failure of engineering, and it is not something clever design will fix. It is a mathematical consequence, and the mathematics is a logarithm, the same function on the school syllabus. This first issue of the series derives the ratio from a single idea you already trust, the conservation of momentum, and shows why every rocket that has ever reached orbit has been built in stages.</p>
+
+      <p>A word on what this series is, since this is its opening issue. Every fortnight I take one idea that runs a real part of the modern world, rockets today, then satellite navigation, machine learning, medicine, cryptography and the climate, and derive the central result using nothing beyond strong school-level mathematics. Every number is real and comes from a published source. Where the school version stops and the harder subject begins, I say so on the page. The working is never skipped, because the working is the point.</p>
+
+      <h2>The one equation</h2>
+
+      <p>The whole issue turns on one result, the Tsiolkovsky rocket equation, first written down by a Russian schoolteacher at the end of the nineteenth century:</p>
+
+      <pre><code>&Delta;v = v_e &times; ln( m_full / m_empty )</code></pre>
+
+      <p>Read it left to right. &Delta;v, said &ldquo;delta-vee,&rdquo; is the change in speed the rocket can achieve. v_e is the exhaust velocity, the speed at which burnt fuel leaves the engine. m_full is the mass of the rocket fully fuelled and m_empty its mass once the fuel is spent. Their ratio has no units, so the logarithm has no units, and &Delta;v comes out in the units of v_e, a speed. Note that only the ratio of the masses matters, not either mass on its own. A model rocket and a Saturn V obey the same rule.</p>
+
+      <h2>The derivation</h2>
+
+      <p>Everything follows from momentum. Momentum is mass times velocity, and in a closed system with nothing pushing from outside, the total cannot change. A rocket in deep space is such a system if we count the rocket and its exhaust together. So we watch one small moment of the burn and insist the books balance.</p>
+
+      <p>Let the rocket have mass m and speed v. In a short interval it throws a small mass of burnt fuel out of the back at speed v_e relative to itself, and its own speed nudges up by a small amount dv. Write the total momentum before the interval, write it after, and set the two equal. Multiply out, cancel the terms that appear on both sides, and drop the one term that is a small number times another small number, which is the single approximation in the whole derivation. What remains is that each small gain in speed equals v_e times the fractional mass thrown away in that instant: dv = &minus;v_e &times; dm/m.</p>
+
+      <p>To get the total, add these slivers up across the whole burn, from the full mass down to the empty mass. Adding many small fractional changes dm/m is exactly the operation whose answer is the natural logarithm: the derivative of ln m is 1/m, so the quantity whose small changes are dm/m is ln m itself. The sum from m_full down to m_empty is therefore ln(m_full/m_empty), and the equation above falls out with no step skipped. The whole behaviour of a rocket is set by two numbers, how fast it throws its exhaust and how much of it is fuel, and the second enters only through a logarithm.</p>
+
+      <h2>Do the numbers</h2>
+
+      <p>Put real figures in. A kerosene-and-oxygen engine, the kind that has flown since the 1960s, throws its exhaust at an effective speed of about 3,000 metres per second. To reach low Earth orbit a rocket needs a &Delta;v of about 9,400 metres per second: more than the 7,800 of orbital speed itself, because a real launch also spends speed fighting gravity and air on the way up.</p>
+
+      <p>Rearrange the equation and the required mass ratio is the exponential of &Delta;v/v_e. You can do it in three lines:</p>
+
+      <pre><code>import math
+
+def mass_ratio(delta_v, v_exhaust):
+    return math.exp(delta_v / v_exhaust)
+
+print(mass_ratio(9400, 3000))   # 22.95   kerosene, one stage
+print(mass_ratio(9400, 4500))   # 8.08    hydrogen, one stage
+print(mass_ratio(4700, 3000))   # 4.79    each of two kerosene stages</code></pre>
+
+      <p>The first number is the whole story. The rocket must weigh about twenty-three times as much full as empty, which means propellant is 22 parts in 23, close to 96 percent, of the mass at liftoff. Everything else, the tanks, the engines, the structure, the guidance, the payload, must fit inside the remaining 4 percent.</p>
+
+      <figure>
+        <img src="/newsletter/six-ideas-that-run-the-world/img/fig-01-mass-ratio.png" alt="The required mass ratio plotted against the speed a rocket must gain, for kerosene and hydrogen engines. At the 9.4 kilometres per second orbit requires, a kerosene rocket needs a ratio near 23 and a hydrogen rocket near 8" loading="lazy" />
+        <figcaption>The mass ratio the equation demands, against the speed the rocket must gain. Reaching orbit on kerosene needs a ratio near 23, which means 96 percent fuel. A faster hydrogen exhaust drops it to about 8, and the logarithm sets the exchange rate.</figcaption>
+      </figure>
+
+      <p>Here is where the trouble starts. The empty structure of a real rocket, tanks and engines and frame, rarely comes in under about 5 to 10 percent of the fuelled mass, because metal must be thick enough not to burst. If the structure alone wants 5 percent and the whole budget for everything-that-is-not-fuel is 4 percent, the sum does not close. A single rocket, one set of tanks and engines, cannot reach orbit and carry anything useful. The equation has just told us that staging is not a design choice. It is a requirement.</p>
+
+      <p>Staging works because you throw away the empty part. Split the job into two rockets stacked on top of each other, each supplying half the speed. The third number in the code above says each stage then needs a ratio of only 4.8, which means about 79 percent propellant, and real tanks can just manage that. When the first stage runs dry, the rocket drops it, dead weight and all, and the second stage starts its climb already light. The two ratios multiply, 4.8 times 4.8, back to about 23: the same total, now split into two buildable pieces.</p>
+
+      <p>The second number in the code is the other escape route. Swap kerosene for hydrogen and oxygen, whose exhaust leaves at about 4,500 metres per second, and the required ratio falls from 23 to 8. This is why the upper stages of many launchers burn hydrogen despite the trouble of keeping it cold. A faster exhaust buys you an easier rocket.</p>
+
+      <h2>Where school ends</h2>
+
+      <p>The derivation assumed the rocket only has to change its speed, with nothing working against it. A real launch is not so kind: gravity taxes every second spent climbing, air resistance takes a smaller share, and both depend on the exact path flown. That turns the neat equation into a differential equation with no tidy formula for its answer, solved on a computer by stepping forward in small time slices, the method you would meet in a first university course on numerical methods. The extra 1,600 metres per second in the 9,400 figure is exactly that tax, and I handed it to you rather than derived it.</p>
+
+      <p>The other limit is not mathematical at all. Exhaust velocity for any chemical rocket is capped near 4.5 kilometres per second, because it is set by the energy stored in chemical bonds, and there are no better bonds to burn. Every chemical rocket works near the same ceiling, and that ceiling, written into the logarithm, is a large part of why nobody has yet sent people to Mars in a hurry.</p>
+
+      <p>One more thing worth carrying away. The man who wrote the equation down, Konstantin Tsiolkovsky, was a self-taught, nearly deaf school mathematics teacher in provincial Russia. He recorded the result in his notebooks in 1897 and published it in 1903, and almost nobody read it for twenty years. The mathematics was correct the whole time. It simply had to wait for its readers.</p>
+
+      <p>Next issue: your phone works out where you are by timing signals from satellites 20,000 kilometres overhead, and if it ignored Einstein the blue dot would drift ten kilometres a day. Simultaneous equations, four satellites, and relativity running correctly in your pocket.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters, from rockets to the energy budget of the planet, every central result
+        derived with school mathematics and every number referenced, are collected in the book
+        <em>Six Ideas That Run the World</em>. The newsletter stands on its own, and you never
+        need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H9P9B5FX" target="_blank" rel="noopener">Six Ideas That Run the World on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/six-ideas-that-run-the-world/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <span>&larr; Nothing earlier</span>
+      <span>Issue 2 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>There are no wrong answers in architecture, only expensive ones — The Expensive Answers, Issue 2</title>
+  <meta name="description" content="A board asks whether the firm should own its AI capability or rent it. A thousand confident answers online, and all of them useless without context. Why architecture cannot be looked up, and the three-step method for pricing the answers available to you." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/distributed-systems-thinking/02-only-expensive-answers.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="There are no wrong answers in architecture, only expensive ones" />
+  <meta property="og:description" content="Why architecture questions cannot be looked up, and the three-step method for pricing the answers available to you." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/distributed-systems-thinking/02-only-expensive-answers.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/distributed-systems-thinking/img/fig-02-the-tradeoff-method.png" />
+  <meta property="article:published_time" content="2026-08-21" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "There are no wrong answers in architecture, only expensive ones",
+    "datePublished": "2026-08-21",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Expensive Answers" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/distributed-systems-thinking/02-only-expensive-answers.html",
+    "description": "Why architecture questions cannot be looked up, and the three-step method for pricing the answers available to you."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/distributed-systems-thinking/">The Expensive Answers</a><span class="sep">·</span>Issue 2
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Expensive Answers · Issue 2</p>
+      <h1 class="article-title">There are no wrong answers in architecture, only expensive ones</h1>
+      <p class="article-subtitle">Why architecture questions cannot be looked up, and the three-step method for pricing them</p>
+      <p class="article-meta">
+        <time datetime="2026-08-21">21 August 2026</time><span class="sep">·</span>5 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">A board memo landed on an engineering team I know, with one sentence underlined: the committee asks whether the firm should own its AI capability rather than rent it.</p>
+
+      <p>The team did what engineers do first. They searched. &ldquo;Self-host LLM versus vendor API&rdquo; returned confident answers by the thousand: a well-argued essay on sovereignty that concluded own; a well-argued essay on undifferentiated heavy lifting that concluded rent; a benchmark showing open-weights models within a few points of the frontier; a post-mortem from a team that had tried self-hosting and retreated after two quarters. None of the authors was wrong. None of them had ever heard of this firm, its eight engineers, its nineteen-thousand-euro monthly cloud envelope, or the residency clauses in its client contracts. The answers disagreed because the question was incomplete.</p>
+
+      <p>For most engineering questions, a best answer exists and someone has written it down. How to rotate a credential, how to structure a retry: these have best practices, and a best practice is permission to stop thinking. That is its value, and there is no shame in taking it. Architecture is the class of problems where the permission is never granted. Whether to own or rent the model that reads your clients&rsquo; contracts depends on who your clients are, what your team can operate at three in the morning, and what it costs to change your mind in eighteen months. No search result knows any of that. You cannot look the answer up, because the answer does not exist until your context is in the room.</p>
+
+      <p>Richards and Ford put it in a form worth memorising: everything in software architecture is a trade-off, and if you think you have found something that is not, you have more likely not yet identified the trade-off.</p>
+
+      <p>Hence the line I open my lectures with, and the name of this newsletter: there are no wrong answers in architecture, only expensive ones. That is not relativism. The prices differ enormously, they change when the context changes, and some of them are ruinous. Judgment means being able to put prices on the answers available to you, in your context, and to choose with open eyes.</p>
+
+      <h2>The method</h2>
+
+      <p>Pricing answers sounds vague. It is actually a procedure with three steps, and the order is the procedure.</p>
+
+      <p>Step one: find the entanglement. Before comparing options, list the qualities the decision actually touches and notice which move together. A team I work with faced a small version of this: uploads were processed synchronously, so users waited, but when the upload returned, the document was guaranteed searchable. Move processing to the background and the wait disappears, and so does the guarantee, and failures go quiet unless you build machinery to keep them loud. Responsiveness, freshness, failure visibility, cost: a braid, not a strand. Price any one strand alone and the answer is obvious and wrong.</p>
+
+      <p>Step two: analyse the coupling. Entanglement says which qualities move together; coupling says through what. Shared processes, shared databases, blocking calls, and every piece of new machinery an option introduces. Change travels along couplings the way water travels along seams, and it finds the ones you did not map.</p>
+
+      <p>Step three: price by impact of change, in concrete scenarios. Never &ldquo;which option is better,&rdquo; always &ldquo;what does each option cost when specific, plausible things happen.&rdquo; For that upload decision, three scenarios settled it: the morning someone uploads three hundred documents at once, the corrupted file at position 217, and the day the tenant count goes from five to forty. Run the scenarios and most decisions mostly make themselves, and they arrive with a price list attached.</p>
+
+      <figure class="figure-wide">
+        <div class="figure-scroll">
+          <a href="/newsletter/distributed-systems-thinking/img/fig-02-the-tradeoff-method.png" target="_blank" rel="noopener">
+            <img src="/newsletter/distributed-systems-thinking/img/fig-02-the-tradeoff-method.png" alt="The tradeoff method as a worksheet: step one, find the entanglement; step two, analyse the coupling; step three, price by impact of change in concrete scenarios; output, a decision and its price recorded as an ADR, with the four traps that break the method listed beneath" loading="lazy" />
+          </a>
+        </div>
+        <figcaption>The method as a worksheet. Every architectural decision in the book passes through these three steps, in order, before it is recorded as a decision with its price attached.</figcaption>
+      </figure>
+
+      <p>Simple to state. What breaks it in practice is a short list of traps: deciding out of context, comparing options that are not at the same level, reasoning about the generic case instead of your case, and letting enthusiasm for a technology write the criteria. Each deserves, and will get, its own piece.</p>
+
+      <h2>Try this against your favourite AI assistant</h2>
+
+      <p>Here is the exercise I now set my masters students, and it works just as well on a Tuesday at work.</p>
+
+      <p>Take a live architectural question, the board memo above if you have nothing closer, and ask an assistant naively: &ldquo;Should we self-host an open-weights LLM or use a vendor API?&rdquo; You will get a tidy two-column essay, every sentence true, concluding that the right choice depends on your specific needs and resources. Nothing decided, because nothing could be: you gave it no context to decide with.</p>
+
+      <p>Now repair the prompt. Supply the real constraints (team size, budget, compliance clauses, deadline, what happens if the vendor deprecates the model) and demand a specific output: a one-page decision with consequences, each assessed against a named constraint, plus the conditions that would trigger a revisit. The improvement is usually dramatic, and it is not the machine that improved. The quality of machine-generated architectural advice is bounded by the quality of the context you feed it, and the three steps above are, among other things, a specification of that context.</p>
+
+      <p>Whatever gap remains between the repaired answer and what your best engineer would write: that gap is what this newsletter is about.</p>
+
+      <p>Next issue asks the quantum&rsquo;s founding question of a production AI feature: what must move together? Model version, prompt set, index version and evaluation set live in four different tools, and they succeed and fail as one unit. I will make the case that they are one deployment quantum with one version number.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters on the same argument, built around one production RAG platform and
+        finishing on the 5G and 6G edge. The newsletter stands on its own, and you never need the
+        book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HDG88RCB" target="_blank" rel="noopener">Distributed Systems Thinking on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/distributed-systems-thinking/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/distributed-systems-thinking/01-every-llm-call-is-a-distributed-transaction.html">&larr; Every LLM call is a distributed transaction</a>
+      <span>Issue 3 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

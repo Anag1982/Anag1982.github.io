@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What a quantum computer actually breaks — After Shor, Issue 1</title>
+  <meta name="description" content="The migration deadlines are law, the standards are published, and the popular account of what a quantum computer breaks is wrong in a specific, consequential way. The accurate account, with a period you can draw." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-pqc/01-what-a-quantum-computer-actually-breaks.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="What a quantum computer actually breaks" />
+  <meta property="og:description" content="The migration deadlines are law, the standards are published, and the popular account is wrong in a specific way." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-pqc/01-what-a-quantum-computer-actually-breaks.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-pqc/img/fig-01-the-period.png" />
+  <meta property="article:published_time" content="2026-08-21" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What a quantum computer actually breaks",
+    "datePublished": "2026-08-21",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "After Shor" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-pqc/01-what-a-quantum-computer-actually-breaks.html",
+    "description": "The migration deadlines are law, the standards are published, and the popular account is wrong in a specific way."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-pqc/">After Shor</a><span class="sep">·</span>Issue 1
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">After Shor · Issue 1</p>
+      <h1 class="article-title">What a quantum computer actually breaks</h1>
+      <p class="article-meta">
+        <time datetime="2026-08-21">21 August 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">On 13 August 2024 the United States National Institute of Standards and Technology published three documents, FIPS 203, 204 and 205, that specify the cryptography the world is expected to be running by 2035. In June 2026 an American executive order put dates on the migration for federal systems: post-quantum key establishment by the end of 2030, digital signatures by the end of 2031. The United Kingdom, the European Union and Australia have published their own versions of the same calendar. If you build or operate systems that use cryptography, one of those calendars now applies to you.</p>
+
+      <p>This is the first issue of a fortnightly series on the mathematics behind that migration. Not the compliance paperwork, and not the vendor briefings: the mathematics, built from modular arithmetic up through lattices and Learning With Errors to the published standards, with small worked numbers at every step. This opening issue does the job the whole series depends on. It establishes precisely what a quantum computer does and does not do to the cryptography in use today, because the popular account is wrong in a specific and consequential way.</p>
+
+      <h2>The accurate account is narrower, and more useful</h2>
+
+      <p>The popular account says quantum computers break encryption. The accurate account says one quantum algorithm, Shor&rsquo;s, completely destroys a small and precisely characterised family of problems, and that family happens to contain every public-key algorithm in widespread deployment: RSA, Diffie-Hellman, and all of elliptic-curve cryptography. A second algorithm, Grover&rsquo;s, offers a generic speedup against everything else, and that speedup is far smaller in practice than its headline suggests. Nothing else currently known threatens the remaining primitives at all.</p>
+
+      <p>The difference between those two accounts is the difference between panic and a migration plan. AES and the SHA hash functions survive with, at most, a parameter adjustment. The public-key layer does not survive, at any key size, because larger keys do not remove the algebraic structure Shor&rsquo;s algorithm exploits. The symmetric problem is a tweak. The asymmetric problem is a replacement, and the replacement is what this series is about.</p>
+
+      <h2>Factoring is a pattern you can draw</h2>
+
+      <p>The word &ldquo;quantum&rdquo; does a lot of intimidating in this subject, so let me show you how unexotic the core of Shor&rsquo;s algorithm is. Take N = 15, the number we want to factor, and pick a = 7. Now compute 7<sup>x</sup> mod 15, the remainder when powers of 7 are divided by 15, for x = 0, 1, 2, and onward:</p>
+
+      <pre><code>N, a = 15, 7
+print([a**x % N for x in range(8)])   # [1, 7, 4, 13, 1, 7, 4, 13]</code></pre>
+
+      <p>The values repeat: 1, 7, 4, 13, then 1 again. The sequence has period r = 4, and the period is the treasure. A classical result of number theory says that once you know r, a factor of N is a greatest-common-divisor away:</p>
+
+      <pre><code>from math import gcd
+r = 4
+print(gcd(a**(r//2) - 1, N), gcd(a**(r//2) + 1, N))   # 3 5</code></pre>
+
+      <p>And 3 &times; 5 = 15. Factored, by finding a period.</p>
+
+      <figure>
+        <img src="/newsletter/maths-for-pqc/img/fig-01-the-period.png" alt="A stem plot of 7 to the power x mod 15 for x from 0 to 11, showing the values 1, 7, 4, 13 repeating with period 4, the period marked with an arrow" loading="lazy" />
+        <figcaption>The whole secret in one picture: 7<sup>x</sup> mod 15 repeats with period 4. Recovering that period is the only thing the quantum computer does. The step from the period to the factors is schoolbook number theory and runs on a laptop.</figcaption>
+      </figure>
+
+      <p>Everything I just did was classical, and for a 15 it is instant. The catch is that for the 617-digit N of RSA-2048 the sequence takes astronomically long to repeat, and no known classical method finds the period fast enough to matter. What Shor showed in 1994 is that a quantum computer can find the period of exactly this kind of function efficiently, because the function&rsquo;s periodic structure lets a quantum Fourier transform concentrate measurement probability on the answer. The quantum machine does one job, period-finding. The rest is the arithmetic you watched above.</p>
+
+      <p>Note what that implies. The reason RSA falls is not that quantum computers are fast in general. It is that factoring has a hidden periodic structure, and the same structure, in slightly different clothes, sits inside discrete logarithms and elliptic curves too, which is why they all fall together. The post-quantum schemes in the published standards are built on problems, lattice problems, decoding problems, hash inversions, for which no such structure is known. That word, known, is doing honest work, and I will come back to it.</p>
+
+      <h2>Why the deadlines come before the machine</h2>
+
+      <p>No quantum computer that can run Shor&rsquo;s algorithm at cryptographic scale exists today, and estimates of when one will carry error bars measured in decades. It is fair to ask why anyone should move now.</p>
+
+      <p>The answer is an asymmetry. Confidentiality must hold for the lifetime of the secret, and an adversary can record ciphertext today and decrypt it whenever the capability arrives. Traffic captured in 2026 that must stay secret until 2050 is already exposed, whenever the machine is built. This is harvest now, decrypt later, and bulk interception and long-term storage of encrypted traffic are established practice for well-resourced actors. Michele Mosca packaged the consequence into an inequality: if the years your data must stay confidential, plus the years your organisation needs to migrate, exceed the years until a cryptographically relevant quantum computer exists, you are already exposed. Most organisations find on honest arithmetic that migration alone takes five to seven years, because cryptography sits in hardware, protocols and vendor products they do not control. Once the first two numbers sum past fifteen, the only arrival date that saves you is one nobody will defend. That is why the executive order puts key establishment a full year ahead of signatures: a signature forged in 2035 cannot invalidate a document signed in 2026, but a session key recovered in 2035 decrypts traffic captured today.</p>
+
+      <h2>One caution, before the series starts building</h2>
+
+      <p>The replacement schemes rest on problems believed hard, and &ldquo;hard&rdquo; is a claim about the best algorithm anyone has published, not a theorem. The field got a live demonstration this summer. HAWK, a lattice-based signature scheme that had advanced to the third round of NIST&rsquo;s additional-signatures process after four years of expert scrutiny, was withdrawn by its own designers at the end of July 2026, a day after a key-recovery attack was posted that cut its security estimates catastrophically. The attack was found by an AI system and confirmed by humans within hours. The standardised schemes have survived far longer and far broader scrutiny, and nothing in that episode touches them. But it is the reason NIST keeps a code-based backup to its lattice-based standards, and it is the reason this series will treat hash-based and code-based constructions as first-class citizens rather than footnotes. A portfolio resting on one hardness assumption is one clever paper away from an emergency.</p>
+
+      <p>Every fortnight, then, one piece of the machinery, built rather than asserted: modular arithmetic, polynomial rings, the number-theoretic transform, lattices, Learning With Errors, and the standards themselves, read line by line. Small numerical examples you can check with a pencil, runnable Python where it illuminates, and dated claims wherever the ground is still moving. It is written for the engineer who will have to defend a migration decision in a room where somebody disagrees. The standards status above was verified in August 2026.</p>
+
+      <p>Next issue the mathematics starts, at the very bottom: the ring of integers mod q. Clock arithmetic, the reason 12 + 3 = 3 on your wall, turns out to be the arithmetic every operation in the new standards runs on, and it has one property, the existence of inverses, whose failure and repair is the first genuinely beautiful thing in the subject.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from what quantum computing actually breaks through lattices, Learning
+        With Errors and the NIST standards read clause by clause, with 196 exercises and full
+        solutions, are collected in the book <em>Maths for Post-Quantum Cryptography</em>. The
+        newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFLYZQ3B/" target="_blank" rel="noopener">Maths for Post-Quantum Cryptography on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-pqc/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <span>&larr; Nothing earlier</span>
+      <span>Issue 2 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

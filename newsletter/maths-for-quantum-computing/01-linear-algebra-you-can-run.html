@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum computing is linear algebra you can run — Amplitudes, Issue 1</title>
+  <meta name="description" content="Quantum computing looks like physics and is mostly linear algebra. A qubit in six lines of NumPy, the one rule that turns amplitudes into probabilities, and what this series will do every fortnight." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-quantum-computing/01-linear-algebra-you-can-run.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Quantum computing is linear algebra you can run" />
+  <meta property="og:description" content="A qubit in six lines of NumPy, the one rule that turns amplitudes into probabilities, and what this series will do every fortnight." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/01-linear-algebra-you-can-run.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/img/fig-01-amplitude-vs-probability.png" />
+  <meta property="article:published_time" content="2026-08-21" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Quantum computing is linear algebra you can run",
+    "datePublished": "2026-08-21",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Amplitudes" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-quantum-computing/01-linear-algebra-you-can-run.html",
+    "description": "A qubit in six lines of NumPy, and the one rule that turns amplitudes into probabilities."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-quantum-computing/">Amplitudes</a><span class="sep">·</span>Issue 1
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Amplitudes · Issue 1</p>
+      <h1 class="article-title">Quantum computing is linear algebra you can run</h1>
+      <p class="article-meta">
+        <time datetime="2026-08-21">21 August 2026</time><span class="sep">·</span>6 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Open a Python shell and type <code>(-1) ** 0.5</code>. You will not get an error. Python returns <code>(6.123233995736766e-17+1j)</code>, which is its way of writing the square root of minus one, with a tiny rounding smudge left on the real part. A first course in mathematics usually treats that number as forbidden. Quantum computing treats it as the ground floor.</p>
+
+      <p>This is the first issue of a new fortnightly series, and I want to open it with the claim the whole series rests on. Quantum computing has a reputation as physics, and physics of the intimidating kind: parallel universes, cats, particles that are somehow in two places at once. Strip the metaphors away and what is actually running underneath is linear algebra. Vectors, matrices, inner products, eigenvalues. A quantum state is a short list of complex numbers. A quantum gate is a small matrix. Running a circuit is matrix multiplication. If you can write NumPy, you can compute everything a textbook on quantum algorithms computes, on the laptop you already own.</p>
+
+      <p>That is not a simplification I am offering to get you started, to be revoked later. It is the actual content of the subject, and this issue demonstrates it.</p>
+
+      <h2>A quantum computation in six lines</h2>
+
+      <p>The smallest interesting quantum computation is this: put one qubit into an equal superposition, and read off the outcome probabilities. In a lab this takes a dilution refrigerator. On paper it takes one matrix product.</p>
+
+      <pre><code>import numpy as np
+
+ket0 = np.array([1, 0])                       # the state |0&gt;
+H = np.array([[1, 1], [1, -1]]) / np.sqrt(2)  # the Hadamard gate
+
+psi = H @ ket0                # apply the gate: one matrix product
+print(psi)                    # [0.70710678 0.70710678]
+print(np.abs(psi) ** 2)       # [0.5 0.5]  the outcome probabilities</code></pre>
+
+      <p>Walk through what just happened. The qubit started as the vector [1, 0], which is what the notation |0&#x27E9; means: a column of two numbers, nothing more. The Hadamard gate is a 2&#215;2 matrix, and applying a gate is multiplying the state by the matrix. The result has 0.7071 in each component, which is 1/&#8730;2. Square the size of each component and you get the probabilities of the two possible measurement outcomes: 0.5 and 0.5, a fair coin. Those are the exact numbers a real quantum device converges on when you run this circuit thousands of times.</p>
+
+      <p>Everything in this series scales up from that cell. Two qubits are a vector of four numbers, ten qubits are a vector of 1,024, and the gates grow to match, but no new kind of object ever appears. The difficulty of quantum computing is not that the mathematics is exotic. It is that the vectors get exponentially long, which is precisely why the machines are worth building.</p>
+
+      <h2>The one rule that matters</h2>
+
+      <p>The two numbers in the state vector are called amplitudes, and the single most important habit in this subject is refusing to confuse an amplitude with a probability. An amplitude of 1/&#8730;2 is about 0.707, and 0.707 is not a 70.7 percent chance of anything. Two of them would sum to more than one.</p>
+
+      <p>The rule connecting the two is short. The probability of an outcome is the squared magnitude of its amplitude. Squaring is what makes the numbers land between 0 and 1 and sum to exactly 1, and it is also what makes room for the strangeness. A probability can never be negative. An amplitude can.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-quantum-computing/img/fig-01-amplitude-vs-probability-stacked.png" />
+          <img src="/newsletter/maths-for-quantum-computing/img/fig-01-amplitude-vs-probability.png" alt="Two panels. Left: the two amplitudes of the state (|0⟩ minus |1⟩) over root two, one positive and one negative. Right: the squared magnitudes, both equal to 0.5, which are the measurement probabilities" loading="lazy" />
+        </picture>
+        <figcaption>The state (|0&#x27E9; &minus; |1&#x27E9;)/&#8730;2 has one positive amplitude and one negative one. Measurement cannot see the difference: squaring the magnitudes gives 0.5 and 0.5 either way. The sign is invisible here, and it is where all the quantum advantage hides.</figcaption>
+      </figure>
+
+      <p>Amplitudes can be complex, too, and the rule does not flinch:</p>
+
+      <pre><code>psi = np.array([1/np.sqrt(2), 1j/np.sqrt(2)])   # a complex amplitude
+print(np.abs(psi) ** 2)                         # [0.5 0.5]</code></pre>
+
+      <p>An imaginary amplitude, and a perfectly ordinary probability. The sign and the angle of an amplitude drop out of any single measurement, but they do not drop out of the computation. When two amplitudes meet inside a gate, a positive and a negative amplitude cancel, the way two water waves cancel, and outcomes that were possible become impossible. Arranging those cancellations so that wrong answers vanish and right answers survive is what a quantum algorithm is. Every famous result in the field, from Shor's factoring algorithm downward, is an exercise in choreographing signs.</p>
+
+      <p>Note what this means for the reputation of the subject. The mystery is not in the objects, which are vectors and matrices you can print. It is in one rule, squared magnitudes become probabilities, and one consequence, amplitudes can cancel before you square them. Hold those two sentences and you hold the plot of the entire series.</p>
+
+      <h2>What this series is</h2>
+
+      <p>Every fortnight I will take one piece of the mathematics behind quantum computing and build it properly: complex numbers, vectors and matrices, inner products, eigenvalues, tensor products, the Bloch sphere, measurement, entanglement, and then a complete algorithm run end to end. The series does its work in NumPy first, with plain arrays you can inspect, and shows the polished framework version in Qiskit where it earns its place, so you always see the mechanism before the abstraction that hides it. Every code block is run before it is printed, and the output shown is the output I got. Mathematics you can execute is mathematics you can trust.</p>
+
+      <p>It is written for the developer who is strong in Python and light on the linear algebra, the person who last saw a matrix some years ago and has been told, correctly, that quantum computing will want it back. No physics is assumed. No mathematics beyond school algebra is assumed either, because the series builds the rest as it goes.</p>
+
+      <p>I should be honest about what the series is not. It will not make you a quantum hardware engineer, and it will not settle when, or whether, quantum computers become commercially decisive. What it will give you is the ability to read a quantum computing paper's linear algebra without flinching, and to check any claim in it by typing the matrices into a notebook. For most working engineers, that is the part worth having.</p>
+
+      <p>Next issue starts at the ground floor the shell command above uncovered: complex numbers. Why the number system had to grow, what a complex number looks like as a point on a plane, and why the quantity you get by multiplying a number with its own conjugate is the exact thing a qubit reports when you measure it.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        The full course, from complex numbers to the Deutsch-Jozsa algorithm, with exercises and
+        solutions and a runnable notebook for every chapter, is the book <em>Maths for Quantum
+        Computing</em>. The newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H7XVWYXN" target="_blank" rel="noopener">Maths for Quantum Computing on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-quantum-computing/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <span>&larr; Nothing earlier</span>
+      <span>Issue 2 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eight billion parameters, counted by hand — Attention, Derived, Issue 1</title>
+  <meta name="description" content="Why the first arXiv paper you open defeats you, and it is not the mathematics. The series opens by counting an eight-billion-parameter transformer by hand, down to the last norm." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-llms/01-eight-billion-parameters-by-hand.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Eight billion parameters, counted by hand" />
+  <meta property="og:description" content="The series opens by counting an eight-billion-parameter transformer by hand, down to the last norm." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-llms/01-eight-billion-parameters-by-hand.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-llms/img/fig-01-where-the-parameters-live.png" />
+  <meta property="article:published_time" content="2026-08-21" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Eight billion parameters, counted by hand",
+    "datePublished": "2026-08-21",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Attention, Derived" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-llms/01-eight-billion-parameters-by-hand.html",
+    "description": "The series opens by counting an eight-billion-parameter transformer by hand, down to the last norm."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-llms/">Attention, Derived</a><span class="sep">·</span>Issue 1
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Attention, Derived · Issue 1</p>
+      <h1 class="article-title">Eight billion parameters, counted by hand</h1>
+      <p class="article-meta">
+        <time datetime="2026-08-21">21 August 2026</time><span class="sep">·</span>5 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">You can already multiply matrices and differentiate. So why does the first arXiv paper you open about large language models defeat you?</p>
+
+      <p>Three reasons, and none of them is mathematics. The paper writes Wx and the code writes <code>x @ W</code>. The paper calls a gradient a Jacobian, and means something specific by it that it does not stop to say. And the paper assumes you know that cross-entropy through a softmax collapses to a subtraction, so it writes p &minus; y without comment and moves on. Each of these is a convention, not a result. Together they cost a competent reader three or four hours per paper, and the hours are spent reconstructing notation rather than learning anything.</p>
+
+      <p>This is the first issue of a fortnightly series on the mathematics inside transformers and large language models, and its method is in the name. Each issue takes one result, the attention scaling factor, rotary position embeddings, the KV-cache arithmetic, the Adam update, states it precisely, derives it in full, and then shows what it costs in practice: memory, compute, or behaviour. Derivation-led, because a result you have derived is a result you can adapt when the architecture shifts under you, and it will shift. The instances in this field have a half-life of a couple of years. The mathematics does not.</p>
+
+      <p>To show what that buys you, this opening issue does the simplest derivation in the subject, and one of the most useful. We count a model.</p>
+
+      <h2>A model is defined by seven numbers</h2>
+
+      <p>Take a transformer I will call Model D, defined entirely by its hyperparameters: 32 layers, model width d = 4096, 32 attention heads of dimension 128, grouped-query attention with 8 key-value heads, a feed-forward width of 14336 with SwiGLU gating, and a vocabulary of 128,256 tokens. If those numbers look familiar from a popular open-weights model, that is not an accident, but nothing below depends on whose model it is. The seven numbers are sufficient.</p>
+
+      <p>Each layer holds four attention matrices. The query projection is d &times; (heads &times; head dim) = 4096 &times; 4096. The key and value projections are smaller, because grouped-query attention gives them only 8 heads each: 4096 &times; 1024. The output projection mirrors the query. The feed-forward block holds three matrices of size 4096 &times; 14336, gate, up and down. And each layer carries two RMSNorm gain vectors of length 4096, which is all the normalisation a modern decoder needs.</p>
+
+      <pre><code>d, h, d_h, n_kv = 4096, 32, 128, 8
+d_ff, L, V = 14336, 32, 128256
+
+attn  = d*h*d_h + 2*d*n_kv*d_h + h*d_h*d   # Q, K and V, O projections
+mlp   = 3 * d * d_ff                       # SwiGLU: gate, up, down
+layer = attn + mlp + 2*d                   # plus two RMSNorm gains
+
+total = L*layer + d + 2*V*d                # final norm, embed, unembed
+print(layer)              # 218112000
+print(total)              # 8030261248
+print(total * 2 / 1e9)    # 16.060522496  bytes in bf16, as GB</code></pre>
+
+      <p>Run it and the count lands on 8,030,261,248. An eight-billion-parameter model, counted end to end on the back of a boarding pass, with nothing assumed beyond multiplication.</p>
+
+      <h2>Two readings of the count</h2>
+
+      <p>The count is not the point. What it makes visible is.</p>
+
+      <figure>
+        <img src="/newsletter/maths-for-llms/img/fig-01-where-the-parameters-live.png" alt="A single horizontal bar showing Model D's 8.03 billion parameters split into feed-forward blocks at 5.64 billion, attention at 1.34 billion, embeddings at 1.05 billion, and all norms together at 0.27 million" loading="lazy" />
+        <figcaption>Where the 8.03 billion parameters live. The feed-forward blocks, the part of the architecture that attracts the least attention, hold 70 percent of the model. Attention, the part with the famous name, holds 17.</figcaption>
+      </figure>
+
+      <p>First reading: the feed-forward block is 81 percent of each layer, 176.2 million of its 218.1 million parameters. The component the whole field is named after, attention, is a minority shareholder in its own architecture. When later issues derive what the feed-forward block actually does, key-value memory, not mere plumbing, you will already know why it deserves the space.</p>
+
+      <p>Second reading: grouped-query attention is visible in the arithmetic before anyone mentions inference. With a full 32 key-value heads, the four attention matrices would cost 67.1 million per layer; at 8 they cost 41.9 million. The choice removed 0.81 billion parameters from the model, and the real reason for it, the KV cache, gets its own issue.</p>
+
+      <p>And one practical consequence, free of charge. Bytes are count times precision, so Model D occupies 16.06 GB in bf16 and will not fit on a 16 GB card. The answer to &ldquo;will this fit&rdquo; is arithmetic, not experiment. That sentence is the spirit of the whole series.</p>
+
+      <h2>Who this is for</h2>
+
+      <p>It is written for the engineer or student who can use these models and is tired of not knowing what is inside them: the person who has read that attention scores are divided by &#8730;d and never seen anyone derive why, or who nods along to &ldquo;the KV cache is the bottleneck&rdquo; without being able to compute the cache&rsquo;s size. Undergraduate linear algebra, calculus and probability are assumed. Nothing else is. Every claim will be derived rather than asserted, every number will come from arithmetic you can rerun, and where a topic is moving fast I will say so and date the claim, because pretending otherwise is how technical writing goes quietly wrong.</p>
+
+      <p>Next issue the derivations start in earnest, at the front door of the model: the embedding matrix. Why a token lookup is secretly a matrix product, what cosine similarity actually measures, and the strange, provable fact that in 4,096 dimensions almost every pair of random vectors is nearly perpendicular, which is the property the whole enterprise quietly rests on.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from the toolkit to scaling laws, quantisation and interpretability, each
+        one question answered by a full derivation with the arithmetic checked by continuous
+        integration, are collected in the book <em>Maths for LLMs</em>. The newsletter stands on
+        its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFF1RKFW" target="_blank" rel="noopener">Maths for LLMs on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-llms/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <span>&larr; Nothing earlier</span>
+      <span>Issue 2 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

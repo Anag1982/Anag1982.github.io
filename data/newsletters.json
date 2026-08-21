@@ -38,7 +38,7 @@
       "cover": "books/distributed-systems-thinking.jpg",
       "tagline": "Architectural judgment in the AI era, one decision at a time.",
       "description": "A weekly series on the judgment that does not transfer to the machine: deciding what a system should be, and being able to say why. Each issue takes one architectural decision out of a working system, walks it hop by hop, and prices the tradeoff instead of declaring a winner.",
-      "cadence": "Weekly",
+      "cadence": "Fortnightly",
       "status": "active",
       "notebooks": "",
       "issues": [
@@ -49,6 +49,14 @@
           "date": "2026-07-23",
           "readingTime": "4 min",
           "summary": "A consultant waits 1.4 seconds for an answer. In that time her question crosses six network boundaries, races every other request in the building to update a billing counter, and streams back through every hop it came from. Why five decades of distributed systems knowledge applies in full."
+        },
+        {
+          "number": 2,
+          "title": "There are no wrong answers in architecture, only expensive ones",
+          "slug": "02-only-expensive-answers",
+          "date": "2026-08-21",
+          "readingTime": "5 min",
+          "summary": "A board asks whether the firm should own its AI capability or rent it. The internet has a thousand confident answers, and all of them are useless without the team's context. Why architecture cannot be looked up, and the three-step method for pricing the answers available to you."
         }
       ]
     },
@@ -61,9 +69,18 @@
       "tagline": "The linear algebra behind quantum computing, taught NumPy-first.",
       "description": "A series on the mathematics of quantum computing for developers who are strong in Python and light on the linear algebra. Complex numbers, state vectors, and quantum algorithms, each built in NumPy before it is shown once in Qiskit.",
       "cadence": "Fortnightly",
-      "status": "planned",
+      "status": "active",
       "notebooks": "",
-      "issues": []
+      "issues": [
+        {
+          "number": 1,
+          "title": "Quantum computing is linear algebra you can run",
+          "slug": "01-linear-algebra-you-can-run",
+          "date": "2026-08-21",
+          "readingTime": "6 min",
+          "summary": "Quantum computing looks like physics and is mostly linear algebra. A qubit in six lines of NumPy, the one rule that turns amplitudes into probabilities, and what this series will do every fortnight."
+        }
+      ]
     },
     {
       "key": "six-ideas-that-run-the-world",
@@ -73,10 +90,63 @@
       "cover": "books/six-ideas-that-run-the-world.jpg",
       "tagline": "Rockets, AI, medicine and cryptography, derived from school mathematics.",
       "description": "A series that takes the ideas quietly running the modern world and derives them in full, using nothing beyond strong school-level mathematics. Where the real research runs past the syllabus, it says so plainly.",
-      "cadence": "Monthly",
-      "status": "planned",
+      "cadence": "Fortnightly",
+      "status": "active",
       "notebooks": "",
-      "issues": []
+      "issues": [
+        {
+          "number": 1,
+          "title": "Why rockets are mostly fuel",
+          "slug": "01-why-rockets-are-mostly-fuel",
+          "date": "2026-08-21",
+          "readingTime": "8 min",
+          "summary": "The Saturn V was about 93 percent propellant, and no clever engineering can change that. The rocket equation derived from school momentum, and why staging is a requirement, not a design choice."
+        }
+      ]
+    },
+    {
+      "key": "maths-for-llms",
+      "name": "Attention, Derived",
+      "book": "Maths for LLMs",
+      "bookLink": "https://www.amazon.com/dp/B0HFF1RKFW",
+      "cover": "books/maths-for-llm.jpg",
+      "tagline": "The mathematics of large language models, every result derived in full.",
+      "description": "A fortnightly series on the mathematics inside transformers and large language models. Each issue takes one result — the attention scaling factor, rotary position embeddings, KV-cache arithmetic, DPO — states it precisely, derives it in full, and shows what it costs in practice. Companion series to the book Maths for LLMs.",
+      "cadence": "Fortnightly",
+      "status": "active",
+      "notebooks": "",
+      "issues": [
+        {
+          "number": 1,
+          "title": "Eight billion parameters, counted by hand",
+          "slug": "01-eight-billion-parameters-by-hand",
+          "date": "2026-08-21",
+          "readingTime": "5 min",
+          "summary": "Why the first arXiv paper you open defeats you, and it is not the mathematics. The series opens by counting an eight-billion-parameter transformer by hand, down to the last norm, and reading two facts off the total that most descriptions never mention."
+        }
+      ]
+    },
+    {
+      "key": "maths-for-pqc",
+      "name": "After Shor",
+      "book": "Maths for Post-Quantum Cryptography",
+      "bookLink": "https://www.amazon.com/dp/B0HFLYZQ3B/",
+      "cover": "books/maths-for-pqc.jpg",
+      "tagline": "The mathematics of the post-quantum migration, one hard problem at a time.",
+      "description": "A fortnightly series on the mathematics behind post-quantum cryptography. From modular arithmetic to lattices, Learning With Errors and the NIST standards, each issue builds one piece of the machinery replacing RSA — and prices what the migration actually asks of working engineers. Companion series to the book Maths for Post-Quantum Cryptography.",
+      "cadence": "Fortnightly",
+      "status": "active",
+      "notebooks": "",
+      "issues": [
+        {
+          "number": 1,
+          "title": "What a quantum computer actually breaks",
+          "slug": "01-what-a-quantum-computer-actually-breaks",
+          "date": "2026-08-21",
+          "readingTime": "7 min",
+          "summary": "The migration deadlines are law, the standards are published, and the popular account of what a quantum computer breaks is wrong in a specific, consequential way. The accurate account, with a period you can draw and factor yourself."
+        }
+      ]
     }
   ]
 }
