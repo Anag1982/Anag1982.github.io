@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The number system had to grow — Amplitudes, Issue 2</title>
+  <meta name="description" content="Complex numbers built from one rule, read as arrows with a length and an angle. Why multiplying by e^iθ is rotation, and how the squared magnitude becomes the probability a qubit reports when measured." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-quantum-computing/02-the-number-system-had-to-grow.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The number system had to grow" />
+  <meta property="og:description" content="Complex numbers built from one rule, read as arrows with a length and an angle. Why multiplying by e^iθ is rotation, and how a squared magnitude becomes a probability." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/02-the-number-system-had-to-grow.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/img/fig-02-the-complex-plane.png" />
+  <meta property="article:published_time" content="2026-09-04" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The number system had to grow",
+    "datePublished": "2026-09-04",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Amplitudes" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-quantum-computing/02-the-number-system-had-to-grow.html",
+    "description": "Complex numbers built from one rule, read as arrows with a length and an angle. Why multiplying by e^iθ is rotation, and how a squared magnitude becomes a probability."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-quantum-computing/">Amplitudes</a><span class="sep">·</span>Issue 2
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Amplitudes · Issue 2</p>
+      <h1 class="article-title">The number system had to grow</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-04">4 September 2026</time><span class="sep">·</span>6 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Open a Python shell and type <code>(-1) ** 0.5</code>. You will not get an error. Python returns <code>(6.123233995736766e-17+1j)</code>, which is its way of writing i, the square root of minus one, with a tiny rounding smudge left on the real part. A first course in mathematics usually treats that number as forbidden. Quantum computing treats it as the ground floor.</p>
+
+      <p>Every amplitude in every qubit is a complex number, so before we can write a line of honest quantum code, we need to be comfortable with what these numbers are and how they behave. This issue builds them from nothing, and it ends at the one calculation that turns them into something an experiment can report.</p>
+
+      <h2>Why i exists</h2>
+
+      <p>Start with the equation x&sup2; = &minus;1. It has no real solution, and the reason is structural rather than a shortage of cleverness. A positive number squared is positive, a negative squared is also positive, and zero squares to zero. Squaring produces only the non-negative half of the number line. The equation is asking for something the real numbers cannot supply.</p>
+
+      <p>Mathematics has met this kind of shortfall before. The counting numbers cannot solve x + 3 = 1, so negative numbers were admitted. The integers cannot solve 2x = 1, so fractions were admitted. Each step added new numbers to answer an equation the old set could not, and complex numbers are the next step in the same sequence. We define one new object i by a single rule, i&sup2; = &minus;1, and agree to carry it through arithmetic like any other quantity.</p>
+
+      <p>A complex number is then anything of the form z = a + bi, with a and b ordinary real numbers. For a programmer the cleanest picture is a pair of floats carrying one extra rule for multiplication. Python already knows the rule, writing the imaginary unit as <code>1j</code>:</p>
+
+      <pre><code>z = 2 + 3j
+print(z.real, z.imag)   # 2.0 3.0
+print((1j) ** 2)        # (-1+0j)</code></pre>
+
+      <h2>Add, multiply, conjugate</h2>
+
+      <p>Three operations carry most of the weight. Addition works component by component: real parts add to the real part, imaginary parts to the imaginary part. Multiplication is ordinary expansion followed by the one substitution i&sup2; = &minus;1. It is worth doing one by hand. Take (2 + 3i)(1 &minus; 4i). Expanding gives 2 &minus; 8i + 3i &minus; 12i&sup2;, the last term becomes +12, and what remains is 14 &minus; 5i.</p>
+
+      <p>The third operation, conjugation, just flips the sign of the imaginary part: z* = a &minus; bi. It earns its own name because of what happens when a number meets its own conjugate:</p>
+
+      <pre><code>z · z* = (a + bi)(a − bi) = a² + b²</code></pre>
+
+      <p>The result is real and never negative, whatever complex number you started from. Hold onto that. It is the fact the whole of measurement stands on, and we return to it below.</p>
+
+      <pre><code>import numpy as np
+
+z = 2 + 3j
+w = 1 - 4j
+print(z * w)               # (14-5j)   matches the hand calculation
+print(z.conjugate())       # (2-3j)
+print(z * z.conjugate())   # (13+0j)   real, as promised</code></pre>
+
+      <h2>An arrow in a plane</h2>
+
+      <p>A complex number carries two real numbers, so draw it in two dimensions: real part on the horizontal axis, imaginary part on the vertical. Then z = 2 + 3i is a point, or an arrow from the origin to that point, and two numbers describe the arrow. Its length is the magnitude, |z| = &radic;(a&sup2; + b&sup2;), which for our z is &radic;13. Its angle from the positive real axis is the phase, &theta;. Conjugation, which flipped the sign of b, is a reflection across the real axis: same length, opposite angle.</p>
+
+      <figure>
+        <img src="/newsletter/maths-for-quantum-computing/img/fig-02-the-complex-plane.png" alt="The complex plane with z = 2 + 3i drawn as an arrow of length root 13 at angle theta, and its conjugate reflected below the real axis" loading="lazy" />
+        <figcaption>One number, two readings: the pair (2, 3), or an arrow with length &radic;13 and angle &theta;. The conjugate is the same arrow reflected across the real axis, and multiplying the two gives 13, a plain squared length.</figcaption>
+      </figure>
+
+      <p>Since an arrow is fixed by its length and angle, every complex number can be written that way instead. Euler&rsquo;s formula supplies the shorthand, e<sup>i&theta;</sup> = cos &theta; + i sin &theta;, and with it any z collapses to the polar form r e<sup>i&theta;</sup>. The payoff is what polar form does to multiplication: multiplying two complex numbers multiplies their lengths and adds their angles. A number of the form e<sup>i&theta;</sup> has length exactly 1, so multiplying by it changes no length at all. It only rotates.</p>
+
+      <p>That single fact is why complex numbers describe quantum gates so cleanly. A large family of the operations we will apply to qubits do nothing but rotate amplitudes in this plane, and rotation is multiplication by e<sup>i&theta;</sup>. One special case is worth carrying in your head: set &theta; = &pi;, a half turn, and e<sup>i&pi;</sup> = &minus;1.</p>
+
+      <pre><code>r, theta = 2.0, np.pi / 3
+z = r * np.exp(1j * theta)          # polar in, rectangular out
+print(np.abs(z), np.angle(z))       # 2.0 1.047...  recovers r and theta
+print(np.exp(1j * np.pi))           # (-1+1.2e-16j)  which is -1</code></pre>
+
+      <h2>The squared length that becomes a probability</h2>
+
+      <p>Return to z &middot; z* = a&sup2; + b&sup2; = |z|&sup2;. Always real, never negative. That is exactly what a probability needs, and it is the reason this small piece of algebra matters more than anything else in the issue.</p>
+
+      <p>Here is the connection, stated plainly now and earned in full later in the series. A qubit is described by two complex amplitudes, &alpha; and &beta;, subject to |&alpha;|&sup2; + |&beta;|&sup2; = 1. Measure it and you get 0 with probability |&alpha;|&sup2; and 1 with probability |&beta;|&sup2;. The amplitudes themselves are not probabilities: they can be negative or complex, and no measurement reads them off directly. Only after you square the magnitude do you get numbers that sum to one and that an experiment can actually report.</p>
+
+      <pre><code>psi = np.array([1 / np.sqrt(2), 1j / np.sqrt(2)])
+print(np.abs(psi) ** 2)             # [0.5 0.5]
+
+phased = np.exp(1j * np.pi / 4) * psi   # multiply the whole state by a phase
+print(np.abs(phased) ** 2)          # [0.5 0.5]  unchanged</code></pre>
+
+      <p>The second amplitude there is purely imaginary, and its outcome probability is a flat 0.5. And notice what the last two lines demonstrate: a phase multiplying the whole state cancels out of every probability, because |r e<sup>i&theta;</sup>|&sup2; = r&sup2; for any angle. A global phase can never be observed. A phase difference between two amplitudes is another matter entirely. It survives when a gate combines them, and it drives the interference that quantum algorithms run on. We do not need the mechanism yet. Note only that phase is physically real, even though this one particular kind is invisible.</p>
+
+      <p>A qubit is two complex numbers, so the next thing we need is a tidy way to hold several numbers together and operate on them at once. That structure is the vector, and next issue builds vectors and vector spaces from the same ground-up footing. By its end, the notation |&psi;&rang; will read as an ordinary column of complex numbers rather than a piece of decoration.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        The full course, from complex numbers to the Deutsch-Jozsa algorithm, with exercises and
+        solutions and a runnable notebook for every chapter, is the book <em>Maths for Quantum
+        Computing</em>. The newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H7XVWYXN" target="_blank" rel="noopener">Maths for Quantum Computing on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-quantum-computing/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-quantum-computing/01-linear-algebra-you-can-run.html">&larr; Quantum computing is linear algebra you can run</a>
+      <span>Issue 3 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

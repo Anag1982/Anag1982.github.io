@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why similar means pointing the same way — The Maths Underneath, Issue 3</title>
+  <meta name="description" content="Distance asks how far apart two points sit, which is the wrong question for taste, topic, and meaning. The dot product, cosine similarity, and the one formula behind search, recommendation, and attention." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-ai/03-why-similar-means-pointing-the-same-way.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Why similar means pointing the same way" />
+  <meta property="og:description" content="Distance is the wrong question for taste, topic, and meaning. The dot product, cosine similarity, and the one formula behind search, recommendation, and attention." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-ai/03-why-similar-means-pointing-the-same-way.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-ai/img/fig-03-direction-not-distance.png" />
+  <meta property="article:published_time" content="2026-09-04" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Why similar means pointing the same way",
+    "datePublished": "2026-09-04",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Maths Underneath" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-ai/03-why-similar-means-pointing-the-same-way.html",
+    "description": "Distance is the wrong question for taste, topic, and meaning. The dot product, cosine similarity, and the one formula behind search, recommendation, and attention."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-ai/">The Maths Underneath</a><span class="sep">·</span>Issue 3
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Maths Underneath · Issue 3</p>
+      <h1 class="article-title">Why similar means pointing the same way</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-04">4 September 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Search for how to fix a bicycle puncture and the engine returns a page that never contains the word puncture. Somewhere inside that engine, two vectors were compared, and the comparison did not ask how far apart they sit. It asked whether they point the same way. This issue builds that comparison from the distance you already have, and by the end you will have written the formula that runs semantic search, recommendation, and a large part of every transformer.</p>
+
+      <h2>The wrong question for documents</h2>
+
+      <p>Last issue ended on a warning. Distance measures difference, and it is the right question for houses, where a point stands for a thing whose size matters. It is the wrong question for topic and taste. Here is the failure, small enough to draw.</p>
+
+      <p>Describe a piece of writing by how often two words appear in it. A short article about evaluating language models uses &ldquo;match&rdquo; twice and &ldquo;model&rdquo; once. A long article on the same subject uses the same words in the same proportion, four times as often. A third, short piece is about something else entirely:</p>
+
+      <pre><code>import numpy as np
+
+a = np.array([2.0, 1.0])   # short piece, on model evaluation
+b = np.array([8.0, 4.0])   # long piece, same subject
+c = np.array([1.0, 3.0])   # short piece, different subject
+
+print(np.linalg.norm(a - b))   # 6.71
+print(np.linalg.norm(a - c))   # 2.24</code></pre>
+
+      <p>By distance, the off-topic piece c is three times closer to a than the on-topic piece b is. All that happened is that b is longer, so its point sits further from the origin. Distance has confused how much was written with what it was about.</p>
+
+      <p>Look at the picture instead. The vectors a and b lie on the same line through the origin, because b is exactly 4 times a. Same mixture of words, same direction. The length of the arrow records how much text there is, and the direction records what the text is about. For topic, the direction is the signal and the length is a distraction.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-ai/img/fig-03-direction-not-distance-stacked.png" />
+          <img src="/newsletter/maths-for-ai/img/fig-03-direction-not-distance.png" alt="Left, three word-count vectors where two point the same way and the nearby one points elsewhere; right, a cosine similarity matrix of four users showing two camps" loading="lazy" />
+        </picture>
+        <figcaption>First the failure: a and b share a direction and a subject, yet distance calls the off-topic c the closer match. Then the fix at work: cosine similarity on four users&rsquo; film ratings recovers the two camps regardless of how generously each person scores.</figcaption>
+      </figure>
+
+      <h2>The dot product measures alignment</h2>
+
+      <p>The tool that reads direction is the dot product. Multiply two vectors component by component and add the results:</p>
+
+      <pre><code>a · b = a₁b₁ + a₂b₂ + ... + aₙbₙ</code></pre>
+
+      <p>One number comes out, and it has a clean geometric meaning: a &middot; b equals the product of the two lengths times the cosine of the angle between the vectors. Point the same way and the number is large and positive. Sit at right angles and it is zero. Oppose each other and it is negative.</p>
+
+      <p>Think of pushing a cart that can only roll along a track. Only the part of your push aligned with the track moves the cart. Push along the track and every bit of effort counts; push sideways and nothing happens. The dot product is exactly how much of one vector is useful in the direction of the other.</p>
+
+      <h2>Divide out the lengths</h2>
+
+      <p>The dot product still carries both lengths, and length is the thing we decided to ignore. So divide it out. What remains is the cosine of the angle alone, and it is called cosine similarity:</p>
+
+      <pre><code>cos θ = (a · b) / (‖a‖ ‖b‖)</code></pre>
+
+      <p>It runs from +1, pointing the same way, through 0, unrelated, to &minus;1, opposite. Apply it to the three documents:</p>
+
+      <pre><code>def cosine(u, v):
+    return np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
+
+print(cosine(a, b))   # 1.0    same subject, any length
+print(cosine(a, c))   # 0.707  related words, different mixture</code></pre>
+
+      <p>The verdicts have swapped, and now they are right. The long article scores a perfect 1.0 against the short one, because dividing by the lengths is the same move as normalising both vectors to length 1 first. A compass needle reports north without telling you how far north to walk. Cosine does the same: it throws away the size and keeps the heading.</p>
+
+      <p>It scales past documents without changing. Rate four users on how much they enjoy action, thriller, romance, and comedy films. Ava and Ben love the first two; Cara and Dan love the last two. One matrix multiplication computes every pairwise similarity at once, using the row-normalising trick from the scaling discussion last issue:</p>
+
+      <pre><code>users = {
+    "Ava":  np.array([5, 5, 1, 1]),
+    "Ben":  np.array([4, 5, 2, 1]),
+    "Cara": np.array([1, 1, 5, 4]),
+    "Dan":  np.array([1, 2, 4, 5]),
+}
+
+M = np.array(list(users.values()), dtype=float)
+M_unit = M / np.linalg.norm(M, axis=1, keepdims=True)
+print(np.round(M_unit @ M_unit.T, 2))
+# [[1.   0.98 0.4  0.49]
+#  [0.98 1.   0.52 0.59]
+#  [0.4  0.52 1.   0.97]
+#  [0.49 0.59 0.97 1.  ]]</code></pre>
+
+      <p>Ava and Ben score 0.98, Cara and Dan score 0.97, and the two camps barely overlap. Note what the normalising bought: a generous rater who scores everything highly and a stingy rater with the same taste share a direction, and cosine sees through the difference in enthusiasm. &ldquo;People like you also enjoyed&rdquo; is this small table, grown large.</p>
+
+      <h2>Where this runs in the wild</h2>
+
+      <p>When you ask an AI assistant a question, the system converts your query into a vector and searches its store of documents for the vectors with the highest cosine similarity to it. That is semantic search, and it is why the puncture page was found without the word puncture: the query and the page point the same way in a space where direction encodes meaning. The same formula sits under retrieval-augmented generation, duplicate detection, similar-artist lists, and customers-also-bought.</p>
+
+      <p>It also runs inside the models themselves. Every neuron computes a dot product between its inputs and its weights, and the attention mechanism inside a transformer is dot products between word vectors, deciding which words should attend to which. Speed up the dot product and you speed up almost everything in AI, which is a large part of why GPUs exist.</p>
+
+      <p>One caution, so this issue does not oversell its own formula. Cosine is the default when overall intensity is a distraction, and sometimes intensity is the point. For the houses of last issue, a large house genuinely differs from a small one, and throwing away magnitude would throw away the fact you care about. Distance and cosine are answers to different questions, and choosing between them is a decision about what your data means, not a technicality. The scaling warning from last issue also survives unchanged: on badly scaled features, the direction is as distorted as the distance.</p>
+
+      <p>Next issue steps up from single vectors to the object that holds thousands of them at once. A dataset is vectors stacked into a matrix, and a matrix is also a machine: feed it a vector and it hands back a new one. One matrix multiply turns out to be a full layer of a neural network, and reading that multiply fluently is most of what makes model code stop looking mysterious.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">Follow along with the code</p>
+      <p>
+        Everything in this issue runs in the free companion notebook for this series, which opens in
+        your browser with nothing to install. The full sequence, with all the figures and worked
+        examples, is collected in the book <em>Maths for AI</em>. The newsletter stands on its own,
+        and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://colab.research.google.com/github/biddu/maths-for-ai-notebooks/blob/main/01_vectors.ipynb" target="_blank" rel="noopener">Open the notebook</a>
+        <a class="btn btn-outline" href="https://www.amazon.co.uk/dp/B0H7QM2BB6" target="_blank" rel="noopener">Maths for AI on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-ai/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-ai/02-your-data-is-already-geometry.html">&larr; Your data is already geometry</a>
+      <span>Issue 4 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

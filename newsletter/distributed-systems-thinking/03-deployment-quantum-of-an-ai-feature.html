@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is the deployment quantum of an AI feature? — The Expensive Answers, Issue 3</title>
+  <meta name="description" content="A production AI feature is four artifacts that succeed and fail together: model version, prompt set, index version, and evaluation set, living in four tools that ship them separately. The case for one deployment unit with one version number." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/distributed-systems-thinking/03-deployment-quantum-of-an-ai-feature.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="What is the deployment quantum of an AI feature?" />
+  <meta property="og:description" content="Model, prompts, index, evals: what moves together, ships together. The case for one deployment unit with one version number." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/distributed-systems-thinking/03-deployment-quantum-of-an-ai-feature.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/distributed-systems-thinking/img/fig-03-the-quantum-audit.png" />
+  <meta property="article:published_time" content="2026-09-04" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What is the deployment quantum of an AI feature?",
+    "datePublished": "2026-09-04",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Expensive Answers" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/distributed-systems-thinking/03-deployment-quantum-of-an-ai-feature.html",
+    "description": "Model, prompts, index, evals: what moves together, ships together. The case for one deployment unit with one version number."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/distributed-systems-thinking/">The Expensive Answers</a><span class="sep">·</span>Issue 3
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Expensive Answers · Issue 3</p>
+      <h1 class="article-title">What is the deployment quantum of an AI feature?</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-04">4 September 2026</time><span class="sep">·</span>4 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">A team I know shipped a two-service architecture and celebrated on Tuesday. On Friday, a routine schema migration on one service took the other one down for eleven minutes. The post-mortem was one sentence long: we have two services and one system.</p>
+
+      <h2>The honest number</h2>
+
+      <p>The diagram said two. The outage said one. Both services read the same database, and a shared schema is a shared contract: a migration deploys everyone&rsquo;s world, whatever the boxes on the whiteboard claim. There is a name for the honest number, and it comes from Richards and Ford: the architecture quantum, the smallest unit you can deploy independently, together with everything it cannot be deployed without. Boxes on a diagram are free. Independence is bought, separately, and most teams have less of it than they think. Six microservices sharing one database is one quantum. Six microservices behind a frontend that deploys as a single artifact is one quantum again. The counting takes five minutes and regularly ruins a good diagram.</p>
+
+      <p>That much is classical. Here is where it gets interesting for anyone shipping AI features.</p>
+
+      <h2>The four artifacts that move together</h2>
+
+      <p>Ask the quantum&rsquo;s founding question, what must move together, about a production AI feature, and four artifacts answer that no deployment tool treats as one thing: the model version behind your vendor&rsquo;s API, the prompt templates tuned against that model, the embedding-index version your retrieval runs on, and the evaluation set that defines what a good answer looks like.</p>
+
+      <figure>
+        <img src="/newsletter/distributed-systems-thinking/img/fig-03-the-quantum-audit.png" alt="A quantum audit of a two-service system: ingestion and query services drawn as separate boxes, both inside one dashed boundary because they share one database, with a quantum count of one" loading="lazy" />
+        <figcaption>The quantum audit that ruins the diagram: two boxes, one shared database, one deployment quantum. The split bought process isolation and separate scaling. It did not buy independent deployment, because the schema is a shared contract.</figcaption>
+      </figure>
+
+      <p>Watch what happens when one moves alone. The vendor upgrades the model on its own schedule: prompts tuned for the old model&rsquo;s habits quietly degrade, and your evaluation thresholds, calibrated against the old behaviour, now report either false alarm or false comfort. Someone improves a prompt: outputs shift, and last month&rsquo;s evaluation scores no longer describe the system that is running. The embedding model gets upgraded and the index rebuilt: retrieval hands different passages to the same prompts, and generation composes answers from different raw material. In every case, the change was deployed to one artifact and the behaviour change arrived through all four.</p>
+
+      <p>That is static coupling in every sense that matters. Nobody drew it, because the four artifacts live in four different tools: an API console, a Git repository, an index store, and, if we are honest, a spreadsheet.</p>
+
+      <h2>The rule, and the four habits that follow</h2>
+
+      <p>So here is the rule I now teach, and as far as I know the framing is my own: the deployment quantum of an AI feature is the tuple of model version, prompt set, index version, and evaluation set, and it should be versioned, released, and rolled back as one unit.</p>
+
+      <p>In practice, four habits follow. Give the tuple a version number of its own. Release it through one pipeline, whatever the artifacts&rsquo; home tools are. Canary it as a unit, because a canary that varies one element while three drift in the background is not a canary, it is a coincidence. And roll it back as a unit, because reverting the prompt against the new model is a configuration that never existed and was never tested.</p>
+
+      <p>Teams that skip this discover the coupling the way the two-service team discovered theirs, except worse, because nothing errors. The system keeps answering. The answers just get quietly worse, for weeks, until someone notices a metric that nobody owns has been sliding. Discovering the tuple in advance costs a version number. Discovering it in production costs a fortnight of debugging a system in which nothing failed.</p>
+
+      <p>One caveat, in fairness. A quantum count of one is not a defect, in classical systems or here. The two-service team kept their shared database, deliberately, with the reasoning written down, because at their scale it was the right debt. The point is never that more independence is better. The point is to know what you actually have, so the diagram stops doing the lying.</p>
+
+      <p>A question worth putting to your own team, because the answer is usually instructive: which of the four artifacts has moved alone, and what did it cost to notice? Next issue turns the lens on the tools everyone is now designing systems with. I asked AI coding assistants to design the platform this series is built around, and what they produced was impressive and wrong in a consistent, diagnosable way. What AI tools systematically leave out of the systems they design, with the receipts.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters on the same argument, built around one production RAG platform and
+        finishing on the 5G and 6G edge. The newsletter stands on its own, and you never need the
+        book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HDG88RCB" target="_blank" rel="noopener">Distributed Systems Thinking on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/distributed-systems-thinking/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/distributed-systems-thinking/02-only-expensive-answers.html">&larr; There are no wrong answers in architecture, only expensive ones</a>
+      <span>Issue 4 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

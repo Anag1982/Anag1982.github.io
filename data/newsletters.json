@@ -27,6 +27,14 @@
           "date": "2026-08-21",
           "readingTime": "7 min",
           "summary": "A row of data is a point in space, and the distance between two points measures how unalike two things are. Vectors, distance, and the scaling mistake that quietly ruins it."
+        },
+        {
+          "number": 3,
+          "title": "Why similar means pointing the same way",
+          "slug": "03-why-similar-means-pointing-the-same-way",
+          "date": "2026-09-04",
+          "readingTime": "7 min",
+          "summary": "Distance asks how far apart two points sit, which is the wrong question for taste, topic, and meaning. The dot product, cosine similarity, and the one formula behind search, recommendation, and attention."
         }
       ]
     },
@@ -57,6 +65,14 @@
           "date": "2026-08-21",
           "readingTime": "5 min",
           "summary": "A board asks whether the firm should own its AI capability or rent it. The internet has a thousand confident answers, and all of them are useless without the team's context. Why architecture cannot be looked up, and the three-step method for pricing the answers available to you."
+        },
+        {
+          "number": 3,
+          "title": "What is the deployment quantum of an AI feature?",
+          "slug": "03-deployment-quantum-of-an-ai-feature",
+          "date": "2026-09-04",
+          "readingTime": "4 min",
+          "summary": "A production AI feature is four artifacts that succeed and fail together, living in four tools that ship them separately: model version, prompts, index, evaluation set. The case for one deployment unit with one version number."
         }
       ]
     },
@@ -79,6 +95,14 @@
           "date": "2026-08-21",
           "readingTime": "6 min",
           "summary": "Quantum computing looks like physics and is mostly linear algebra. A qubit in six lines of NumPy, the one rule that turns amplitudes into probabilities, and what this series will do every fortnight."
+        },
+        {
+          "number": 2,
+          "title": "The number system had to grow",
+          "slug": "02-the-number-system-had-to-grow",
+          "date": "2026-09-04",
+          "readingTime": "6 min",
+          "summary": "Complex numbers built from one rule and read as arrows with a length and an angle. Why multiplying by e^iθ is rotation, and how a squared magnitude becomes the probability a qubit reports when measured."
         }
       ]
     },
@@ -101,6 +125,14 @@
           "date": "2026-08-21",
           "readingTime": "8 min",
           "summary": "The Saturn V was about 93 percent propellant, and no clever engineering can change that. The rocket equation derived from school momentum, and why staging is a requirement, not a design choice."
+        },
+        {
+          "number": 2,
+          "title": "How your phone knows where it is",
+          "slug": "02-how-your-phone-knows-where-it-is",
+          "date": "2026-09-04",
+          "readingTime": "7 min",
+          "summary": "Your phone finds itself by timing satellite signals to a few billionths of a second, and if it ignored Einstein the blue dot would drift eleven kilometres a day. Simultaneous equations, a fourth satellite for a cheap clock, and the 1977 satellite that put relativity on a switch."
         }
       ]
     },
@@ -123,6 +155,14 @@
           "date": "2026-08-21",
           "readingTime": "5 min",
           "summary": "Why the first arXiv paper you open defeats you, and it is not the mathematics. The series opens by counting an eight-billion-parameter transformer by hand, down to the last norm, and reading two facts off the total that most descriptions never mention."
+        },
+        {
+          "number": 2,
+          "title": "In 4,096 dimensions, almost everything is perpendicular",
+          "slug": "02-almost-everything-is-perpendicular",
+          "date": "2026-09-04",
+          "readingTime": "7 min",
+          "summary": "Two random directions in 4,096 dimensions are all but perpendicular, and that single fact is why a transformer has room to store anything at all. The embedding lookup as a matrix product, what cosine similarity quietly discards, and the two corrections every similarity number needs."
         }
       ]
     },
@@ -145,6 +185,14 @@
           "date": "2026-08-21",
           "readingTime": "7 min",
           "summary": "The migration deadlines are law, the standards are published, and the popular account of what a quantum computer breaks is wrong in a specific, consequential way. The accurate account, with a period you can draw and factor yourself."
+        },
+        {
+          "number": 2,
+          "title": "Clock arithmetic, and the one gap in it",
+          "slug": "02-clock-arithmetic-and-the-one-gap-in-it",
+          "date": "2026-09-04",
+          "readingTime": "7 min",
+          "summary": "The arithmetic on a clock face, done properly, is the arithmetic every operation in the post-quantum standards runs on. Where division fails and how it is repaired, why both moduli are prime, and the divisibility test that decides which transforms are even possible."
         }
       ]
     }

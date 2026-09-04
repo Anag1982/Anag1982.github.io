@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clock arithmetic, and the one gap in it — After Shor, Issue 2</title>
+  <meta name="description" content="The arithmetic on a clock face, done properly, is the arithmetic every operation in the post-quantum standards runs on. Where division fails and how it is repaired, why both standards insist on a prime modulus, and the divisibility test that decides which transforms are even possible." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-pqc/02-clock-arithmetic-and-the-one-gap-in-it.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Clock arithmetic, and the one gap in it" />
+  <meta property="og:description" content="Clock arithmetic is the arithmetic the post-quantum standards run on. Where division fails, how it is repaired, and why the moduli are prime." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-pqc/02-clock-arithmetic-and-the-one-gap-in-it.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-pqc/img/fig-02-powers-of-two-mod-11.png" />
+  <meta property="article:published_time" content="2026-09-04" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Clock arithmetic, and the one gap in it",
+    "datePublished": "2026-09-04",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "After Shor" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-pqc/02-clock-arithmetic-and-the-one-gap-in-it.html",
+    "description": "Clock arithmetic is the arithmetic the post-quantum standards run on. Where division fails, how it is repaired, and why the moduli are prime."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-pqc/">After Shor</a><span class="sep">·</span>Issue 2
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">After Shor · Issue 2</p>
+      <h1 class="article-title">Clock arithmetic, and the one gap in it</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-04">4 September 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">On the clock on your wall, 12 + 3 = 3, and nobody is troubled. The clock reduces every count to its remainder on dividing by 12, and the arithmetic works: you can add and multiply hours and the answers are consistent. Take that idea seriously, swap the 12 for a prime with a few thousand or a few million on it, and you have the algebraic structure that every operation in the post-quantum standards runs on. Nothing in ML-KEM or ML-DSA computes with anything else.</p>
+
+      <p>Last issue promised that the mathematics would start at the very bottom. This is the bottom: the ring of integers mod q, the one place its arithmetic fails, and the repair that is the first genuinely beautiful thing in the subject.</p>
+
+      <h2>The ring Z<sub>q</sub></h2>
+
+      <p>Fix an integer q &ge; 2. Two integers are congruent mod q when they differ by a multiple of q, and Z<sub>q</sub> = {0, 1, ..., q &minus; 1} names one representative from each class. Addition and multiplication descend unambiguously: reduce after every operation and the answer matches reducing once at the end. That is all &ldquo;mod&rdquo; ever means computationally. FIPS 203, the key-establishment standard, works over Z<sub>q</sub> with q = 3329. FIPS 204, the signature standard, uses q = 8380417. Both are prime, and that is not a detail, as we will see.</p>
+
+      <p>One warning before anything else, because it bites implementers rather than mathematicians. Z<sub>q</sub> has no preferred representatives: {0, ..., q &minus; 1} and the centred set {&minus;&lfloor;q/2&rfloor;, ..., &lceil;q/2&rceil; &minus; 1} name the same ring. But ML-KEM&rsquo;s noise is drawn to be small in absolute value, and &ldquo;small&rdquo; is a statement about the centred representative: the unsigned residue q &minus; 1 and the centred residue &minus;1 are the same ring element and utterly different noise magnitudes. Fix a convention and say so. The two silently disagree on every negative number.</p>
+
+      <h2>The gap: division</h2>
+
+      <p>Addition, subtraction and multiplication all work in Z<sub>q</sub> without complaint. Division is the gap. Dividing by a means multiplying by an element a<sup>&minus;1</sup> with a &middot; a<sup>&minus;1</sup> &equiv; 1 (mod q), and such an inverse exists exactly when gcd(a, q) = 1. When it fails, it fails hard: in Z<sub>4</sub>, 2 &times; 2 &equiv; 0, so 2 multiplied by anything is 0 or 2, and nothing multiplies it to 1. A composite modulus leaves holes in the arithmetic wherever a shared factor sits.</p>
+
+      <p>The repair, when gcd(a, q) = 1, is the extended Euclidean algorithm. The ordinary Euclidean algorithm finds the gcd by repeated division with remainder; run the same recursion carrying coefficients along and it terminates in B&eacute;zout&rsquo;s identity, integers s and t with s&middot;a + t&middot;q = gcd(a, q). When the gcd is 1, read that equation mod q: s&middot;a &equiv; 1, so s is the inverse, delivered by the same algorithm that proved it exists. Here it is doing real work on the real modulus:</p>
+
+      <pre><code>def inverse_euclid(a, q):
+    old_r, r = a, q
+    old_s, s = 1, 0
+    while r != 0:
+        k = old_r // r
+        old_r, r = r, old_r - k * r
+        old_s, s = s, old_s - k * s
+    return old_s % q            # valid when gcd(a, q) == 1
+
+print(inverse_euclid(17, 3329))   # 1175
+print(17 * 1175 % 3329)           # 1</code></pre>
+
+      <p>Now the consequence the standards are built on. When q is prime, every nonzero element is coprime to q, so every nonzero element has an inverse, and Z<sub>q</sub> is a field: a system where all four operations work everywhere. This is why FIPS 203 and 204 insist on prime q. The scheme needs to divide, everywhere, with no holes, and only a prime buys that.</p>
+
+      <h2>A second way to invert, and why implementations prefer it</h2>
+
+      <p>There is a second route to the same inverse, through a theorem of Fermat. For prime p and any a not divisible by p, multiplication by a merely shuffles the nonzero residues, and comparing the product of all of them before and after the shuffle forces a<sup>p&minus;1</sup> &equiv; 1 (mod p). Multiply both sides by a<sup>&minus;1</sup> and the inverse appears as a power: a<sup>p&minus;2</sup> &equiv; a<sup>&minus;1</sup>. Inversion becomes exponentiation, done by repeated squaring in about log p multiplications.</p>
+
+      <pre><code>print(pow(7, 11, 13))         # 2, and 7 x 2 = 14 = 1 (mod 13)
+print(pow(17, 3327, 3329))    # 1175, the same inverse as before</code></pre>
+
+      <p>Why keep two algorithms for one job? Because they differ in something subtler than speed. Extended Euclid takes a number of steps, and at each step a branch, that depend on the value of a. Fermat inversion performs a fixed pattern of squarings and multiplications set entirely by the public exponent q &minus; 2, identical for every a. If a is secret, that difference is everything: an attacker with a stopwatch, a power probe, or shared cache access can often read a data-dependent computation&rsquo;s secrets from its timing, and a computation whose sequence of operations never varies gives such an attacker nothing. This is the constant-time discipline, and it is why the best-known field-inversion code in deployed cryptography computes a<sup>&minus;1</sup> by exponentiation rather than by the shorter, faster, data-dependent Euclid. The theme returns in every implementation chapter of this subject; this is its first appearance, and the cleanest.</p>
+
+      <h2>The gate every modulus must pass</h2>
+
+      <p>One more idea completes the toolkit. The order of an element a is the least k with a<sup>k</sup> &equiv; 1: the length of the cycle its powers walk before repeating. Orders always divide q &minus; 1, which is Fermat&rsquo;s theorem sharpened. An element whose order is exactly q &minus; 1 is a primitive root, and its powers visit every nonzero residue exactly once:</p>
+
+      <figure>
+        <img src="/newsletter/maths-for-pqc/img/fig-02-powers-of-two-mod-11.png" alt="The ten powers of 2 mod 11 arranged in a cycle, visiting every nonzero residue exactly once before returning to 1" loading="lazy" />
+        <figcaption>Z<sub>11</sub> generated by the primitive root 2: the powers 2&#8304;, 2&sup1;, ..., 2&#8313; visit all of {1, ..., 10} exactly once, then repeat. Every prime has such a generator.</figcaption>
+      </figure>
+
+      <p>An element of order exactly n, a primitive n-th root of unity, can therefore exist only if n divides q &minus; 1. That single divisibility is the gate every fast-transform-friendly modulus must pass, and it was checked before either standard was written. Factor the two: 3329 &minus; 1 = 3328 = 2<sup>8</sup> &middot; 13, and 8380417 &minus; 1 = 8380416 = 2<sup>13</sup> &middot; 3 &middot; 11 &middot; 31. Both standards work with polynomials of degree 256. Since 256 divides 3328 but 512 does not, ML-KEM&rsquo;s modulus has 256-th roots of unity and no 512-th roots; ML-DSA&rsquo;s has both. That one arithmetic fact is why the two standards&rsquo; fast transforms will look slightly different when we build them, one complete and one stopping a level early. Choosing q is choosing which transforms are even possible, before a single coefficient is multiplied. And note the trap in the neighbouring claim: primality makes Z<sub>q</sub> a field, but it says nothing about which roots of unity live inside it. Both conditions were engineered into these moduli separately.</p>
+
+      <p>That is the ground floor built: a clock face where all four operations work, two ways to divide with one of them safe to run on secrets, and a divisibility test that decides what the modulus can support. Next issue we glue polynomials onto it. ML-KEM does not live in Z<sub>q</sub> itself but in the ring R<sub>q</sub> = Z<sub>q</sub>[x]/(x&sup2;&#8309;&#8310; + 1), polynomials of degree under 256 whose coefficients are clock-face numbers, and the strange-looking divisor x&sup2;&#8309;&#8310; + 1 turns out to be one of the best engineering decisions in the whole standard.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from what quantum computing actually breaks through lattices, Learning
+        With Errors and the NIST standards read clause by clause, with 196 exercises and full
+        solutions, are collected in the book <em>Maths for Post-Quantum Cryptography</em>. The
+        newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFLYZQ3B/" target="_blank" rel="noopener">Maths for Post-Quantum Cryptography on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-pqc/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-pqc/01-what-a-quantum-computer-actually-breaks.html">&larr; What a quantum computer actually breaks</a>
+      <span>Issue 3 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

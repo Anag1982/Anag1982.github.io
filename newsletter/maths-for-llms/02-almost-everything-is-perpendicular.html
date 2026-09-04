@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>In 4,096 dimensions, almost everything is perpendicular — Attention, Derived, Issue 2</title>
+  <meta name="description" content="Two random directions in 4,096 dimensions are all but perpendicular, and that single fact is why a transformer has room to store anything at all. The embedding lookup as a matrix product, what cosine similarity quietly discards, and the two corrections every similarity number needs." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-llms/02-almost-everything-is-perpendicular.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="In 4,096 dimensions, almost everything is perpendicular" />
+  <meta property="og:description" content="Two random directions in 4,096 dimensions are all but perpendicular, and that is why the model has room to store anything at all." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-llms/02-almost-everything-is-perpendicular.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-llms/img/fig-02-almost-orthogonal.png" />
+  <meta property="article:published_time" content="2026-09-04" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "In 4,096 dimensions, almost everything is perpendicular",
+    "datePublished": "2026-09-04",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Attention, Derived" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-llms/02-almost-everything-is-perpendicular.html",
+    "description": "Two random directions in 4,096 dimensions are all but perpendicular, and that is why the model has room to store anything at all."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-llms/">Attention, Derived</a><span class="sep">·</span>Issue 2
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Attention, Derived · Issue 2</p>
+      <h1 class="article-title">In 4,096 dimensions, almost everything is perpendicular</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-04">4 September 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Model D, our eight-billion-parameter reference model from last issue, has a vocabulary of 128,256 tokens and a width of 4,096, and the first thing it does with your prompt is replace each token by one row of a 128,256-row table. That table holds a little over half a billion parameters, and there is one at each end of the network. Everything downstream is arithmetic on those rows.</p>
+
+      <p>This issue asks three questions about that table. What does the lookup actually cost? When a paper tells you two tokens have cosine similarity 0.82, what has been measured? And how does a mere 4,096 dimensions hold a vocabulary, and apparently a world model, without everything colliding? The third answer is the good one, and it is the opposite of most people&rsquo;s intuition.</p>
+
+      <h2>The lookup is a matrix product</h2>
+
+      <p>Indexing into a table sounds like it should sit outside the mathematics, a bit of plumbing before the real work. It does not. Write the token ids of a length-s sequence as a one-hot matrix O, one row per token with a single 1 marking its id, and the embedded sequence is exactly the product X = O W<sub>E</sub>, where W<sub>E</sub> is the V &times; d embedding table. Expand the product and each row of X is precisely the looked-up row of W<sub>E</sub>. The framework&rsquo;s gather is an optimisation of an exact matrix product, not an approximation to one.</p>
+
+      <p>The derivation pays off in the backward pass. The gradient with respect to W<sub>E</sub> is O<sup>T</sup> times the gradient arriving from above, and because O is one-hot, that product touches at most s of the V rows: a scatter-add, where a token appearing three times has its three gradients accumulated. Every other row of half a billion parameters receives exactly nothing that step. That sparsity sounds efficient and is also a trap. Optimisers that carry per-parameter state, and weight decay, quietly assume every parameter is updated every step, and applied inconsistently across rows they let rare-token embeddings drift or decay over a long run. That is the mechanism behind the glitch tokens that produce erratic output when prompted, and it is why large-scale trainers densify the update despite the cost.</p>
+
+      <h2>What cosine similarity discards</h2>
+
+      <p>Once tokens are vectors, the default comparison is cosine similarity, the angle between them with both lengths divided out. Dividing out the lengths is a real decision: cosine is unchanged if either vector is rescaled, so it discards one full degree of freedom per vector, and in an embedding matrix norm is information, tracking token frequency among other things. Note also that the model itself never computes a cosine. The attention score of next issue keeps both magnitudes.</p>
+
+      <p>The deeper problem is the frame. Trained embedding clouds carry a large common offset: write each embedding as the cloud mean plus a deviation, x = &mu; + x&#771;, and the inner product of any pair contains a shared term &Vert;&mu;&Vert;&sup2; that has nothing to do with either token. When &Vert;&mu;&Vert; is comparable to the spread of the cloud, that term pushes every cosine toward a common positive floor, and what you are ranking is agreement with the mean, not agreement with each other. On a real checkpoint, a small model I measured for the book, the mean off-diagonal cosine over 40 frequent tokens is +0.245 raw. Subtracting the mean takes it to +0.124, so centring removes about half the floor and leaves the other half, because the centred cloud still has a dominant principal direction that frequent tokens share. Projecting that direction out as well takes the floor to +0.003, and the next nine directions change nothing further. Two corrections, not one. A similarity heatmap computed without both is the standard first plot of every embedding-analysis blog post, and it is a picture of the offset, not of meaning.</p>
+
+      <h2>Almost everything is perpendicular</h2>
+
+      <p>Now the fact the chapter exists for. Take two independent random directions in d dimensions, uniform on the sphere. Their cosine has mean zero and standard deviation 1/&radic;d. In three dimensions that is 0.58, matching everyday intuition: random directions can point all over the place. At d = 4,096 it is exactly 1/64 = 0.0156. Almost every pair of directions is almost exactly perpendicular, and the concentration tightens as the width grows.</p>
+
+      <p>The derivation is three lines and worth having. Rotate the frame so the second vector is the first coordinate axis; the cosine is then just the first coordinate x&#8321; of a random unit vector. Symmetry gives it mean zero. The coordinates are identically distributed and their squares sum to 1, so E[x&#8321;&sup2;] = 1/d, and the standard deviation is 1/&radic;d. You can watch the theory land in twenty thousand samples:</p>
+
+      <pre><code>import numpy as np
+rng = np.random.default_rng(0)
+d = 4096
+x = rng.normal(size=(20000, d)); x /= np.linalg.norm(x, axis=1, keepdims=True)
+y = rng.normal(size=(20000, d)); y /= np.linalg.norm(y, axis=1, keepdims=True)
+cos = (x * y).sum(axis=1)
+
+print(round(cos.std(), 4))         # 0.0157   theory says 1/64 = 0.0156
+print(round(np.abs(cos).max(), 3)) # 0.062    20,000 pairs, none past 0.07</code></pre>
+
+      <figure>
+        <img src="/newsletter/maths-for-llms/img/fig-02-almost-orthogonal.png" alt="Distributions of the cosine between two random directions at widths 3, 64, 512 and 4096, collapsing from a flat spread to a narrow spike at zero" loading="lazy" />
+        <figcaption>The distribution of cos &theta; between independent random directions, at four widths. At d = 3 it is spread across the whole range, which is the intuition most of us arrive with. By d = 4,096 it is a spike of width 1/64 centred on zero.</figcaption>
+      </figure>
+
+      <p>This is the opposite of the usual reading of high dimensions. The phrase &ldquo;curse of dimensionality&rdquo; suggests crowding, and there is a real curse, but it is contrast collapsing, not space running out: almost all of a high-dimensional ball&rsquo;s volume sits in a thin shell at its surface, and at d = 4,096 a shell of relative thickness one part in a thousand already holds 98.3 percent of the volume. What is abundant is directions. Exact orthogonality supplies only d perpendicular directions, but near-orthogonality is generic, and d dimensions hold exponentially many almost-perpendicular ones. Capacity is angular, not volumetric, and it is the reason a width of 4,096 can assign a workably distinct direction to far more concepts than 4,096.</p>
+
+      <p>The same numbers hand you a significance floor. Below roughly 3/&radic;d, which is 0.05 at this width, a measured similarity is indistinguishable from two random directions, and above it you must still subtract the mean and the top direction before concluding anything. One honest caveat: the random-direction result is the null model, and trained embeddings are decidedly not uniform on the sphere. That is precisely why the corrections of the previous section exist, and why the null model is the right yardstick to hold them against.</p>
+
+      <h2>The consequence</h2>
+
+      <p>Three things follow. The vocabulary is a bill fixed before training starts: two tables of 525 million parameters each in Model D, 13 percent of the model, which is exactly the accounting that decides whether a model family ties its input and output embeddings. The lookup is free in compute and awkward in gradient traffic, which is where rare-token strangeness comes from. And the geometry is angular: directions are the resource, and any similarity you report needs the mean and the top principal direction removed first.</p>
+
+      <p>Next issue the stream of embedded vectors arrives at the mechanism the series is named for. Attention compares vectors with a score that keeps the magnitudes cosine throws away, and its formula carries a curious constant: the score is divided by &radic;d before anything else happens. That factor is not a convention. It is forced by the variance arithmetic of this issue, and we will derive it from a blank page.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from the toolkit to scaling laws, quantisation and interpretability, each
+        one question answered by a full derivation with the arithmetic checked by continuous
+        integration, are collected in the book <em>Maths for LLMs</em>. The newsletter stands on
+        its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFF1RKFW" target="_blank" rel="noopener">Maths for LLMs on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-llms/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-llms/01-eight-billion-parameters-by-hand.html">&larr; Eight billion parameters, counted by hand</a>
+      <span>Issue 3 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

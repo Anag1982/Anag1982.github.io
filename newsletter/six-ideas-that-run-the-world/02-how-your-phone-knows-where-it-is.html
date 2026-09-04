@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How your phone knows where it is — Six Ideas, Issue 2</title>
+  <meta name="description" content="Your phone finds itself by timing signals from satellites 20,000 kilometres up, and if it ignored Einstein the blue dot would drift eleven kilometres a day. Simultaneous equations you can solve by hand, a fourth satellite for a cheap clock, and the 1977 satellite that put relativity on a switch." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/02-how-your-phone-knows-where-it-is.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="How your phone knows where it is" />
+  <meta property="og:description" content="Timing signals from satellites 20,000 km up, simultaneous equations you can solve by hand, and the reason relativity runs correctly in your pocket." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/02-how-your-phone-knows-where-it-is.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/img/fig-02-trilateration.png" />
+  <meta property="article:published_time" content="2026-09-04" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How your phone knows where it is",
+    "datePublished": "2026-09-04",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Six Ideas" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/six-ideas-that-run-the-world/02-how-your-phone-knows-where-it-is.html",
+    "description": "Timing signals from satellites 20,000 km up, simultaneous equations you can solve by hand, and the reason relativity runs correctly in your pocket."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/six-ideas-that-run-the-world/">Six Ideas</a><span class="sep">·</span>Issue 2
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Six Ideas · Issue 2</p>
+      <h1 class="article-title">How your phone knows where it is</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-04">4 September 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">The blue dot on your phone&rsquo;s map is right to within a few metres, and it has no idea where it is. It works out its position by listening to a handful of satellites 20,000 kilometres overhead and timing their signals to within a few billionths of a second. If it ignored Einstein, that dot would drift away from you by about eleven kilometres every day. Relativity is not a curiosity from a textbook. It is running, correctly, in your pocket, right now.</p>
+
+      <p>This chapter of the story needs nothing beyond the simultaneous equations on a school syllabus, plus one correction from physics that the school version cannot supply but can certainly appreciate. As always, every number is real and you can check each one with the arithmetic on the page.</p>
+
+      <h2>Every satellite puts you on a circle</h2>
+
+      <p>The question is this: how does a phone that only listens, and is never told anything, work out where it is to within a few metres? It has no map of itself and no beacon of its own. It has only the arrival times of signals from satellites whose positions are known.</p>
+
+      <p>Each satellite broadcasts its position and the exact time it sent each signal. The receiver measures how long the signal took to arrive and multiplies by the speed of light to get its distance from that satellite. One distance from one known point places you somewhere on a circle around it, or a sphere in three dimensions. A second satellite gives a second circle, and two circles cross at two points. A third picks which of the two points is real. This is trilateration, and it is nothing more than solving simultaneous equations for where several circles intersect.</p>
+
+      <p>Do one by hand, on flat ground. Two beacons sit 10 km apart; put the first at the origin and the second at (10, 0). Your receiver measures itself 6 km from the first and 8 km from the second. The two circle equations are x&sup2; + y&sup2; = 36 and (x &minus; 10)&sup2; + y&sup2; = 64. Subtract the first from the second and the squares in x cancel, leaving &minus;20x + 100 = 28, so x = 3.6. Substitute back: y&sup2; = 36 &minus; 12.96 = 23.04, so y = &plusmn;4.8. Two candidate positions, exactly as the picture predicts, and a third beacon settles which. You have just done the core computation of satellite navigation with a pencil.</p>
+
+      <figure>
+        <img src="/newsletter/six-ideas-that-run-the-world/img/fig-02-trilateration.png" alt="Three range circles from three beacons meeting at a single point, with the second candidate intersection marked as the ghost solution the third circle rules out" loading="lazy" />
+        <figcaption>The worked example, drawn. Ranges of 6 km and 8 km from beacons 10 km apart meet at (3.6, 4.8) and at a ghost point below; the third circle keeps one and rules out the other. A real receiver does this with spheres, four of them.</figcaption>
+      </figure>
+
+      <h2>The fourth satellite</h2>
+
+      <p>In three dimensions there are three unknowns for position, so three satellites and three sphere equations should pin you down. In practice a fourth is needed, and the reason is money. Every GPS satellite carries an atomic clock. Your phone does not, and its cheap clock is slightly wrong. Light covers 300 metres in a millionth of a second, so a timing error of one microsecond becomes a position error of 300 metres. The receiver cannot afford to trust its own clock, so it treats its clock offset as one more unknown and solves for it along with x, y and z. Four unknowns, four satellites, four equations. That is why your phone needs to see at least four.</p>
+
+      <p>Note what the phone is not doing: it sends nothing to the satellites, and the satellites do not know you exist. GPS is one-way. The satellites broadcast, the receiver listens and computes, and a basic receiver reveals nothing about you to the sky. Location sharing happens separately, over the mobile network, only if an app sends it.</p>
+
+      <h2>Einstein in your pocket</h2>
+
+      <p>Now put numbers on the precision. Light covers about 30 centimetres in a nanosecond. To place a phone within a few metres, the timing must be good to about ten nanoseconds. That is why the satellites carry atomic clocks, and why the small print of relativity stops being small.</p>
+
+      <pre><code>c = 3.0e8                    # speed of light, m/s
+print(0.067 * c / 1000)      # 20100.0  km: a 0.067 s signal delay
+print(10e-9 * c)             # 3.0      metres per 10 ns of timing error
+print(38e-6 * c / 1000)      # 11.4     km of drift per uncorrected day</code></pre>
+
+      <p>Two relativistic effects act on the satellite clocks, and they pull in opposite directions. Special relativity says a moving clock runs slow, which would lose the satellite clock about 7 microseconds a day. General relativity says a clock higher in a weaker gravitational field runs fast, which would gain about 45 microseconds a day. The two do not cancel. The net effect is that the satellite clock gains about 38 microseconds a day relative to the ground, and the last line of arithmetic above turns that into distance: left uncorrected, the computed position would be off by roughly 11 kilometres after a single day. A system that ignored Einstein would be useless for navigation within hours. The correction is designed in before launch, and it works.</p>
+
+      <h2>The switch they built to check</h2>
+
+      <p>When the first satellite carrying the new navigation technology was being prepared in the mid-1970s, not everyone believed the correction was needed. Some engineers thought the predicted frequency shift was a theorist&rsquo;s fussiness that real hardware would not notice. So the satellite, NTS-2, launched in 1977, was fitted with its clock correction switchable: it could be turned on or off from the ground, so the effect could be measured rather than argued about.</p>
+
+      <p>They turned it off first and watched. The clock drifted, at very close to the rate general relativity predicted. Then they turned the correction on and the drift went away. The story is a good antidote to the idea that established physics is simply believed. It was tested, in orbit, by people who were not sure, and it passed. The physicist Neil Ashby, who documented the relativistic design of the system, has set out this history in detail.</p>
+
+      <h2>Where school ends</h2>
+
+      <p>The clean four-sphere picture is the idea, not the practice. A real receiver sees more than four satellites, and the measurements disagree slightly, so it does not solve the equations exactly. Instead it finds the position that best fits all of them at once, by a method called least squares. It also models the delay the signal picks up crossing the ionosphere, and it smooths its estimate over time with a tool called a Kalman filter, which this book meets again in the chapter on self-driving cars. Those belong to a first year at university and beyond. The school version gets you the principle, and the reason relativity is in the phone.</p>
+
+      <p>That method the real receiver leans on, fitting a best answer through measurements that do not quite agree, deserves a story of its own, and it has one. Next issue: on the first night of the nineteenth century an astronomer found a new world, watched it for six weeks, and lost it in the Sun&rsquo;s glare. A 24-year-old named Gauss fitted a curve through the scattered observations and told the astronomers where to look. The method he used is the direct ancestor of the systems now called artificial intelligence, and you can derive it with school calculus.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters, from rockets to the energy budget of the planet, every central result
+        derived with school mathematics and every number referenced, are collected in the book
+        <em>Six Ideas That Run the World</em>. The newsletter stands on its own, and you never
+        need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H9P9B5FX" target="_blank" rel="noopener">Six Ideas That Run the World on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/six-ideas-that-run-the-world/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/six-ideas-that-run-the-world/01-why-rockets-are-mostly-fuel.html">&larr; Why rockets are mostly fuel</a>
+      <span>Issue 3 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
