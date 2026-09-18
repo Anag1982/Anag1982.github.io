@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polynomials on the clock face — After Shor, Issue 3</title>
+  <meta name="description" content="ML-KEM and ML-DSA compute in the ring of polynomials of degree under 256 with clock-face coefficients. Negacyclic multiplication derived from one substitution, why n must be a power of two, and the single divisibility check that decides how far the ring splits." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-pqc/03-polynomials-on-the-clock-face.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Polynomials on the clock face" />
+  <meta property="og:description" content="The standards compute in a ring of polynomials with clock-face coefficients. Rotate-and-negate multiplication, why n is a power of two, and the divisibility check that decides everything." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-pqc/03-polynomials-on-the-clock-face.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-pqc/img/fig-03-polynomials-on-the-clock.png" />
+  <meta property="article:published_time" content="2026-09-18" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Polynomials on the clock face",
+    "datePublished": "2026-09-18",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "After Shor" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-pqc/03-polynomials-on-the-clock-face.html",
+    "description": "The standards compute in a ring of polynomials with clock-face coefficients. Rotate-and-negate multiplication, why n is a power of two, and the divisibility check that decides everything."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-pqc/">After Shor</a><span class="sep">·</span>Issue 3
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">After Shor · Issue 3</p>
+      <h1 class="article-title">Polynomials on the clock face</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-18">18 September 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">The ground floor from last issue was Z<sub>q</sub>, the clock face where all four operations work. But ML-KEM and ML-DSA do not compute in Z<sub>q</sub>. They compute in R<sub>q</sub> = Z<sub>q</sub>[x]/(x&sup2;&#8309;&#8310; + 1): polynomials of degree under 256 whose coefficients are clock-face numbers. Every object downstream has this shape. A ciphertext is a handful of elements of R<sub>q</sub>, a signature is built from them, a public key is a matrix of them. This issue derives the three design choices hiding in that one line, and the strange-looking divisor x&sup2;&#8309;&#8310; + 1 turns out to be one of the best engineering decisions in the whole standard.</p>
+
+      <h2>The same move, one level up</h2>
+
+      <p>Building R<sub>q</sub> is the move that built Z<sub>q</sub>, repeated. There, we fixed an integer q and kept remainders after dividing by it. Here, we fix a polynomial, x&#8319; + 1 with n = 256, and keep remainders after dividing by that. Every element of R<sub>q</sub> is represented by a unique polynomial of degree less than n, which is to say by its n coefficients, each a number in Z<sub>q</sub>. Byte for byte, an element of R<sub>q</sub> is a fixed-size array of 256 small integers, with no pointers and no variable-length encoding, and the standards&rsquo; serialisation formats are exactly &ldquo;write the coefficients down.&rdquo;</p>
+
+      <p>Addition is coefficientwise and needs nothing further. It is tempting to conclude that R<sub>q</sub> is just Z<sub>q</sub><sup>256</sup> with extra notation, and additively that is true. The ring earns its keep in the multiplication: coordinatewise products would throw away all the algebraic structure, while R<sub>q</sub>&rsquo;s multiplication lets one ring product diffuse information across all 256 coefficients in a single step. The ring structure is not decoration. It is the entire reason the standards use polynomials instead of plain vectors of integers.</p>
+
+      <h2>Multiplication with a twist</h2>
+
+      <p>To multiply in R<sub>q</sub>, multiply as ordinary polynomials, then reduce. Reduction means substituting x&#8319; &equiv; &minus;1, because x&#8319; + 1 &equiv; 0 modulo itself, and that substitution is where the character of the ring comes from. Work the smallest honest example: n = 4, f = 1 + 2x + 3x&sup2; + 4x&sup3;, multiplied by x. The ordinary product is x + 2x&sup2; + 3x&sup3; + 4x&#8308;, and the last term reduces: 4x&#8308; &equiv; &minus;4. So</p>
+
+      <pre><code>f &middot; x  &equiv;  &minus;4 + x + 2x&sup2; + 3x&sup3;   (mod x&#8308; + 1)</code></pre>
+
+      <p>Multiplying by x rotates the coefficient array one slot and flips the sign of whatever rotates past the top. Run the general case through the same substitution and multiplication in R<sub>q</sub> comes out as ordinary cyclic convolution, except that the wrap-around terms come back negated. That minus sign is the whole content of the name this operation carries, negacyclic convolution, and it is the only difference from the convolution used in rings built from x&#8319; &minus; 1.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-pqc/img/fig-03-polynomials-on-the-clock-stacked.png" />
+          <img src="/newsletter/maths-for-pqc/img/fig-03-polynomials-on-the-clock.png" alt="Left, the coefficients 1, 2, 3, 4 shifting one slot right under multiplication by x with the top coefficient wrapping to the front as minus 4; right, the seventeen elements of Z 17 on a circle with the four roots of x to the fourth plus one highlighted as odd powers of psi equals 9" loading="lazy" />
+        </picture>
+        <figcaption>Left, multiplication by x in R<sub>q</sub>: rotate the coefficient array, negate the wrap. Right, the toy case q = 17, n = 4: the four roots of x&#8308; + 1 in Z&#8321;&#8327; are exactly {2, 8, 9, 15}, the odd powers of a primitive 8th root of unity &psi; = 9.</figcaption>
+      </figure>
+
+      <p>Ten lines of code implement the convolution formula directly, and checking them against rotate-and-negate on random polynomials is the kind of test worth actually running:</p>
+
+      <pre><code>def negacyclic(f, g, q):
+    n = len(f); h = [0] * n
+    for i in range(n):
+        for j in range(n):
+            k = (i + j) % n
+            s = 1 if i + j &lt; n else -1
+            h[k] = (h[k] + s * f[i] * g[j]) % q
+    return h
+
+print(negacyclic([1, 2, 3, 4], [0, 1, 0, 0], 17))
+# [13, 1, 2, 3]   ->  -4 mod 17 is 13: rotate, negate the wrap</code></pre>
+
+      <h2>Why 256 and not 250</h2>
+
+      <p>Fixing x&#8319; + 1 was a choice, and not every n makes it a good one. The requirement that matters is that x&#8319; + 1 should not factor into smaller polynomials, for the same reason last issue wanted a prime modulus: a reducible modulus lets the ring decompose into smaller rings, and a decomposable ring hands an attacker smaller, more structured pieces to work on one at a time.</p>
+
+      <p>Suppose n has an odd factor d &gt; 1, say n = dm. For odd d there is a school identity: y&#7496; + 1 = (y + 1)(y&#7496;&#8315;&sup1; &minus; y&#7496;&#8315;&sup2; + &#8943; &minus; y + 1), the signs telescoping precisely because d is odd. Substitute y = x&#7504; and the identity exhibits x&#8319; + 1 as a genuine product of two smaller polynomials. Read the contrapositive: if x&#8319; + 1 is to be irreducible, n can have no odd factor above 1, so n must be a power of two. That the power-of-two choice actually delivers irreducibility is a deeper fact about cyclotomic polynomials which we use without reproving, in the same spirit as last issue&rsquo;s citation that Z<sub>q</sub>&#215; is cyclic. Both standards take n = 256 = 2&#8312;: large enough that nothing peels off, small enough that the coefficient arrays stay compact.</p>
+
+      <h2>One divisibility check decides the rest</h2>
+
+      <p>Irreducible over the rationals does not mean irreducible over Z<sub>q</sub>, and what happens over Z<sub>q</sub> is decided by a single condition on q. Suppose Z<sub>q</sub> contains an element &psi; of order exactly 2n, a primitive 2n-th root of unity in last issue&rsquo;s language. Then &psi;&#8319; squares to 1 without being 1, and since a prime modulus permits no zero divisors, &psi;&#8319; must be &minus;1. Every odd power of &psi; is therefore a root of x&#8319; + 1, they are all distinct, and a degree-n polynomial has room for no others: x&#8319; + 1 splits completely into n linear factors. Such a &psi; exists exactly when 2n divides q &minus; 1, that is, when q &equiv; 1 (mod 2n).</p>
+
+      <p>The toy case makes it concrete. Take q = 17, n = 4, so 2n = 8 divides q &minus; 1 = 16. Direct search finds &psi; = 9, whose odd powers are 9, 15, 8, 2 modulo 17, and brute force confirms that {2, 8, 9, 15} is the complete root set of x&#8308; + 1 in Z&#8321;&#8327;. Now the standards&rsquo; numbers. Both fix 2n = 512. Last issue factored q &minus; 1 for each: ML-DSA&rsquo;s 8380416 = 2&sup1;&sup3;&middot;3&middot;11&middot;31 is divisible by 512, so its x&sup2;&#8309;&#8310; + 1 splits into 256 linear factors. ML-KEM&rsquo;s 3328 = 2&#8312;&middot;13 is not, and its polynomial only splits as far as 128 quadratics.</p>
+
+      <p>Note what that shortfall is and is not. The convolution formula above is exact for every modulus, so nothing about ML-KEM&rsquo;s multiplication is broken or approximate. What the divisibility buys is speed: full splitting turns one ring product into n independent products in Z<sub>q</sub>, while ML-KEM&rsquo;s transform bottoms out one level early in 128 small 2 &times; 2 multiplications. Both run fast. Which factorisation the arithmetic exploits is read off one divisibility check before a single coefficient is multiplied.</p>
+
+      <h2>The security dial is k, not the ring</h2>
+
+      <p>A single ring element is not enough structure to build a scheme with adjustable security, so both standards work with vectors over R<sub>q</sub>. The set R<sub>q</sub><sup>k</sup> of k-tuples behaves like a vector space with R<sub>q</sub> as its scalars, and the operation the standards actually run is a matrix over R<sub>q</sub> acting on such a vector, every scalar multiply inside it a negacyclic convolution. Here is the striking design fact: across all six parameter sets of the two standards, n and q never change. ML-KEM at security categories 1, 3 and 5 uses (k, l) of (2, 2), (3, 3) and (4, 4); ML-DSA uses (4, 4), (6, 5) and (8, 7). The ring is chosen once, for the reasons derived above, and the security dial is the integer k, at the cost of a larger matrix and larger keys.</p>
+
+      <p>One cost is now sitting in plain view. Computed straight from the convolution formula, a single ring product is n&sup2; scalar multiplications, tens of thousands for n = 256, and a matrix-vector product needs kl of them. That cost is large enough to matter and structured enough to fix, and the divisibility condition above is precisely what determines how far it can be driven down. Next issue builds the machine that does it: the number-theoretic transform, which evaluates a polynomial at the powers of &psi; the way this issue&rsquo;s roots suggest, turns convolution into coordinatewise multiplication, and brings n&sup2; down to n log n. It is the fast Fourier transform wearing modular clothes, and it is the reason post-quantum key exchange costs microseconds rather than milliseconds.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from what quantum computing actually breaks through lattices, Learning
+        With Errors and the NIST standards read clause by clause, with 196 exercises and full
+        solutions, are collected in the book <em>Maths for Post-Quantum Cryptography</em>. The
+        newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFLYZQ3B/" target="_blank" rel="noopener">Maths for Post-Quantum Cryptography on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-pqc/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-pqc/02-clock-arithmetic-and-the-one-gap-in-it.html">&larr; Clock arithmetic, and the one gap in it</a>
+      <span>Issue 4 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

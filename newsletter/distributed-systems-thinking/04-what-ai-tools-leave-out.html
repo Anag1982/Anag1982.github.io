@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What AI coding tools leave out, with receipts — The Expensive Answers, Issue 4</title>
+  <meta name="description" content="Four design tasks handed naively to a coding assistant, four transcripts kept. The omissions cluster exactly where production engineering lives: failure, tenancy, change over time, cost, and invalidation. The five-question checklist that catches them." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/distributed-systems-thinking/04-what-ai-tools-leave-out.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="What AI coding tools leave out, with receipts" />
+  <meta property="og:description" content="Four design tasks handed naively to a coding assistant, one consistent pattern in what came back, and the five-question review checklist that catches what the tools leave out." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/distributed-systems-thinking/04-what-ai-tools-leave-out.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/distributed-systems-thinking/img/fig-04-the-naive-pilot.png" />
+  <meta property="article:published_time" content="2026-09-18" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What AI coding tools leave out, with receipts",
+    "datePublished": "2026-09-18",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Expensive Answers" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/distributed-systems-thinking/04-what-ai-tools-leave-out.html",
+    "description": "Four design tasks handed naively to a coding assistant, one consistent pattern in what came back, and the five-question review checklist that catches what the tools leave out."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/distributed-systems-thinking/">The Expensive Answers</a><span class="sep">·</span>Issue 4
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Expensive Answers · Issue 4</p>
+      <h1 class="article-title">What AI coding tools leave out, with receipts</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-18">18 September 2026</time><span class="sep">·</span>4 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">For the book I am writing, I have been running the same experiment on every chapter: take the chapter&rsquo;s central design question, hand it to a current coding assistant, naively, the way a busy engineer would, and keep the transcript. Four experiments in, the results are consistent enough to report, and the pattern is more useful than the individual failures.</p>
+
+      <h2>Four experiments</h2>
+
+      <p>Experiment one. &ldquo;Design a document question-answering system for a professional services firm. Users upload documents and ask questions; answers must cite sources.&rdquo; The assistant produced a clean, sensible stack that would demo well inside a week. It contained no timeout, retry, or failure story anywhere, although its availability was exactly its LLM vendor&rsquo;s availability. No statement of who may see which documents, although a professional firm&rsquo;s clients are competitors of one another. No answer to what happens when a document changes. No cost model, although every question spends metered money. And a cache &ldquo;for performance&rdquo; with no invalidation story.</p>
+
+      <figure>
+        <img src="/newsletter/distributed-systems-thinking/img/fig-04-the-naive-pilot.png" alt="Architecture diagram of the naive DocuMind pilot: web client, one service deployment, one database, and a vendor LLM API with no timeout set" loading="lazy" />
+        <figcaption>The naive pilot, drawn honestly. This is the completeness level the assistants keep reproducing: it works, the pilot users like it, and nothing on the diagram says where it breaks first.</figcaption>
+      </figure>
+
+      <p>Experiment two. &ldquo;Should we self-host an open-weights LLM or use a vendor API?&rdquo; A tidy two-column essay: control and privacy on one side, quality and speed on the other, concluding that the right choice depends on your specific needs and resources. Every sentence true. Nothing decided, and nothing decidable, because the assistant had no context and, more telling, never asked for any.</p>
+
+      <p>Experiment three. &ldquo;Split this monolith into microservices.&rdquo; Six services with plausible names, a queue, a gateway, and one PostgreSQL database shared by all six, with per-service databases noted as something to consider later. Anyone who counts deployment units knows what that is: the same system as before, with six times the operational surface and zero additional independence.</p>
+
+      <p>Experiment four. &ldquo;Write a Python client for our LLM vendor&rsquo;s chat API.&rdquo; Clean, idiomatic, working code, with a thoughtful retry loop: three attempts on any non-200. Including the 400s that can never succeed twice, and the 429s whose Retry-After header it never read. No timeout. No idempotency key, so a timeout plus a retry can bill twice for one answer. Model name unpinned.</p>
+
+      <h2>One shape</h2>
+
+      <p>Four experiments, one shape. The tools produce the happy path of the most familiar stack, at the completeness level of a demonstration, and the omissions cluster exactly where production engineering lives: failure, tenancy, change over time, cost, and invalidation. This is not stupidity and it deserves no sneering. A system trained on the world&rsquo;s published code reproduces the median of the world&rsquo;s published code, and the median published example is a demo. The failure story was never in the README. The tenancy model was never in the blog post. The tool is not wrong about the world; it is faithful to it.</p>
+
+      <h2>The discipline</h2>
+
+      <p>Which points at the practical discipline, and it has two halves.</p>
+
+      <p>First, review with a checklist, not a feeling. Mine now opens with five questions, in order: where is the failure story; who may see what; what happens when the data changes; what does an operation cost; and what invalidates the cache. Then a verdict per finding, in one of three words, accept, modify, or reject, each with one sentence of justification. Critique without a recorded verdict is commentary.</p>
+
+      <p>Second, repair the prompt before blaming the tool. The two-column essay in experiment two became dramatically better when the prompt carried the real context (team size, budget, compliance clauses, deadline) and demanded a decision with consequences, each assessed against a named constraint. The quality of machine-generated architectural advice is bounded by the quality of the context you feed it. Your context is the one input the machine cannot have unless you supply it, and supplying context turns out to be most of what architectural method is.</p>
+
+      <p>The conclusion I keep arriving at, experiment after experiment: as generation gets cheaper, review gets more valuable, not less. The hour the assistant saves you was never the valuable hour. The valuable hour is the one where somebody asks what has to be true for this design to survive contact with your particular reality, and notices that the sketch does not say.</p>
+
+      <p>All four transcripts are going into the book, unedited, alongside the repaired versions. A question worth putting to your own team, because everyone has an answer: what has an assistant most memorably left out of a design it handed you? Next issue: the strangest interface in your system, and why your prompts deserve code review.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters on the same argument, built around one production RAG platform and
+        finishing on the 5G and 6G edge. The newsletter stands on its own, and you never need the
+        book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HDG88RCB" target="_blank" rel="noopener">Distributed Systems Thinking on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/distributed-systems-thinking/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/distributed-systems-thinking/03-deployment-quantum-of-an-ai-feature.html">&larr; What is the deployment quantum of an AI feature?</a>
+      <span>Issue 5 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

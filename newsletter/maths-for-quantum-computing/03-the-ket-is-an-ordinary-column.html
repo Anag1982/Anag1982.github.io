@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The ket is an ordinary column — Amplitudes, Issue 3</title>
+  <meta name="description" content="Vectors and vector spaces from the ground up: columns of complex numbers, linear combinations, basis and dimension, and the unit-length rule that makes a pair of amplitudes a legal qubit. By the end, the ket notation reads as an ordinary column." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-quantum-computing/03-the-ket-is-an-ordinary-column.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The ket is an ordinary column" />
+  <meta property="og:description" content="Vectors built from the ground up: columns of complex numbers, linear combinations, basis and dimension, and the unit-length rule that makes two amplitudes a legal qubit state." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/03-the-ket-is-an-ordinary-column.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/img/fig-03-the-ket-as-a-column.png" />
+  <meta property="article:published_time" content="2026-09-18" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The ket is an ordinary column",
+    "datePublished": "2026-09-18",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Amplitudes" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-quantum-computing/03-the-ket-is-an-ordinary-column.html",
+    "description": "Vectors built from the ground up: columns of complex numbers, linear combinations, basis and dimension, and the unit-length rule that makes two amplitudes a legal qubit state."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-quantum-computing/">Amplitudes</a><span class="sep">·</span>Issue 3
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Amplitudes · Issue 3</p>
+      <h1 class="article-title">The ket is an ordinary column</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-18">18 September 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">A qubit is two complex numbers, and last issue left them lying loose. This issue builds the container: the vector, an ordered column of numbers, and the small set of rules for combining columns that all of quantum computing is written in. By the end, the notation |&psi;&rang; will read as an ordinary column of complex numbers rather than a piece of decoration, which is exactly what it is.</p>
+
+      <h2>From lists to columns</h2>
+
+      <p>A Python list like [3, -1, 4] is an ordered collection of numbers. A vector is the same thing with one extra promise: the order carries meaning. The first entry is the first coordinate, the second is the second, and swapping them gives a different vector. That is the entire idea, and everything in this issue is bookkeeping on ordered tuples.</p>
+
+      <p>In this series a vector is a column, written stacked vertically. The column convention is not decoration. Next issue a matrix will multiply a vector from the left, and that operation only lines up if the vector is a column standing to the right of the matrix. Fix the convention now and the matrix issue costs you nothing.</p>
+
+      <pre><code>import numpy as np
+
+v = np.array([3, -1, 4], dtype=complex)
+print(v)         # [ 3.-0.j -1.-0.j  4.-0.j]
+print(v.shape)   # (3,)   -> three entries in a line
+print(v[0])      # (3+0j) -> the top entry of the column</code></pre>
+
+      <p>We passed dtype=complex even though the entries are real, and every entry now prints with a +0.j tail. That looks like clutter, and for quantum work it is the correct default: qubit amplitudes are complex numbers, and forcing the array to real would silently discard any imaginary part later. The number of entries is the vector&rsquo;s dimension. Almost every vector in the rest of this series has exactly two, and the reason is coming.</p>
+
+      <h2>Add, scale, combine</h2>
+
+      <p>Two operations define a vector space, and both act entry by entry. To add two vectors of the same length, add their matching entries. To scale a vector by a number, multiply every entry by it, and the scalar is allowed to be complex, including 1j. Combine the two and you get a linear combination: scale several vectors, add the results. It is the single most important construction in the subject, because a qubit state is a linear combination of two fixed vectors, and every gate produces another one.</p>
+
+      <pre><code>u = np.array([1, 0], dtype=complex)
+w = np.array([0, 1], dtype=complex)
+
+print(2 * u + 3 * w)   # [2.+0.j 3.+0.j]  -> walk 2 along u, then 3 along w</code></pre>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-quantum-computing/img/fig-03-the-ket-as-a-column-stacked.png" />
+          <img src="/newsletter/maths-for-quantum-computing/img/fig-03-the-ket-as-a-column.png" alt="Left, the basis vectors and the linear combination 2 times ket 0 plus 3 times ket 1 drawn as arrows; right, the vector one-one normalised onto the unit circle to give the plus state" loading="lazy" />
+        </picture>
+        <figcaption>Left, every 2-vector is reached by walking along the two basis kets: 2&middot;|0&rang; + 3&middot;|1&rang; lands on [2, 3]. Right, the vector [1, 1] has length &radic;2, so it is a direction rather than a state; dividing by the norm puts it on the unit circle as |+&rang;, where the squared entries sum to 1.</figcaption>
+      </figure>
+
+      <p>For real 2-vectors the picture is arrows on a plane, and addition is walking one arrow after the other. Complex entries break the picture, since a complex 2-vector needs four real numbers to plot, but the algebra does not change: add entrywise, scale every entry. Hold the arrow picture as a memory aid for the real case and trust the arithmetic for the complex one.</p>
+
+      <h2>Basis, span, and why a qubit is two-dimensional</h2>
+
+      <p>In the code above, every 2-vector we could want is reachable as a combination of u = [1, 0] and w = [0, 1]. That is not luck. It is the defining property of a basis: a set of vectors that spans the space, meaning every vector is some combination of them, with none of them redundant. The pair [1, 0] and [2, 0] fails the test, because both point along the same line and their combinations never leave it.</p>
+
+      <p>The two vectors [1, 0] and [0, 1] are the standard basis, and it earns the name standard because coordinates and entries coincide: the vector [7, -4] has coordinate 7 on the first basis vector and &minus;4 on the second, and you read them straight off. The dimension of a space is the number of vectors in any basis for it. The space of complex 2-vectors, written &#8450;&sup2;, has dimension 2, and a single qubit lives in exactly that space. Two qubits live in &#8450;&#8308;, and n qubits in a space of dimension 2&#8319;, which is where the size of quantum computing comes from, but this issue stays at one qubit.</p>
+
+      <p>Why complex entries rather than real ones? Because a qubit&rsquo;s two amplitudes must be able to interfere, and interference needs a relative phase, which is an angle. A complex number r&thinsp;e<sup>i&theta;</sup> carries a size and an angle in one object, and the angle is exactly the phase from last issue. Strip out the imaginary part and the gates two issues from now stop behaving. This is a physical fact about the theory, confirmed by experiment, not a modelling choice anyone could reverse.</p>
+
+      <h2>The unit-length rule</h2>
+
+      <p>A qubit state is written |&psi;&rang; = &alpha;|0&rang; + &beta;|1&rang;, with complex amplitudes &alpha; and &beta;. As a vector it is simply the column [&alpha;, &beta;]. The amplitudes are not free: they must satisfy |&alpha;|&sup2; + |&beta;|&sup2; = 1. The reason is measurement. Measuring the qubit gives 0 with probability |&alpha;|&sup2; and 1 with probability |&beta;|&sup2;, and the probabilities of the only two outcomes must sum to one. So a valid state is a unit vector, length exactly 1, and a vector like [1, 1] is a direction rather than a state until you rescale it:</p>
+
+      <pre><code>psi = np.array([1, 1], dtype=complex)
+norm = np.linalg.norm(psi)          # sqrt(|1|^2 + |1|^2) = 1.4142...
+psi_unit = psi / norm
+print(psi_unit)                     # [0.707+0.j 0.707+0.j]
+
+prob = np.abs(psi_unit) ** 2
+print(prob)                         # [0.5 0.5]
+print(np.isclose(prob.sum(), 1.0))  # True</code></pre>
+
+      <p>Note the check on the last line. The probabilities sum to 0.9999999999999998, not exactly 1, and the gap is floating-point rounding rather than physics. Never test a normalised state with ==; it will fail on rounding alone. np.isclose is the honest comparison, and building the habit here saves an evening of debugging later.</p>
+
+      <h2>Reading the ket</h2>
+
+      <p>Dirac&rsquo;s notation |&psi;&rang; is called a ket, and it is nothing more than a named column. The bars and bracket are a label saying this object is a quantum state vector, and the letter inside is its name. The two basis kets are the columns we have used all along: |0&rang; is [1, 0] and |1&rang; is [0, 1]. The state built by combining them equally, then normalising, has a name of its own:</p>
+
+      <pre><code>ket0 = np.array([1, 0], dtype=complex)
+ket1 = np.array([0, 1], dtype=complex)
+
+ket_plus = (ket0 + ket1) / np.sqrt(2)
+print(ket_plus)                  # [0.707+0.j 0.707+0.j]
+print(np.abs(ket_plus) ** 2)     # [0.5 0.5]</code></pre>
+
+      <p>That is |+&rang;, the equal superposition: measuring it gives 0 half the time and 1 half the time. Its cousin |&minus;&rang; = (|0&rang; &minus; |1&rang;)/&radic;2 has the same two probabilities, because squaring a magnitude erases the sign, yet it is a different state, and the difference is a relative phase of the kind last issue promised would matter. The gates that separate the two are one issue away.</p>
+
+      <p>A qubit, then, is a unit column in &#8450;&sup2;, and you can now write down any single-qubit state and check that it is legal. What you cannot yet do is change one state into another. A quantum gate takes a state in and returns a state out, and the object that does it is a matrix: multiply the column by a 2 &times; 2 grid of complex numbers and you get the new column. Next issue builds matrices as the verbs acting on this issue&rsquo;s nouns, shows why the NOT gate is a small swap matrix, and proves the one property every legal gate must have.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        The full course, from complex numbers to the Deutsch-Jozsa algorithm, with exercises and
+        solutions and a runnable notebook for every chapter, is the book <em>Maths for Quantum
+        Computing</em>. The newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H7XVWYXN" target="_blank" rel="noopener">Maths for Quantum Computing on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-quantum-computing/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-quantum-computing/02-the-number-system-had-to-grow.html">&larr; The number system had to grow</a>
+      <span>Issue 4 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

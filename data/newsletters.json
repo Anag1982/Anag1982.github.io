@@ -35,6 +35,14 @@
           "date": "2026-09-04",
           "readingTime": "7 min",
           "summary": "Distance asks how far apart two points sit, which is the wrong question for taste, topic, and meaning. The dot product, cosine similarity, and the one formula behind search, recommendation, and attention."
+        },
+        {
+          "number": 4,
+          "title": "A matrix is a machine",
+          "slug": "04-a-matrix-is-a-machine",
+          "date": "2026-09-18",
+          "readingTime": "6 min",
+          "summary": "A matrix is two things at once: a table holding a whole dataset, one example per row, and a machine that transforms every point by the same rule. One matrix multiply turns out to be a full neural-network layer, and the order of two multiplies is part of the answer."
         }
       ]
     },
@@ -73,6 +81,14 @@
           "date": "2026-09-04",
           "readingTime": "4 min",
           "summary": "A production AI feature is four artifacts that succeed and fail together, living in four tools that ship them separately: model version, prompts, index, evaluation set. The case for one deployment unit with one version number."
+        },
+        {
+          "number": 4,
+          "title": "What AI coding tools leave out, with receipts",
+          "slug": "04-what-ai-tools-leave-out",
+          "date": "2026-09-18",
+          "readingTime": "4 min",
+          "summary": "Four design tasks handed naively to a coding assistant, and one consistent shape in what came back: demos, with the omissions clustered exactly where production lives. The five-question review checklist, and why repairing the prompt beats blaming the tool."
         }
       ]
     },
@@ -103,6 +119,14 @@
           "date": "2026-09-04",
           "readingTime": "6 min",
           "summary": "Complex numbers built from one rule and read as arrows with a length and an angle. Why multiplying by e^iθ is rotation, and how a squared magnitude becomes the probability a qubit reports when measured."
+        },
+        {
+          "number": 3,
+          "title": "The ket is an ordinary column",
+          "slug": "03-the-ket-is-an-ordinary-column",
+          "date": "2026-09-18",
+          "readingTime": "7 min",
+          "summary": "A qubit state is a unit column of two complex numbers, and this issue builds the container: vectors, linear combinations, basis and dimension, the normalisation rule that probabilities force, and why the ket notation is a label rather than a mystery."
         }
       ]
     },
@@ -133,6 +157,14 @@
           "date": "2026-09-04",
           "readingTime": "7 min",
           "summary": "Your phone finds itself by timing satellite signals to a few billionths of a second, and if it ignored Einstein the blue dot would drift eleven kilometres a day. Simultaneous equations, a fourth satellite for a cheap clock, and the 1977 satellite that put relativity on a switch."
+        },
+        {
+          "number": 3,
+          "title": "The straight line that became AI",
+          "slug": "03-the-straight-line-that-became-ai",
+          "date": "2026-09-18",
+          "readingTime": "6 min",
+          "summary": "Gauss recovered the lost dwarf planet Ceres by fitting a model through imperfect observations, and his method is the direct ancestor of machine learning. Least squares derived with school calculus, a fit worked by hand, and the XOR picture that explains why deep networks are deep."
         }
       ]
     },
@@ -163,6 +195,14 @@
           "date": "2026-09-04",
           "readingTime": "7 min",
           "summary": "Two random directions in 4,096 dimensions are all but perpendicular, and that single fact is why a transformer has room to store anything at all. The embedding lookup as a matrix product, what cosine similarity quietly discards, and the two corrections every similarity number needs."
+        },
+        {
+          "number": 3,
+          "title": "Why attention divides by √d",
+          "slug": "03-why-attention-divides-by-root-d",
+          "date": "2026-09-18",
+          "readingTime": "6 min",
+          "summary": "The most-quoted constant in the transformer, derived from a blank page: unscaled logits spread as the square root of the head width, the softmax Jacobian dies exponentially in the top-two gap, and the division exists to keep the gradient alive. Why the argument holds only at initialisation, and what QK-norm changes."
         }
       ]
     },
@@ -193,6 +233,14 @@
           "date": "2026-09-04",
           "readingTime": "7 min",
           "summary": "The arithmetic on a clock face, done properly, is the arithmetic every operation in the post-quantum standards runs on. Where division fails and how it is repaired, why both moduli are prime, and the divisibility test that decides which transforms are even possible."
+        },
+        {
+          "number": 3,
+          "title": "Polynomials on the clock face",
+          "slug": "03-polynomials-on-the-clock-face",
+          "date": "2026-09-18",
+          "readingTime": "8 min",
+          "summary": "The standards do not compute in plain clock arithmetic but in a ring of polynomials of degree under 256 whose coefficients are clock-face numbers. Multiplication comes out as rotate-and-negate convolution, n must be a power of two, and a single divisibility check on q decides whether the ring splits all the way."
         }
       ]
     }

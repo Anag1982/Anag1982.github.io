@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The straight line that became AI — Six Ideas, Issue 3</title>
+  <meta name="description" content="A 24-year-old Gauss recovered a lost dwarf planet by fitting a model through scattered observations. The method, least squares, derived here with school calculus, a fit worked by hand, and the one picture that shows why deep networks are deep." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/03-the-straight-line-that-became-ai.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The straight line that became AI" />
+  <meta property="og:description" content="Gauss recovered the lost dwarf planet Ceres by fitting a model to imperfect data. Least squares derived with school calculus, and the picture that turns fitted lines into a neural network." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/03-the-straight-line-that-became-ai.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/img/fig-03-the-best-line.png" />
+  <meta property="article:published_time" content="2026-09-18" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The straight line that became AI",
+    "datePublished": "2026-09-18",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Six Ideas" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/six-ideas-that-run-the-world/03-the-straight-line-that-became-ai.html",
+    "description": "Gauss recovered the lost dwarf planet Ceres by fitting a model to imperfect data. Least squares derived with school calculus, and the picture that turns fitted lines into a neural network."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/six-ideas-that-run-the-world/">Six Ideas</a><span class="sep">·</span>Issue 3
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Six Ideas · Issue 3</p>
+      <h1 class="article-title">The straight line that became AI</h1>
+      <p class="article-meta">
+        <time datetime="2026-09-18">18 September 2026</time><span class="sep">·</span>6 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">On the first night of the nineteenth century, an astronomer found a new object between Mars and Jupiter, watched it for six weeks, and lost it in the Sun&rsquo;s glare. It was the dwarf planet Ceres, and it looked gone for good. A 24-year-old named Carl Friedrich Gauss took the scattered observations, fitted them, and told the astronomers where to look. Ceres reappeared almost exactly where he said. The method he leaned on, fitting a model to imperfect data by making the total error as small as possible, is called least squares, and it is the direct ancestor of the systems now called artificial intelligence. This issue derives it with school calculus, then shows in one picture how the same idea, stacked up, becomes a neural network.</p>
+
+      <h2>The question</h2>
+
+      <p>Given a cloud of data points that roughly follow a line, which line is best, and what does best even mean? It is not obvious, because infinitely many lines pass near the data and none passes through all of it. Real measurements carry noise, so demanding a line through every point is demanding the impossible. The way out is to change the question: not the line that hits the points, but the line that misses them by as little as possible.</p>
+
+      <p>Make &ldquo;as little as possible&rdquo; precise. Model the data with a straight line, y = mx + c. For each data point the line makes an error, the vertical gap between the real y and the line&rsquo;s prediction. Square each gap, so overshoots and undershoots both count as positive and big misses cost more than small ones, then add them up. The best line is the one that makes that total smallest. The squared gaps are called residuals, and the recipe is least squares.</p>
+
+      <h2>The derivation, in one move you already own</h2>
+
+      <p>Call the total squared error E. It depends on the two numbers you get to choose, the slope m and the intercept c. At the lowest point of a valley the ground is flat, so the best m and c are where the rate of change of E is zero in both directions, and that is the derivative from Chapter 1 doing its usual job of finding the bottom.</p>
+
+      <p>Differentiate E with respect to c and set the result to zero, and out falls a fact worth keeping: the best line must pass through the average point, the point whose coordinates are the mean of the x values and the mean of the y values. Differentiate with respect to m, substitute the first result, and the slope comes out as a formula you can compute with a pencil: how x and y vary together, divided by how x varies on its own. Two numbers, and the best line is fixed. No new mathematics entered, only the derivative, used to find the floor of a valley.</p>
+
+      <p>Try it on five real points: (1, 2.1), (2, 3.9), (3, 6.1), (4, 8.0), (5, 9.9). The averages are 3 and 6. Work the two sums and the slope comes out at about 1.97, the intercept at about 0.09. The data were points near the line y = 2x with small wobbles, and least squares has recovered it. Three lines of code confirm the pencil:</p>
+
+      <pre><code>import numpy as np
+x = np.array([1, 2, 3, 4, 5.]);  y = np.array([2.1, 3.9, 6.1, 8.0, 9.9])
+m = ((x - x.mean()) * (y - y.mean())).sum() / ((x - x.mean())**2).sum()
+print(m, y.mean() - m * x.mean())   # 1.97  0.09</code></pre>
+
+      <p>The computer is doing the arithmetic you just did, not magic. That sentence is most of what this book wants you to take from the chapter.</p>
+
+      <h2>The bridge to AI, shorter than it looks</h2>
+
+      <p>An artificial neuron takes several inputs, multiplies each by a weight, adds them up, and fires if the total passes a threshold. With two inputs, the set of points where it just barely fires is a straight line dividing the plane into fire and do-not-fire. A neuron is a line. Training a neuron is choosing the weights, which is choosing a line, which is the fitting problem you just solved.</p>
+
+      <p>One line, though, cannot do everything, and the failure is drawable. Colour the four corners of a square so that opposite corners match, the pattern called XOR. Try to separate the two colours with a single straight line and you will fail, because any line leaves a matched pair split across it. But two lines can fence the middle band off from the corners, and stacking neurons into two layers gives you those two lines and a way to combine them. That single picture is the reason deep networks are deep: one layer draws straight boundaries, and more layers bend and combine them into any shape.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/six-ideas-that-run-the-world/img/fig-03-the-best-line-stacked.png" />
+          <img src="/newsletter/six-ideas-that-run-the-world/img/fig-03-the-best-line.png" alt="Left, five data points with the least-squares line and dashed residuals passing through the average point; right, the XOR pattern that one line cannot separate and two lines can" loading="lazy" />
+        </picture>
+        <figcaption>Left, the best line through five noisy points: the dashed residuals are what gets squared and summed, and the line pins itself to the average point (3, 6). Right, XOR: whichever way one line cuts, each side holds a corner of each colour, and two lines, combined by a second layer, finish the job.</figcaption>
+      </figure>
+
+      <h2>Where school ends</h2>
+
+      <p>Real problems have many inputs, not one, so the line becomes a plane in many dimensions and the bookkeeping needs matrices and vectors, which is the linear algebra of a first-year engineering course. Real models are often curves and thresholds rather than lines, which needs logistic and nonlinear fitting. And a large network has far too many weights to solve with one formula, so instead of the exact answer above it is trained step by step, walking downhill on the error. The idea you now have, fit a model by making the squared error small, survives all of it. Only the machinery grows.</p>
+
+      <h2>The person behind it</h2>
+
+      <p>Least squares is also a lesson in how credit works in science. Adrien-Marie Legendre published the method clearly in 1805, in an appendix on the orbits of comets, and gave it its name. Gauss, in 1809, wrote that he had been using it since 1795 and had relied on it to recover Ceres in 1801. Legendre was furious, and the two never settled it. Both were right in their way: Legendre published first, and Gauss very likely used it first and pushed it further by tying it to probability.</p>
+
+      <p>The quarrel matters because it shows the ordinary shape of discovery. A useful idea is often in the air, arrived at independently by more than one person, and the question of who owns it is rarely clean. What survived the argument is the method itself, which now runs quietly inside every fitted line, every calibration, and every trained model. The people are remembered for the fight. The mathematics does not care who won.</p>
+
+      <p>Next issue takes the step this one set up. When a model has too many knobs for any formula to set at once, the machine finds them the way you would find the bottom of a valley in thick fog: feel the slope under your feet, take a small step downhill, feel again. That walk was written down by Cauchy in 1847 in a three-page note, it is called gradient descent, and it is the engine that trains every large AI system running today. You will run it by hand and watch one wrong number make it fly apart.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters, from rockets to the energy budget of the planet, every central result
+        derived with school mathematics and every number referenced, are collected in the book
+        <em>Six Ideas That Run the World</em>. The newsletter stands on its own, and you never
+        need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H9P9B5FX" target="_blank" rel="noopener">Six Ideas That Run the World on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/six-ideas-that-run-the-world/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/six-ideas-that-run-the-world/02-how-your-phone-knows-where-it-is.html">&larr; How your phone knows where it is</a>
+      <span>Issue 4 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
