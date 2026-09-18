@@ -1,5 +1,33 @@
 [
   {
+    "title": "Post-Quantum Migration: An Engineer's Playbook",
+    "subtitle": "Inventory, Hybrid TLS, Quantum-Safe PKI and Crypto-Agility with ML-KEM, ML-DSA and OpenSSL 3.5",
+    "role": "Author",
+    "series": null,
+    "publisher": "Independently published",
+    "year": 2026,
+    "date": "September 2026",
+    "format": "Kindle · Paperback · Hardcover · 217 pages",
+    "cover": "books/post-quantum-migration.jpg",
+    "link": "https://www.amazon.com/dp/B0HK18CRWJ",
+    "blurb": "Nobody knows when a quantum computer will break RSA; everybody can know, today, when their algorithms become non-compliant — CNSA 2.0 procurement from 2027, NIST deprecation of RSA-2048 and P-256 after 2030, the EU roadmap for critical infrastructure by 2030. This playbook treats those dates as the threat model and works in the order the work has to happen: cryptographic inventory, hybrid TLS, a PKI whose chains fit in one round trip, signing that verifies in 2040, re-keying data at rest, procurement, and a crypto-agility layer so the next algorithm change is an edit, not a second migration. Every size, timing and byte count measured by a lab in the companion repository.",
+    "category": "authored"
+  },
+  {
+    "title": "Maths for AI Evaluation",
+    "subtitle": "Confidence Intervals, Judges, and Leaderboards",
+    "role": "Author",
+    "series": "Mathematics for Everything, Book 5",
+    "publisher": "Independently published",
+    "year": 2026,
+    "date": "September 2026",
+    "format": "Kindle · Paperback · Hardcover · 253 pages",
+    "cover": "books/maths-for-ai-evaluation.jpg",
+    "link": "https://www.amazon.com/dp/B0HHS1YM6Z",
+    "blurb": "An eval score is an estimate, and an estimate has a standard error. Twelve chapters derive what follows from that one fact, nothing skipped: intervals for benchmark scores, paired model comparisons, calibration, clustered items, leaderboards and the winner's curse, human raters who disagree, the language-model judge as an instrument with a sensitivity and a specificity, the algebra of pass@k, and ranking from pairwise preferences with Bradley–Terry — ending with what an honest results table looks like, built twice.",
+    "category": "authored"
+  },
+  {
     "title": "Maths for Post-Quantum Cryptography",
     "subtitle": "Lattices, Learning With Errors and the NIST Standards",
     "role": "Author",
@@ -25,6 +53,20 @@
     "cover": "books/maths-for-llm.jpg",
     "link": "https://www.amazon.com/dp/B0HFF1RKFW",
     "blurb": "Most explanations of large language models show you the code or the intuition; this book shows you the mathematics, with every result derived in full. Scaled dot-product attention and why the scaling factor is 1/√d_k, rotary position embeddings, FlashAttention, DPO from the KL-regularised objective — through to KV-cache footprints and training FLOP budgets from first principles. 180 exercises with full worked solutions and a companion repository where every derivation runs as code.",
+    "category": "authored"
+  },
+  {
+    "title": "Software Engineering Thinking",
+    "subtitle": "Judgment, Review, and Craft When AI Writes the Code",
+    "role": "Author",
+    "series": null,
+    "publisher": "Independently published",
+    "year": 2026,
+    "date": "August 2026",
+    "format": "Kindle · Paperback · 469 pages",
+    "cover": "books/software-engineering-thinking.jpg",
+    "link": "https://www.amazon.com/dp/B0HF3ZDGYH",
+    "blurb": "Eleven seconds to generate two hundred and forty lines; twenty minutes to read them properly. A working method for the engineer who now spends more time judging code than writing it: five questions to put to any change in under a minute, three depths of review with a blunt rule for choosing between them, and a ninety-second log entry that restores the chain of custody. Every exhibit is a real generated artefact — thirty-one recorded runs, with the tool, model, date and tool-call count printed so you can judge the conditions yourself. Companion volume to Distributed Systems Thinking.",
     "category": "authored"
   },
   {
