@@ -1,5 +1,33 @@
 [
   {
+    "title": "The Tradeoff Method for ML Systems",
+    "subtitle": "Machine Learning and GenAI System Design Interviews",
+    "role": "Author",
+    "series": null,
+    "publisher": "Independently published",
+    "year": 2026,
+    "date": "September 2026",
+    "format": "Kindle · Paperback · Hardcover · 310 pages",
+    "cover": "books/tradeoff-method-ml-systems.jpg",
+    "link": "https://www.amazon.com/dp/B0HL418FLH",
+    "blurb": "A machine learning design interview hands you a business goal and a rate, and watches whether you can turn them into an objective a model could serve, find the constraint that binds, and choose a design whose price you can state — the model is the last thing decided. This volume retunes the five moves for systems with a learned component, adds the objective sheet and the loop sheet, draws every design on the quality–latency–cost budget triangle, and works fourteen designs end to end. Companion volume to The Tradeoff Method.",
+    "category": "authored"
+  },
+  {
+    "title": "The Tradeoff Method",
+    "subtitle": "System Design Interviews as Decisions You Can Defend",
+    "role": "Author",
+    "series": null,
+    "publisher": "Independently published",
+    "year": 2026,
+    "date": "September 2026",
+    "format": "Kindle · Paperback · Hardcover · 262 pages",
+    "cover": "books/tradeoff-method.jpg",
+    "link": "https://www.amazon.com/dp/B0HKF13ZGH",
+    "blurb": "A system design interview hands you a deliberately incomplete brief and grades how you choose between the two or three designs that could satisfy it — a decision problem, and decision problems have a method. Five moves — frame, budget, axes, commit, stress — each leaving an artefact on the whiteboard an interviewer can push on, ending in the sentence they are waiting for: I am choosing X over Y, because the brief weights A above B, and I accept C. Twelve designs worked end to end.",
+    "category": "authored"
+  },
+  {
     "title": "Post-Quantum Migration: An Engineer's Playbook",
     "subtitle": "Inventory, Hybrid TLS, Quantum-Safe PKI and Crypto-Agility with ML-KEM, ML-DSA and OpenSSL 3.5",
     "role": "Author",

@@ -1,5 +1,14 @@
 [
   {
+    "title": "Quantum-Enhanced Communication-Efficient Federated Learning With Dynamic Power Allocation for Massive MIMO Systems",
+    "authors": "Y. Liu, Y. Liu, R. Fan, A. Nag, A. Mukherjee",
+    "venue": "IEEE Open Journal of the Communications Society",
+    "details": "vol. 7, pp. 10749–10767, 2026",
+    "year": 2026,
+    "type": "journal",
+    "doi": "10.1109/ojcoms.2026.3728140"
+  },
+  {
     "title": "An Unsupervised Machine Learning to Optimize Hybrid Quantum Noise Clusters for Gaussian Quantum Channel",
     "authors": "M. Chakraborty, A. Mukherjee, I. Krikidis, A. Nag, S. Chandra",
     "venue": "IEEE Transactions on Green Communications and Networking",
@@ -43,6 +52,15 @@
     "year": 2026,
     "type": "conference",
     "doi": "10.1109/wcnc65185.2026.11555408"
+  },
+  {
+    "title": "An X-Band Reconfigurable Reflective Surface with Energy Harvesting Feature",
+    "authors": "A. Das, İ. Ünal, A. Nag, R. B. Staszewski",
+    "venue": "20th European Conference on Antennas and Propagation (EuCAP)",
+    "details": "pp. 1–5, 2026",
+    "year": 2026,
+    "type": "conference",
+    "doi": "10.23919/eucap68105.2026.11612211"
   },
   {
     "title": "A Hybrid Noise Approach to Modeling of Free-Space Satellite Quantum Communication Channel for Continuous-Variable QKD",
