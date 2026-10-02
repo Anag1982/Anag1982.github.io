@@ -43,6 +43,14 @@
           "date": "2026-09-18",
           "readingTime": "6 min",
           "summary": "A matrix is two things at once: a table holding a whole dataset, one example per row, and a machine that transforms every point by the same rule. One matrix multiply turns out to be a full neural-network layer, and the order of two multiplies is part of the answer."
+        },
+        {
+          "number": 5,
+          "title": "Running the machine backwards",
+          "slug": "05-running-the-machine-backwards",
+          "date": "2026-10-02",
+          "readingTime": "6 min",
+          "summary": "Given a matrix and the output it produced, recover the input. Two receipts fix the price of an apple and an orange, rank measures how much information a matrix really holds, and when no exact answer exists, least squares finds the best one, which is the first machine-learning model."
         }
       ]
     },
@@ -89,6 +97,14 @@
           "date": "2026-09-18",
           "readingTime": "4 min",
           "summary": "Four design tasks handed naively to a coding assistant, and one consistent shape in what came back: demos, with the omissions clustered exactly where production lives. The five-question review checklist, and why repairing the prompt beats blaming the tool."
+        },
+        {
+          "number": 5,
+          "title": "The prompt is an API contract",
+          "slug": "05-the-prompt-is-an-api-contract",
+          "date": "2026-10-02",
+          "readingTime": "4 min",
+          "summary": "The call between deterministic code and a language model is usually treated as craft. Read it instead as the interface artifact it is: specification, test cases, schema, dependency pin, variance clause, version. Why hallucination is an unspecified failure mode, and why a vendor model upgrade is just a dependency bump, if you have contract tests to re-run."
         }
       ]
     },
@@ -127,6 +143,14 @@
           "date": "2026-09-18",
           "readingTime": "7 min",
           "summary": "A qubit state is a unit column of two complex numbers, and this issue builds the container: vectors, linear combinations, basis and dimension, the normalisation rule that probabilities force, and why the ket notation is a label rather than a mystery."
+        },
+        {
+          "number": 4,
+          "title": "A gate is a matrix",
+          "slug": "04-a-gate-is-a-matrix",
+          "date": "2026-10-02",
+          "readingTime": "7 min",
+          "summary": "The verbs arrive: a quantum gate is not described by a matrix, it is one. Matrix-vector multiplication by hand, the NOT gate as a small swap, why reordering two gates changes the circuit, and the unitarity test every legal gate must pass."
         }
       ]
     },
@@ -165,6 +189,14 @@
           "date": "2026-09-18",
           "readingTime": "6 min",
           "summary": "Gauss recovered the lost dwarf planet Ceres by fitting a model through imperfect observations, and his method is the direct ancestor of machine learning. Least squares derived with school calculus, a fit worked by hand, and the XOR picture that explains why deep networks are deep."
+        },
+        {
+          "number": 4,
+          "title": "Walking downhill in the dark",
+          "slug": "04-walking-downhill-in-the-dark",
+          "date": "2026-10-02",
+          "readingTime": "8 min",
+          "summary": "In 1847 Cauchy published a three-page note on solving awkward equations by walking downhill, and that note is now the engine of nearly all modern AI. The update rule run by hand, the one number that decides whether it learns or flies apart, and what changes at a hundred billion knobs. Nothing, except the arithmetic and the electricity bill."
         }
       ]
     },
@@ -203,6 +235,14 @@
           "date": "2026-09-18",
           "readingTime": "6 min",
           "summary": "The most-quoted constant in the transformer, derived from a blank page: unscaled logits spread as the square root of the head width, the softmax Jacobian dies exponentially in the top-two gap, and the division exists to keep the gradient alive. Why the argument holds only at initialisation, and what QK-norm changes."
+        },
+        {
+          "number": 4,
+          "title": "Position is a rotation",
+          "slug": "04-position-is-a-rotation",
+          "date": "2026-10-02",
+          "readingTime": "8 min",
+          "summary": "Attention treats its input as an unordered set, so position must be injected, and demanding that logits depend only on relative distance forces a unique answer: rotate every query and key by an angle proportional to its position. RoPE derived from a functional equation, the wavelength ladder, and the 29 frequency pairs that never completed a turn in training."
         }
       ]
     },
@@ -241,6 +281,14 @@
           "date": "2026-09-18",
           "readingTime": "8 min",
           "summary": "The standards do not compute in plain clock arithmetic but in a ring of polynomials of degree under 256 whose coefficients are clock-face numbers. Multiplication comes out as rotate-and-negate convolution, n must be a power of two, and a single divisibility check on q decides whether the ring splits all the way."
+        },
+        {
+          "number": 4,
+          "title": "The transform that splits the ring",
+          "slug": "04-the-transform-that-splits-the-ring",
+          "date": "2026-10-02",
+          "readingTime": "8 min",
+          "summary": "Evaluate a polynomial at the odd powers of psi and convolution becomes pointwise multiplication: the number-theoretic transform, derived from the Chinese Remainder Theorem and checked by hand at q = 17. Splitting by square roots seven times, why ML-KEM stops at 128 quadratics while ML-DSA reaches scalars, and the thirtyfold saving the standards run on."
         }
       ]
     }

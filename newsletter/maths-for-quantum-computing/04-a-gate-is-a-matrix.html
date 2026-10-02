@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A gate is a matrix — Amplitudes, Issue 4</title>
+  <meta name="description" content="A quantum gate is not described by a matrix; it is one. Matrix-vector multiplication by hand, the NOT gate as a small swap, why gate order changes the circuit, and the one property, unitarity, that every legal gate must have." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-quantum-computing/04-a-gate-is-a-matrix.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="A gate is a matrix" />
+  <meta property="og:description" content="The verbs arrive: matrices acting on last issue's kets. The NOT gate as a swap, the Hadamard building superposition, why order matters, and the unitarity test every legal gate must pass." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/04-a-gate-is-a-matrix.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/img/fig-04-a-gate-moves-the-plane.png" />
+  <meta property="article:published_time" content="2026-10-02" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "A gate is a matrix",
+    "datePublished": "2026-10-02",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Amplitudes" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-quantum-computing/04-a-gate-is-a-matrix.html",
+    "description": "The verbs arrive: matrices acting on last issue's kets. The NOT gate as a swap, the Hadamard building superposition, why order matters, and the unitarity test every legal gate must pass."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-quantum-computing/">Amplitudes</a><span class="sep">·</span>Issue 4
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Amplitudes · Issue 4</p>
+      <h1 class="article-title">A gate is a matrix</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-02">2 October 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Last issue built the nouns: a qubit state is a unit column of two complex numbers, and you can now write any of them down. What you cannot yet do is change one state into another. The object that does it is a matrix, and the claim of this issue is stronger than it sounds. A quantum gate is not described by a matrix, or modelled by one, or conveniently represented by one. A gate <em>is</em> a matrix, and running a circuit is nothing but multiplication. Everything in this issue runs in NumPy, and every product is small enough to check with a pencil first.</p>
+
+      <h2>A table and a rule</h2>
+
+      <p>A 2 &times; 2 matrix holds four numbers in two rows and two columns. Read as a table, that is all it is. Read as a transformation, the same four numbers are a rule that takes any vector in and returns a vector out. Take A = [[2, 0], [0, 1]]: the rule is &ldquo;double the first coordinate, leave the second alone.&rdquo; Feed it the unit square, corner by corner, and the square comes out a rectangle twice as wide. The columns of a matrix are exactly where the two basis arrows land, (1, 0) on column one and (0, 1) on column two, so you can read a matrix&rsquo;s whole effect straight off its columns. This works because the rule is linear, it respects adding and scaling, and the correspondence is exact: every linear map is a matrix, every matrix is a linear map. The whole of this issue rests on that one fact.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-quantum-computing/img/fig-04-a-gate-moves-the-plane-stacked.png" />
+          <img src="/newsletter/maths-for-quantum-computing/img/fig-04-a-gate-moves-the-plane.png" alt="Left, the unit square stretched into a rectangle by the matrix with rows 2 0 and 0 1, with the arrow showing the basis vector 1 0 landing on 2 0; right, the states ket 0 and ket 1 on the unit circle with the Hadamard carrying ket 0 to the plus state and the X gate swapping the two axes" loading="lazy" />
+        </picture>
+        <figcaption>Left, a matrix as a rule: every point of the square obeys it, and column one of the matrix is where (1, 0) lands. Right, the same idea on states: H carries |0&#x27e9; to the equal superposition |+&#x27e9;, and X swaps the two basis directions.</figcaption>
+      </figure>
+
+      <h2>Rows times columns</h2>
+
+      <p>The core operation is a matrix times a vector, and the rule is mechanical: each row of the matrix is dotted with the vector, and each dot product becomes one entry of the output. Work one through. A = [[2, 0], [0, 1]] on v = (3, 4): first row gives 2&middot;3 + 0&middot;4 = 6, second row gives 0&middot;3 + 1&middot;4 = 4, so Av = (6, 4), the doubling rule as promised. Now a matrix that mixes the coordinates, B = [[0, 1], [1, 0]], on the same v: first row 0&middot;3 + 1&middot;4 = 4, second row 1&middot;3 + 0&middot;4 = 3. So Bv = (4, 3). This B swaps the two coordinates, and remember it, because it is about to get a famous name.</p>
+
+      <pre><code>import numpy as np
+np.set_printoptions(precision=3, suppress=True)
+
+A = np.array([[2, 0], [0, 1]])
+B = np.array([[0, 1], [1, 0]])
+v = np.array([3, 4])
+
+print(A @ v)   # [6 4]
+print(B @ v)   # [4 3] -> the coordinates are swapped</code></pre>
+
+      <p>One warning before the physics, because it is the single most common bug in beginner quantum code. In NumPy, @ is matrix multiplication and * is elementwise multiplication, and they are different operations that share the word multiply. M * M squares each entry where M @ M is the true product, and writing X * ket where you meant X @ ket runs silently and returns a wrong array of the right shape. The error message never says &ldquo;you meant @&rdquo;, because there is no error message.</p>
+
+      <h2>The NOT gate is a swap</h2>
+
+      <p>Now apply the swap matrix to last issue&rsquo;s basis states, |0&#x27e9; = (1, 0) and |1&#x27e9; = (0, 1). By the row rule, B&middot;|0&#x27e9; = (0, 1) = |1&#x27e9;, and B&middot;|1&#x27e9; = (1, 0) = |0&#x27e9;. The matrix flips 0 to 1 and 1 to 0, which is why it is called the NOT gate and written X. The second gate worth meeting today is the Hadamard, H, which is 1/&radic;2 times [[1, 1], [1, &minus;1]]. Feed it |0&#x27e9; and out comes (1/&radic;2, 1/&radic;2), which is exactly the equal superposition |+&#x27e9; from issue 3, both amplitudes 1/&radic;2, both measurement probabilities &frac12;. The gate that creates superposition is a small real matrix, and watching it act is one line:</p>
+
+      <pre><code>ket0 = np.array([1, 0], dtype=complex)
+ket1 = np.array([0, 1], dtype=complex)
+
+X = np.array([[0, 1], [1, 0]], dtype=complex)
+H = np.array([[1, 1], [1, -1]], dtype=complex) / np.sqrt(2)
+
+print(X @ ket0)   # [0.+0.j 1.+0.j] == |1>
+print(H @ ket0)   # [0.707+0.j 0.707+0.j] == |+>
+print(np.allclose(H @ H @ ket0, ket0))   # True -> H undoes itself</code></pre>
+
+      <p>Note the dtype=complex, even though every entry here is real. Gate entries are complex in general, the Y gate carries &plusmn;i, and a real-typed array would silently discard the imaginary parts the moment they appear.</p>
+
+      <h2>Order is part of the circuit</h2>
+
+      <p>Multiplying two matrices builds the single matrix that does both transformations in sequence, and the order reads right to left: in the product AB, it is B that acts first, because B sits next to the vector. There is a catch, and it is not a technicality. Take A = [[1, 2], [0, 1]] and B = [[1, 0], [3, 1]] and work all four dot products each way: AB comes out [[7, 2], [3, 1]] while BA comes out [[1, 2], [3, 7]]. The two products differ, and that is the normal situation, not a quirk of these numbers. In ordinary arithmetic 3 &times; 5 equals 5 &times; 3; for matrices that guarantee is gone. A circuit that applies X, then H, then X is the single matrix XHX, and reordering the gates generally computes something else. When a simulator runs your circuit, it is doing exactly this: either multiplying the gate matrices into one and applying it, or applying them to the state one at a time. Both give the same answer, which is why it is free to pick whichever is cheaper.</p>
+
+      <h2>The one property every gate must have</h2>
+
+      <p>Not every matrix gets to be a gate, and the test was promised last issue. A state&rsquo;s squared amplitudes are measurement probabilities, so they must sum to 1, which is the statement that the state is a unit vector. A legal gate must therefore map unit vectors to unit vectors: it may rotate and reflect, never stretch. The matrices that preserve length have a name and a one-line test. Write U&dagger; for the conjugate transpose of U, the dagger: transpose the matrix, then conjugate every entry. A matrix is unitary when U&dagger;U = I, and unitary is precisely the length-preserving condition. It also hands you the undo button for free: U&dagger;U = I says U&dagger; is the inverse of U, so every gate can be run backwards by taking its dagger, with no matrix inversion in sight. Quantum gates are reversible by construction, which is a real constraint on hardware and a real difference from a classical AND gate, which destroys a bit of input and cannot be run backwards.</p>
+
+      <pre><code>def is_unitary(U):
+    return np.allclose(U.conj().T @ U, np.eye(U.shape[0]))
+
+Y = np.array([[0, -1j], [1j, 0]])
+print(is_unitary(X), is_unitary(H), is_unitary(Y))   # True True True
+
+v = np.array([0.6, 0.8])                   # a unit vector: 0.36 + 0.64 = 1
+print(round(np.linalg.norm(H @ v), 12))    # 1.0 -> the length survived</code></pre>
+
+      <p>Two cautions close the loop. First, write the dagger as .conj().T, always: for real matrices the plain transpose happens to agree, so the missing conjugate hides until a complex entry arrives, and then it is wrong. Second, invertible is not enough. The stretching matrix [[2, 0], [0, 1]] from the top of this issue has a perfectly good inverse and is still not a legal gate, because it turns a unit vector into one of length greater than 1, which would make probabilities sum past certainty. Unitarity is the whole entry requirement: it is what conserves total probability, and it is what makes every quantum computation, before measurement, a reversible rotation of a very large space.</p>
+
+      <p>You can now apply a gate to a state and chain gates into circuits, which is most of the mechanics of a quantum program. What is still missing is how to compare two states: how to ask how much one overlaps another, and where the measurement probabilities really come from. That question is an inner product, and it is where the bra &#x27e8;&psi;| finally joins the ket. Next issue builds it, shows why the inner product of a state with itself is the normalisation rule we have been checking all along, and meets the number &#x27e8;&phi;|&psi;&#x27e9; whose squared magnitude is the chance that a measurement finds one state as the other.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        The full course, from complex numbers to the Deutsch-Jozsa algorithm, with exercises and
+        solutions and a runnable notebook for every chapter, is the book <em>Maths for Quantum
+        Computing</em>. The newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H7XVWYXN" target="_blank" rel="noopener">Maths for Quantum Computing on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-quantum-computing/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-quantum-computing/03-the-ket-is-an-ordinary-column.html">&larr; The ket is an ordinary column</a>
+      <span>Issue 5 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

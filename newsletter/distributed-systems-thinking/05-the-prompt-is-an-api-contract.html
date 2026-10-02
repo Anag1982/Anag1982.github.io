@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The prompt is an API contract — The Expensive Answers, Issue 5</title>
+  <meta name="description" content="The call between deterministic code and a language model is usually treated as craft. Read it instead as the interface artifact it is: specification, test cases, schema, dependency pin, variance clause, version. Written that way, a prompt is reviewable, and what is reviewable can be owned." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/distributed-systems-thinking/05-the-prompt-is-an-api-contract.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The prompt is an API contract" />
+  <meta property="og:description" content="Every part of a production prompt maps to a contract concept you already maintain, and the mapping is not a metaphor. Why hallucination is an unspecified failure mode, and why your prompts deserve the same review as an API change." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/distributed-systems-thinking/05-the-prompt-is-an-api-contract.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/distributed-systems-thinking/img/fig-05-the-prompt-contract.png" />
+  <meta property="article:published_time" content="2026-10-02" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The prompt is an API contract",
+    "datePublished": "2026-10-02",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Expensive Answers" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/distributed-systems-thinking/05-the-prompt-is-an-api-contract.html",
+    "description": "Every part of a production prompt maps to a contract concept you already maintain, and the mapping is not a metaphor. Why hallucination is an unspecified failure mode, and why your prompts deserve the same review as an API change."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/distributed-systems-thinking/">The Expensive Answers</a><span class="sep">·</span>Issue 5
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Expensive Answers · Issue 5</p>
+      <h1 class="article-title">The prompt is an API contract</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-02">2 October 2026</time><span class="sep">·</span>4 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">There is one interface in a modern system unlike every other. On one end, your code: deterministic, typed, tested. On the other, a language model: it reads English, fills in whatever you leave open, and does not guarantee the same answer twice. The call between them is usually treated as craft, prompt magic, a dark art with folklore instead of discipline.</p>
+
+      <p>I want to argue the opposite. The prompt is an interface artifact. Every part of it maps to a contract concept you already maintain, and the mapping is not a metaphor. It is a working discipline, and teams that adopt it stop experiencing model behaviour as weather.</p>
+
+      <h2>The clause most prompts are missing</h2>
+
+      <p>Walk the mapping. The system instructions are the interface specification. &ldquo;Answer only from the provided passages; cite every claim; if the passages do not contain the answer, say so&rdquo; is a set of preconditions and postconditions, and that last clause is the one most prompts are missing: the defined failure mode, the 404 of the prompt, the specified behaviour for the case where success is impossible. An interface without a failure mode is not underspecified at the edges. It is unspecified exactly where it matters most, and the model will improvise there. Improvisation at the failure boundary has a domain name: hallucination.</p>
+
+      <p>This reframes the phenomenon usefully. Ambiguity in a prompt is under-specification in a contract, and a model meeting one does not misbehave. It obeys. It fills the gap the way it fills every gap, from its training distribution, with the most typical completion of the world&rsquo;s text. The model never breaks your contract; it honours clauses you did not know you had written, supplied by the median of the internet. Read failures this way and they stop being mysteries and become diffs: find the clause you left open, and close it.</p>
+
+      <figure>
+        <img src="/newsletter/distributed-systems-thinking/img/fig-05-the-prompt-contract.png" alt="Diagram reading a production prompt as a contract between deterministic caller code and a probabilistic model: system instructions as the interface specification, few-shot examples as contract test cases, output format rules as the response schema, model and version pin as the dependency declaration, temperature and limits as the variance and cost clauses, and the prompt version number as breaking-change management" loading="lazy" />
+        <figcaption>The prompt, read as the contract it secretly is. Each element maps to an interface concept your team already maintains for every other dependency, and the vendor upgrade of the final line is priced in the last section.</figcaption>
+      </figure>
+
+      <p>The rest of the prompt maps just as cleanly. Few-shot examples are contract test cases: each one asserts a behaviour the caller relies on, so choose them like regression tests, pinning what would hurt most if it drifted, not what demos best. Output format rules are the response schema, and the structured-output modes now offered by every serious API are schema enforcement, the difference between requesting JSON politely and validating it at the boundary; if your code parses the model&rsquo;s output, enforce, do not request. The model name and version are the dependency declaration, and an unpinned model is an unpinned dependency in production, a sentence that needs no elaboration if you have lived through one. Temperature and token limits are the variance and cost clauses: how much surprise, and how much spend, the caller will accept.</p>
+
+      <h2>Your prompts deserve code review</h2>
+
+      <p>And the prompt&rsquo;s own version number is the piece most teams are missing entirely. A prompt change is an interface change, entitled to the full ritual: a diff someone reviews, a version that increments, a changelog line that says why, a test run before it ships. If your prompts live in a wiki, edited in place, unreviewed and unversioned, then your system&rsquo;s most sensitive interface has less change control than your CSS.</p>
+
+      <h2>The day you did nothing</h2>
+
+      <p>The discipline pays off hardest on the day you did nothing. The vendor upgrades the model; not a word of your prompt changes, and every probability behind its interpretation does. Treated as craft, this is a mystery that arrives like weather. Treated as a contract, it is a dependency upgrade, the most routine event in software, with the most routine response: re-run the contract tests, read the behavioural diff, and decide whether to ship or to pin. The teams that struggle with model upgrades are, almost always, the teams with no contract tests to re-run.</p>
+
+      <p>One habit to start this week, if you take nothing else: put your prompts in version control, next to the code that depends on them, and require the same review for a prompt change as for an API change. Everything else, the golden question sets, the automated evaluation, the release tuple that versions model, prompts, index, and evals together, grows naturally from that one habit, and I will get to the machinery in later pieces.</p>
+
+      <p>The strangest interface in your system turns out to be the discipline&rsquo;s best student: specification, tests, schema, dependency pin, variance clause, version. Written that way, a prompt is reviewable. And what is reviewable can be owned.</p>
+
+      <p>A question worth putting to your own team, because the answer is usually illuminating: who reviews prompt changes today, and what would have to be true for the answer to be &ldquo;the same people who review API changes&rdquo;? Next issue returns to the pipeline behind these interfaces, with a story: seventy-four documents vanish from a healthy system while every dashboard stays green, and the question that follows turns out to be the whole of delivery semantics: what does a duplicate cost?</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters on the same argument, built around one production RAG platform and
+        finishing on the 5G and 6G edge. The newsletter stands on its own, and you never need the
+        book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HDG88RCB" target="_blank" rel="noopener">Distributed Systems Thinking on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/distributed-systems-thinking/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/distributed-systems-thinking/04-what-ai-tools-leave-out.html">&larr; What AI coding tools leave out, with receipts</a>
+      <span>Issue 6 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running the machine backwards — The Maths Underneath, Issue 5</title>
+  <meta name="description" content="Given a matrix and the output it produced, recover the input. Two receipts fix two prices, rank measures how much information a matrix really holds, and when no exact answer exists, least squares finds the best one, which is the first machine-learning model." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-ai/05-running-the-machine-backwards.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Running the machine backwards" />
+  <meta property="og:description" content="Two receipts fix two prices, rank measures how much a matrix really holds, and least squares finds the best answer when no exact one exists. That last move is the first machine-learning model." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-ai/05-running-the-machine-backwards.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-ai/img/fig-05-two-lines-and-a-best-fit.png" />
+  <meta property="article:published_time" content="2026-10-02" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Running the machine backwards",
+    "datePublished": "2026-10-02",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Maths Underneath" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-ai/05-running-the-machine-backwards.html",
+    "description": "Two receipts fix two prices, rank measures how much a matrix really holds, and least squares finds the best answer when no exact one exists. That last move is the first machine-learning model."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-ai/">The Maths Underneath</a><span class="sep">·</span>Issue 5
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Maths Underneath · Issue 5</p>
+      <h1 class="article-title">Running the machine backwards</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-02">2 October 2026</time><span class="sep">·</span>6 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Last issue sent vectors forward through a matrix: feed in x&#8407;, read out Ax&#8407;. This issue runs the arrow the other way. You are handed the output and the matrix, and you must recover the input. That single question, which x&#8407; gives Ax&#8407; = b&#8407;, is one of the oldest problems in mathematics, and following it honestly leads to when an answer exists at all, to how much information a matrix really holds, and to the best possible answer when no exact one exists. That last stop is a line fitted to noisy points, and it is the simplest model in all of machine learning.</p>
+
+      <h2>Two receipts</h2>
+
+      <p>Two shoppers visit the same stall. The first buys 2 apples and 1 orange and pays 8. The second buys 1 apple and 3 oranges and pays 9. Neither receipt lists the unit prices. Can you recover them? Call the apple price x and the orange price y, and the two receipts become two equations: 2x + y = 8 and x + 3y = 9. Written with a matrix, this is Ap&#8407; = b&#8407;, where A holds the quantities and b&#8407; the totals. Each equation is a straight line, and the solution is the point where the lines cross, because that point is the only one that satisfies both receipts at once.</p>
+
+      <pre><code>import numpy as np
+
+A = np.array([[2, 1],
+              [1, 3]])
+b = np.array([8, 9])
+
+print(np.linalg.solve(A, b))   # [3. 2.] -> apple costs 3, orange costs 2</code></pre>
+
+      <p>Note that solve does not compute an inverse and multiply by it. It uses elimination, which is faster and steadier, and that matters once the matrices are large. The rule worth fixing now: to solve a system, call solve, not inv. Computing a full inverse costs more and magnifies rounding error, and a matrix without full rank, a phrase about to be defined, has no inverse at all.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-ai/img/fig-05-two-lines-and-a-best-fit-stacked.png" />
+          <img src="/newsletter/maths-for-ai/img/fig-05-two-lines-and-a-best-fit.png" alt="Left, the two receipt equations drawn as lines crossing at apple price 3 and orange price 2; right, six exam-score points with the least-squares line through them and the residual gaps marked" loading="lazy" />
+        </picture>
+        <figcaption>Left, two receipts are two lines, and the prices are where they cross. Right, the other regime: six noisy points, no line through all of them, and the best-fit line whose squared residuals are as small as possible.</figcaption>
+      </figure>
+
+      <h2>One answer, none, or infinitely many</h2>
+
+      <p>Two lines can meet once, never, or everywhere, and each case says something concrete about the data. They meet once when the equations carry genuinely different information, as the receipts did. They never meet when the equations contradict each other: one receipt implying x + y = 2 and another x + y = 5 describes the same basket at two different totals, and no prices explain both. And they meet everywhere when one equation is a rescaling of the other, x + y = 2 beside 2x + 2y = 4, so the second receipt adds nothing and infinitely many price pairs fit.</p>
+
+      <p>A solvable system needs as many genuinely different equations as unknowns, and the word doing the work is independent. These three cases are the whole story of fitting a model. More independent equations than unknowns, which is more data than parameters, usually means no exact fit, and you settle for the closest one below. More unknowns than equations, which is more parameters than data, means infinitely many fits, and the model can memorise noise. Large models live in that second regime, and the regularization mentioned back in issue 2 is how one sensible answer gets picked out of the infinite pile.</p>
+
+      <h2>Rank: how much a matrix really holds</h2>
+
+      <p>Take a dataset with two columns, height in inches and height in centimetres. The second column is always about 2.54 times the first, so it is not a new measurement. Plotted, the points do not fill the plane; they collapse onto a line. The matrix has two columns but only one independent direction, and the count of independent directions is the rank. A matrix whose rank falls short of its size is called rank-deficient, and NumPy will report both the rank and a related test, the determinant, which is zero exactly when the columns are dependent:</p>
+
+      <pre><code>independent = np.array([[2, 1],
+                        [1, 3]])
+redundant   = np.array([[2, 1],
+                        [4, 2]])   # row 2 is 2 x row 1
+
+print(np.linalg.matrix_rank(independent))        # 2 -> two real directions
+print(np.linalg.matrix_rank(redundant))          # 1 -> only one
+print(np.linalg.det(redundant.astype(float)))    # 0.0 -> rank-deficient</code></pre>
+
+      <p>Real data is almost always lower rank than it looks, because features overlap and repeat, and that redundancy is not a nuisance. It is the thing the field exploits. Compressing a dataset means finding the few directions that carry most of the information and discarding the rest, and modern fine-tuning makes the same bet: a method called LoRA updates a giant weight matrix with a tiny low-rank correction, wagering that the useful change lives in very few directions. Rank is why the bet pays off.</p>
+
+      <h2>The best answer when there is no exact one</h2>
+
+      <p>Most real problems have no exact solution, and that is not a failure. Record how many hours six students studied and the exam scores they got: (1, 52), (2, 58), (3, 62), (4, 71), (5, 74), (6, 83). Score rises with hours, but no single straight line passes through all six points, because real data carries noise. So change the question. Instead of the line that hits every point, ask for the line that misses them by as little as possible. &ldquo;As little as possible&rdquo; is made precise by least squares: choose the line that makes the sum of the squared vertical gaps, the residuals, as small as it can be. Squaring keeps positive and negative misses from cancelling and punishes large misses more than small ones.</p>
+
+      <pre><code>hours  = np.array([1, 2, 3, 4, 5, 6], dtype=float)
+scores = np.array([52, 58, 62, 71, 74, 83], dtype=float)
+
+A = np.vstack([hours, np.ones_like(hours)]).T    # each row: [hours, 1]
+slope, intercept = np.linalg.lstsq(A, scores, rcond=None)[0]
+
+print(round(slope, 3), round(intercept, 3))   # 6.057 45.467
+print(round(slope * 3.5 + intercept, 3))      # 66.667 -> predicted score, 3.5 hours</code></pre>
+
+      <p>The column of ones is what lets the line have an intercept. The fit says each extra hour of study is worth about 6 points, starting from a baseline near 45, and it will predict a score for a student it never saw. That is a model, trained on data, by solving an over-determined system in the best-fit sense, and it is exactly what linear regression does.</p>
+
+      <p>Here is why this small example carries the whole book&rsquo;s weight. Fitting weights to data by minimising a squared error is what linear regression does with two parameters and what a neural network does with millions. The total squared residual you just minimised is a loss function, the quantity training drives down. The only thing that changes at scale is that the system becomes too large to solve in one step the way lstsq does here, so the minimum has to be walked to, step by step. That walk is gradient descent, and this series is two issues away from it.</p>
+
+      <p>Next issue first asks a stranger question that makes the walk possible: which directions does a matrix refuse to turn? Feed most vectors through a matrix and they come out rotated. A special few come out pointing exactly the way they went in, only stretched, and those directions, the eigenvectors, are how Google first ranked the web, how a covariance matrix confesses which way the data spreads, and how a photograph is compressed to a tenth of its size while your eye barely notices.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">Follow along with the code</p>
+      <p>
+        Everything in this issue runs in the free companion notebook for this series, which opens in
+        your browser with nothing to install. The full sequence, with all the figures and worked
+        examples, is collected in the book <em>Maths for AI</em>. The newsletter stands on its own,
+        and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://colab.research.google.com/github/biddu/maths-for-ai-notebooks/blob/main/03_systems_rank_least_squares.ipynb" target="_blank" rel="noopener">Open the notebook</a>
+        <a class="btn btn-outline" href="https://www.amazon.co.uk/dp/B0H7QM2BB6" target="_blank" rel="noopener">Maths for AI on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-ai/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-ai/04-a-matrix-is-a-machine.html">&larr; A matrix is a machine</a>
+      <span>Issue 6 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

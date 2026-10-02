@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The transform that splits the ring — After Shor, Issue 4</title>
+  <meta name="description" content="The number-theoretic transform derived from the Chinese Remainder Theorem: evaluate at the odd powers of psi and convolution becomes pointwise multiplication. Splitting by square roots seven times, why ML-KEM stops at 128 quadratics while ML-DSA reaches scalars, and the thirtyfold saving that makes post-quantum key exchange cost microseconds." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-pqc/04-the-transform-that-splits-the-ring.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The transform that splits the ring" />
+  <meta property="og:description" content="Evaluate at the odd powers of psi and convolution becomes pointwise multiplication. The NTT derived by hand at q = 17, the seven square-root splits, and the thirtyfold saving the standards run on." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-pqc/04-the-transform-that-splits-the-ring.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-pqc/img/fig-04-split-the-ring.png" />
+  <meta property="article:published_time" content="2026-10-02" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The transform that splits the ring",
+    "datePublished": "2026-10-02",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "After Shor" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-pqc/04-the-transform-that-splits-the-ring.html",
+    "description": "Evaluate at the odd powers of psi and convolution becomes pointwise multiplication. The NTT derived by hand at q = 17, the seven square-root splits, and the thirtyfold saving the standards run on."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-pqc/">After Shor</a><span class="sep">·</span>Issue 4
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">After Shor · Issue 4</p>
+      <h1 class="article-title">The transform that splits the ring</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-02">2 October 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Last issue ended with a bill and a promise. The bill: one ring product in R<sub>q</sub>, computed straight from the convolution formula, costs n&sup2; scalar multiplications, 65,536 of them at n = 256, and a matrix-vector product needs kl ring products. The promise: the divisibility check on q, which decided how far x&#8319; + 1 splits, is exactly what a fast algorithm exploits. This issue builds the machine that cashes it: the number-theoretic transform, which is the fast Fourier transform wearing modular clothes, derived here from nothing beyond the Chinese Remainder Theorem and the roots last issue already found.</p>
+
+      <h2>The same trick, one level up</h2>
+
+      <p>Issue 2&rsquo;s Chinese Remainder Theorem said that factoring an integer modulus into coprime pieces turns one big arithmetic into independent parallel arithmetics, one per piece. The same theorem holds with polynomials in place of integers. If x&#8319; + 1 factors modulo q into pairwise coprime pieces, then R<sub>q</sub> splits into a product of small rings, one per factor, and multiplication on the right-hand side is done coordinate by coordinate. Call the splitting map the transform: forward, it sends a polynomial to its tuple of residues; inverse, it reassembles the polynomial. A negacyclic product then becomes transform, multiply pointwise, transform back. Nothing is faster yet, because the transform itself still has to be computed, but the algebraic idea costs nothing new. It is the CRT, run on polynomials.</p>
+
+      <h2>Evaluate at the odd powers</h2>
+
+      <p>Take the case last issue called complete: q &equiv; 1 (mod 2n), a primitive 2n-th root of unity &psi; exists, and x&#8319; + 1 splits into n distinct linear factors x &minus; &psi;&sup2;&#x2071;&#8314;&sup1;. Reducing a polynomial modulo a linear factor x &minus; a is, by the remainder theorem, the same thing as evaluating it at a. So the forward transform is pure evaluation: the i-th coordinate of f&#770; is f(&psi;&sup2;&#x2071;&#8314;&sup1;) mod q, the polynomial read off at the i-th odd power of &psi;. The inverse is the CRT reconstruction, and it comes out as the mirror formula, a sum against the negative powers of &psi; with one factor of n&#8315;&sup1; in front, which exists because q is prime.</p>
+
+      <p>Run the toy case by hand, because it makes the whole construction concrete. Last issue found that for q = 17, n = 4, the roots of x&#8308; + 1 are {2, 8, 9, 15}, the odd powers of &psi; = 9 in the order 9, 15, 8, 2. Take f = 1 + 2x + 3x&sup2; + 4x&sup3; and evaluate at each root modulo 17: f&#770; = (f(9), f(15), f(8), f(2)) = (16, 11, 13, 15). Fourteen lines verify the round trip and the claim the whole construction exists for:</p>
+
+      <pre><code>q, n, psi = 17, 4, 9
+
+def ntt(f):
+    return [sum(c * pow(psi, (2*i+1)*j, q) for j, c in enumerate(f)) % q
+            for i in range(n)]
+
+def intt(fh):
+    ninv = pow(n, -1, q)
+    return [ninv * sum(fh[i] * pow(psi, -(2*i+1)*j, q) for i in range(n)) % q
+            for j in range(n)]
+
+f, g = [1, 2, 3, 4], [5, 0, 2, 1]
+print(ntt(f))                                  # [16, 11, 13, 15]
+print(intt(ntt(f)))                            # [1, 2, 3, 4] -> round trip exact
+h = [a * b % q for a, b in zip(ntt(f), ntt(g))]
+print(intt(h))                                 # [14, 16, 13, 8]
+# identical to last issue's negacyclic convolution of f and g</code></pre>
+
+      <p>Pointwise products in the transform domain invert back to exactly the negacyclic product, and every quantity in sight is an integer modulo q. That last point deserves a sentence, because a misconception runs the other way. The NTT is not an approximation of the FFT adapted for computers; the relationship is the reverse. The FFT, run on cos and sin, rounds, because its roots of unity are irrational and floating point truncates them. The NTT&rsquo;s roots of unity live in Z<sub>q</sub>, so it is exact, with no rounding anywhere, at the cost of a constraint the FFT never faces: not every q contains the roots a given transform length needs, which is precisely what last issue&rsquo;s divisibility check was checking.</p>
+
+      <h2>Splitting by square roots</h2>
+
+      <p>As written above, both the forward and inverse maps still cost n&sup2; multiplications, each output computed from scratch. The fast algorithm shares work instead, and the sharing rests on one derivable move. Suppose some ring Z<sub>q</sub>[x]/(x&sup2;&#x1d50; &minus; &Gamma;) appears in the decomposition, and &Gamma; has a square root &delta; in Z<sub>q</sub>. Then x&sup2;&#x1d50; &minus; &Gamma; = (x&#x1d50; &minus; &delta;)(x&#x1d50; + &delta;), the two factors are coprime because q is odd, and the CRT applies one level down: the ring splits in half, each child the same shape as the parent. Apply the move again wherever a square root exists.</p>
+
+      <p>Track the recursion by exponents. The top ring is x&sup2;&#8309;&#8310; &minus; (&minus;1), and in ML-KEM&rsquo;s Z&#8323;&#8323;&#8322;&#8329; the element &minus;1 is &zeta;&sup1;&sup2;&#8312; for the standard&rsquo;s root &zeta; = 17 of order 256. Splitting needs a square root of &zeta;&sup1;&sup2;&#8312;, which is &zeta;&#8310;&#8308;, and the two children carry exponents 64 and 192. Every split halves the surviving exponent, and every split demands the current exponent be even. Starting from 128 = 2&#8311;, the halving succeeds exactly seven times, and then every surviving exponent is odd. An odd power of &zeta; provably has no square root modulo 3329: a square root would be an element of order 512, and last issue&rsquo;s factorisation 3328 = 2&#8312; &middot; 13 showed that no such element exists, since 512 does not divide 3328. So the recursion stops at 128 quadratic factors, not because the algorithm gives up but because the ring has run out of square roots. The bit-reversed index pattern that looks so mysterious in the standard&rsquo;s pseudocode is nothing but the bookkeeping this binary splitting leaves behind.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-pqc/img/fig-04-split-the-ring-stacked.png" />
+          <img src="/newsletter/maths-for-pqc/img/fig-04-split-the-ring.png" alt="Left, the recursive splitting tree: x to the 256 minus zeta to the 128 splitting into two rings with exponents 64 and 192, each splitting again into four rings of degree 64, with a note that 128 halves seven times before every exponent is odd; right, a log-log plot of multiplications per ring product against ring degree, the schoolbook n squared curve against the transform route, with n equals 256 marked at 65,536 versus 3,200" loading="lazy" />
+        </picture>
+        <figcaption>Left, the first two of seven levels: each split takes a square root of the parent&rsquo;s constant, halving the exponent, until every exponent is odd. Right, what the splits buy: at n = 256, one ring product falls from 65,536 schoolbook multiplications to about 3,200 via the transform.</figcaption>
+      </figure>
+
+      <p>Each split costs almost nothing at runtime. One level of the transform is n/2 butterflies, each a single multiplication by a power of &zeta; followed by one addition and one subtraction, and ML-KEM uses seven levels, so a full forward transform is 7 &times; 128 = 896 multiplications instead of 65,536. The same butterfly is the FFT taught in every signal-processing course, run over Z<sub>q</sub> instead of the complex numbers. At the bottom, a pointwise product must multiply two degree-one polynomials modulo x&sup2; &minus; &gamma;, which expands to four multiplications and three additions per leaf, the standard&rsquo;s BaseCaseMultiply, with &gamma; fixed per leaf and public.</p>
+
+      <p>And here the two standards part company by exactly one factor of two. ML-DSA&rsquo;s modulus has q &minus; 1 = 8380416 = 2&sup1;&sup3; &middot; 3 &middot; 11 &middot; 31, divisible by 512, so its root &psi; = 1753 has order 2n rather than n, the halving succeeds eight times instead of seven, and the recursion runs all the way to 256 linear factors. Its pointwise multiplication is plain entrywise scalar multiplication, no quadratic leaves needed. Same algorithm, same bookkeeping, one extra split. The two transforms that look so different in the two standards&rsquo; pseudocode differ by nothing else.</p>
+
+      <h2>What it buys</h2>
+
+      <p>Put the pieces against last issue&rsquo;s cost table. The module product As at ML-KEM-768&rsquo;s k = l = 3 costs, naively, nine negacyclic products at 65,536 multiplications each: 589,824. Via the transform: convert the nine entries of A and the three of s, multiply pointwise in nine blocks of 128 leaves at four multiplications each, sum, and transform the three results back, which is fifteen transforms at 896 multiplications plus 4,608 leaf multiplications, a total of 18,048. That is a saving of more than thirtyfold on the complete job, inverse transforms included. The gap widens with n, which is the right-hand panel of the figure. This is why the module structure of last issue and this issue&rsquo;s transform are inseparable in every real implementation: one supplies the structure, the other makes using it affordable, and together they are the reason a post-quantum key exchange costs microseconds rather than milliseconds.</p>
+
+      <p>The arithmetic story of this series is now complete: a clock face, polynomials on it, and a transform that multiplies them fast. What none of it explains is where the security lives, because nothing so far is hard to undo. Next issue starts the second half of the book&rsquo;s title: the lattice, an infinite grid of points generated by a handful of basis vectors, the innocent-looking problem of finding the shortest nonzero point in the grid, and the reason that problem stays hard even for the quantum computer that broke Chapter 1&rsquo;s world.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from what quantum computing actually breaks through lattices, Learning
+        With Errors and the NIST standards read clause by clause, with 196 exercises and full
+        solutions, are collected in the book <em>Maths for Post-Quantum Cryptography</em>. The
+        newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFLYZQ3B/" target="_blank" rel="noopener">Maths for Post-Quantum Cryptography on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-pqc/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-pqc/03-polynomials-on-the-clock-face.html">&larr; Polynomials on the clock face</a>
+      <span>Issue 5 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walking downhill in the dark — Six Ideas, Issue 4</title>
+  <meta name="description" content="In 1847 Cauchy published a three-page note on solving awkward equations by stepping downhill. That note is now the engine of nearly all modern AI. The update rule run by hand, the one number that decides whether it learns or flies apart, and what changes at a hundred billion knobs. Nothing, except the electricity bill." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/04-walking-downhill-in-the-dark.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Walking downhill in the dark" />
+  <meta property="og:description" content="Cauchy's 1847 downhill walk is the engine of modern AI. Run the update rule by hand, break it on purpose with one number, and see what changes at a hundred billion knobs." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/04-walking-downhill-in-the-dark.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/img/fig-04-downhill-two-strides.png" />
+  <meta property="article:published_time" content="2026-10-02" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Walking downhill in the dark",
+    "datePublished": "2026-10-02",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Six Ideas" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/six-ideas-that-run-the-world/04-walking-downhill-in-the-dark.html",
+    "description": "Cauchy's 1847 downhill walk is the engine of modern AI. Run the update rule by hand, break it on purpose with one number, and see what changes at a hundred billion knobs."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/six-ideas-that-run-the-world/">Six Ideas</a><span class="sep">·</span>Issue 4
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Six Ideas · Issue 4</p>
+      <h1 class="article-title">Walking downhill in the dark</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-02">2 October 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">In 1847 the French mathematician Augustin-Louis Cauchy published a three-page note with a modest aim. He wanted a way to solve systems of equations too awkward to solve directly, and his idea was to turn the problem into a downhill walk: write down a quantity that measures how wrong your current guess is, then keep stepping in whatever direction makes that quantity fall fastest, until it stops falling. He called it the method of steepest descent. That note is now the engine of nearly all modern artificial intelligence. The biggest systems of the mid-2020s have on the order of a hundred billion adjustable numbers, nobody sets a single one of them by hand, and the thing that sets them is Cauchy&rsquo;s walk, run for weeks across thousands of processors. This issue builds the walk from the derivative you met in issue 3, runs it by hand, breaks it on purpose, and then says honestly what changes when one knob becomes a hundred billion.</p>
+
+      <h2>The question, stated plainly</h2>
+
+      <p>How does a machine set a number it has never been told, using only a measure of how wrong it currently is? It is not obvious, because the machine is not given the right answer for its internal numbers. It is given examples, a way to score how badly it is doing, and nothing else. It has to find its own way to a good setting, in the dark, feeling only the ground under its feet.</p>
+
+      <p>The entire method is one line, the gradient descent update. For a single adjustable number w, often called a weight, the rule is: replace w by w &minus; &eta;&middot;(dE/dw). Here E is the error, a number that is large when the machine is doing badly, sometimes called the loss. The term dE/dw is the derivative of the error with respect to w, the slope of the error as w changes, and it points the way the error rises. The Greek letter &eta;, said &ldquo;eta,&rdquo; is the learning rate, a small positive number we choose, and it sets how big a step to take. Subtracting the slope moves w in the direction the error falls, which is the whole point.</p>
+
+      <h2>Run it by hand</h2>
+
+      <p>Take the simplest error worth studying, E = (w &minus; 3)&sup2;, a parabola with its lowest point at w = 3, where the error is zero. We do not want to be told that the answer is 3. We want the rule to find it, the way a real machine must. The slope, from the calculus of issue 3, is 2(w &minus; 3): negative below 3, where the error falls as w rises, and positive above it. The update rule reads the sign and does the right thing in both cases automatically, because it subtracts the slope.</p>
+
+      <p>Set &eta; = 0.1, start deliberately badly at w = 0, and turn the handle. Step one: the slope is 2(0 &minus; 3) = &minus;6, so w becomes 0 &minus; 0.1&times;(&minus;6) = 0.6. From 0.6 the slope is &minus;4.8 and w becomes 1.08. Then 1.464, then 1.771, then 2.017, climbing steadily toward 3 with each step smaller than the last. There is a clean reason for the slowing. Measured from the answer, the rule multiplies the remaining distance by the same factor every step, here 1 &minus; 2&eta; = 0.8: start 3 away, and the gaps run 3, 2.4, 1.92, and so on, shrinking by a fifth each step. The gap never exactly reaches zero, and after 16 steps it is already under 0.1, too small to matter. Five lines of code turn the same handle:</p>
+
+      <pre><code>w, eta = 0.0, 0.1
+for step in range(5):
+    w = w - eta * 2 * (w - 3)      # the whole of gradient descent
+    print(round(w, 3))
+# 0.6  1.08  1.464  1.771  2.017  -> walking toward 3</code></pre>
+
+      <p>The machine has found the answer it was never given, by feeling the slope and stepping downhill. That sentence, scaled up, is the training of every modern model.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/six-ideas-that-run-the-world/img/fig-04-downhill-two-strides-stacked.png" />
+          <img src="/newsletter/six-ideas-that-run-the-world/img/fig-04-downhill-two-strides.png" alt="Left, the error parabola with the descent steps from w equals 0 walking into the valley at w equals 3, each step shorter than the last; right, the value of w against step number for learning rate 0.1, which settles on 3, and learning rate 1.1, which oscillates with growing swings" loading="lazy" />
+        </picture>
+        <figcaption>Left, &eta; = 0.1: the walk from w = 0 into the valley at w = 3, each step shorter because the ground is flatter. Right, the same rule at two strides: 0.1 settles on the answer, 1.1 is thrown further from it at every step.</figcaption>
+      </figure>
+
+      <h2>The stride that breaks it</h2>
+
+      <p>The learning rate is where the method lives or dies, and you can break it with one number. The step is only safe if it does not overshoot the valley. For this error the gap to the answer is multiplied each step by 1 &minus; 2&eta;, so the walk settles only when that factor is smaller than one in size, which means &eta; must lie between 0 and 1. Choose &eta; = 0.5 and the factor is zero: the rule jumps to w = 3 in a single perfect step. Choose &eta; = 1.1 and the factor is &minus;1.2, bigger than one in size, so the gap grows instead of shrinking. From w = 0 the guesses read 6.6, then &minus;1.32, then 8.18, then &minus;3.22, then 10.46, flailing across the valley and thrown further out each time. Same rule, same error, one number changed, and the machine has gone from learning to diverging.</p>
+
+      <p>The image to keep is a hillside in thick fog. You want the bottom of the valley and cannot see it. All you can feel is the slope under your feet, so you take a small step down the steepest direction, feel again, and step again. Sensible steps reach the bottom. Wild strides leap clean over the valley and land you higher than you began. That is gradient descent, and &eta; is the length of your stride.</p>
+
+      <h2>From one knob to a hundred billion</h2>
+
+      <p>Here is the honest part. In a large model, every one of the roughly 10&sup1;&sup1; adjustable numbers gets exactly the update you just ran by hand, over and over. Nothing in the line changes. What changes is everything around it. Each number needs its own slope, found by holding the others still, a tool called the partial derivative that arrives in first-year university calculus. And because the machine computes its answer in stages, each feeding the next, finding how the final error depends on a number buried deep inside means tracing the effect back through every stage between. That careful, repeated use of the chain rule has its own name, backpropagation, and keeping the books across billions of numbers needs the language of matrices. None of it changes the rule. It only tells you how to compute the slope when the machine is deep. The valley becomes a surface in a hundred billion dimensions that no one can picture, the fog is total, and the walk still works. The idea has been fixed since Cauchy&rsquo;s three pages; the difficulty moved into doing the arithmetic a hundred billion times a second, and into paying for it. Training runs for the largest recent models have been reported to cost tens of millions of dollars in computing alone. The mathematics is free. The steps are not.</p>
+
+      <h2>The man who did not see the revival</h2>
+
+      <p>This idea&rsquo;s history is a warning as much as an inspiration. In 1958 the American psychologist Frank Rosenblatt built the perceptron, an early artificial neuron that adjusted its own weights from examples, and the press treated it as the arrival of thinking machines; The New York Times relayed expectations of a device that would one day &ldquo;walk, talk, see, write.&rdquo; In 1969 Marvin Minsky and Seymour Papert published a book proving that a single-layer perceptron cannot compute even the XOR pattern, the four corners no single straight line can separate, the very picture issue 3 ended on. The limitation was real but narrower than it was taken to be; funding collapsed anyway, into what is now called an AI winter. Rosenblatt died in a boating accident in 1971, at 43, and did not see the recovery. It came in 1986, when Rumelhart, Hinton and Williams put this issue&rsquo;s method to work across many layers under the name backpropagation. A network of several layers separates XOR easily, and the downhill walk trains it. The idea declared a dead end had been waiting seventeen years for the right way to compute its slopes, and for computers fast enough to take the steps.</p>
+
+      <p>One open problem, named plainly because the honesty is the point: there is no full theory of why this works as well as it does. A hundred billion knobs is more than enough freedom to memorise the training examples outright, yet the trained machines often do well on examples they never saw, and why the downhill walk lands on settings that generalise rather than memorise is genuinely not understood. A student who finds that question interesting has found a research career.</p>
+
+      <p>Next issue puts the fourth of our six ideas, the vector, in the driving seat, literally. A self-driving car&rsquo;s camera says the obstacle is 40 metres away and its radar says 42, and the car must act on one number. The rule for combining measurements that disagree is a weighted average you can compute in one line, it was rejected by the journals before it navigated Apollo to the Moon, and it is called the Kalman filter.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters, from rockets to the energy budget of the planet, every central result
+        derived with school mathematics and every number referenced, are collected in the book
+        <em>Six Ideas That Run the World</em>. The newsletter stands on its own, and you never
+        need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H9P9B5FX" target="_blank" rel="noopener">Six Ideas That Run the World on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/six-ideas-that-run-the-world/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/six-ideas-that-run-the-world/03-the-straight-line-that-became-ai.html">&larr; The straight line that became AI</a>
+      <span>Issue 5 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

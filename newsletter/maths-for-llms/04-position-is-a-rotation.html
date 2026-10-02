@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Position is a rotation — Attention, Derived, Issue 4</title>
+  <meta name="description" content="Attention treats its input as an unordered set, so position must be injected, and asking for the injection that makes logits depend only on relative distance forces a unique answer: rotate every query and key by an angle proportional to its position. RoPE derived from a functional equation, the wavelength ladder, and the arithmetic that decides whether a model extends before you rent a single GPU hour." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-llms/04-position-is-a-rotation.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Position is a rotation" />
+  <meta property="og:description" content="Asking for logits that depend only on relative distance forces a unique answer: rotation. RoPE derived, the wavelength ladder read honestly, and why 29 of a model's 64 frequency pairs never completed a turn in training." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-llms/04-position-is-a-rotation.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-llms/img/fig-04-the-wavelength-ladder.png" />
+  <meta property="article:published_time" content="2026-10-02" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Position is a rotation",
+    "datePublished": "2026-10-02",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Attention, Derived" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-llms/04-position-is-a-rotation.html",
+    "description": "Asking for logits that depend only on relative distance forces a unique answer: rotation. RoPE derived, the wavelength ladder read honestly, and why 29 of a model's 64 frequency pairs never completed a turn in training."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-llms/">Attention, Derived</a><span class="sep">·</span>Issue 4
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Attention, Derived · Issue 4</p>
+      <h1 class="article-title">Position is a rotation</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-02">2 October 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Last issue&rsquo;s derivation quietly used a fact it never faced: attention treats its input as an unordered set. Nothing in the score knows that <em>dog bites man</em> differs from <em>man bites dog</em>, so order has to be put in by hand. This issue makes the blindness precise, shows why the first fix fails, and then does what this series is for: instead of presenting the modern injection as a trick, it asks for what is wanted, writes that want as an equation, and watches the equation force its own answer. The answer is strange and lovely. Position is a rotation.</p>
+
+      <h2>Attention is blind to order</h2>
+
+      <p>The claim can be made exact. Shuffle the rows of the input with a permutation matrix P and chase it through attention: the projections pick up P, the logit matrix becomes PSP&#x1d40;, a row-wise softmax commutes with permuting rows and columns together, and the final P&#x1d40;P collapses to the identity. What is left is Attn(PX) = P&middot;Attn(X): shuffle the input and the output shuffles identically, with nothing in the computation noticing. One rider matters in practice. The causal mask of a decoder is not permutation-invariant, so a decoder trained with no positional encoding at all does learn usable word order from the mask alone: how many tokens a query can see is itself a position signal. What the mask supplies is an ordering, not a metric. It distinguishes before from after, and it cannot distinguish three tokens back from three thousand, which is why every model that must reason about long documents encodes position explicitly.</p>
+
+      <h2>Why adding position fails</h2>
+
+      <p>The first answer, the one most readers meet first, adds a fixed sinusoidal vector to each token before the projections, with a different frequency per coordinate pair. The construction has a seductive property, a shift in position is a linear map on the encoding, and the original paper offered it as a reason to expect extrapolation to longer sequences. The expectation was not met, and expanding one logit shows why. With position added to content, the product (x + PE<sub>m</sub>)W<sub>Q</sub>W<sub>K</sub><sup>T</sup>(y + PE<sub>n</sub>)<sup>T</sup> opens into four terms: a pure content term, a term coupling the query&rsquo;s absolute position to the key&rsquo;s content, the mirror of that, and only one term involving both positions together. Nothing constrains the learned projection matrices to preserve the structure that made the encoding attractive, and two of the four terms are not relative quantities at all. Learned absolute embeddings, a lookup table indexed by position, share the problem and add a harder one: there is no row for position 8193 if the table stops at 8192.</p>
+
+      <p>The fix is to stop adding position to the token and start applying it to the query and key directly, inside the inner product, where relative structure can be made to survive.</p>
+
+      <h2>Ask for what you want</h2>
+
+      <p>So ask. We want a map f(x, m) that applies position m to a vector x such that the attention logit depends on positions only through their difference: &#x27e8;f(q, m), f(k, n)&#x27e9; = g(q, k, n &minus; m), with f(x, 0) = x. That is a functional equation, and restricting f to be linear in x, so f(x, m) = xA&#8344; for some matrix A&#8344;, it essentially solves itself in four moves. The condition says A&#8344;&#x1d40;A&#8345; depends only on n &minus; m; call it G(n &minus; m). Setting m = 0 gives G(n) = A&#8345;. Setting n = m gives A&#8344;&#x1d40;A&#8344; = I, which is worth pausing on: orthogonality is not assumed anywhere, it is forced, and it is exactly the property that keeps &#x2016;f(q, m)&#x2016; independent of position, so no absolute-position magnitude term can leak into the logit. The two facts together make m &#x21a6; A&#8344; a one-parameter group, A&#8344; = exp(m&Theta;) with &Theta; skew-symmetric, and a real skew-symmetric matrix block-diagonalises into 2 &times; 2 rotation blocks. The general solution of the equation is: pair up the coordinates, and rotate pair i by the angle m&theta;&#x1d62;. That is RoPE, the rotary position embedding, and the pairing of adjacent coordinates is a convention chosen because it makes the rotation cost a handful of multiplies instead of a matrix product.</p>
+
+      <p>The identity that makes it useful follows from angle addition, block by block: R&#8344;&#x1d40;R&#8345; = R&#8345;&#8331;&#8344;, and therefore &#x27e8;R&#8344;q, R&#8345;k&#x27e9; = q&#x1d40;R&#8345;&#8331;&#8344;k. Only the difference of positions survives the inner product, exactly, at every length. Ten lines check it numerically, and the assertion is the kind worth actually running:</p>
+
+      <pre><code>import numpy as np
+
+def rot(x, pos, theta):                  # rotate each pair i by pos * theta[i]
+    out = x.copy().reshape(-1, 2)
+    c, s = np.cos(pos * theta), np.sin(pos * theta)
+    out = np.stack([c * out[:, 0] - s * out[:, 1],
+                    s * out[:, 0] + c * out[:, 1]], axis=1)
+    return out.reshape(-1)
+
+rng = np.random.default_rng(0)
+theta = 500_000.0 ** (-2 * np.arange(4) / 8)     # the frequency ladder, d_h = 8
+q, k = rng.normal(size=8), rng.normal(size=8)
+
+lhs = rot(q, 57, theta) @ rot(k, 1234, theta)    # positions 57 and 1234
+rhs = q @ rot(k, 1234 - 57, theta)               # only the gap of 1177
+print(np.allclose(lhs, rhs))                     # True -> relative, exactly</code></pre>
+
+      <h2>The ladder of wavelengths</h2>
+
+      <p>The frequencies &theta;<sub>i</sub> = b<sup>&minus;2i/d</sup> form a geometric ladder, and the useful way to read them is as wavelengths, &lambda;<sub>i</sub> = 2&pi;b<sup>2i/d</sup>: the number of tokens pair i needs to complete one full turn. Take a representative 2026 configuration, head dimension 128, so 64 pairs, and base b = 500,000. The fastest pair turns once every 6.28 tokens. The slowest turns once every 2.56 million. That range is the whole point, and it is also the problem. A pair whose wavelength exceeds the trained context never completes a rotation while the model is learning: it has seen phases only in a small arc, and it has no experience of anything outside that arc. The boundary is a number you can compute from the config file alone: the first pair with &lambda;<sub>i</sub> larger than the trained context. At a trained context of 8,192 tokens, &lambda;&#8323;&#8324; &asymp; 6,695 still fits and &lambda;&#8323;&#8325; &asymp; 8,219 does not, so the boundary sits at pair 35. Pairs 0 to 34 were exercised through complete cycles. The other 29, nearly half the ladder, never once saw a full turn.</p>
+
+      <figure>
+        <img src="/newsletter/maths-for-llms/img/fig-04-the-wavelength-ladder.png" alt="Wavelength of each of the 64 RoPE pairs on a log scale, rising geometrically from about 6 tokens to 2.56 million, with the trained context of 8192 tokens drawn as a horizontal line crossed at pair index 35, blue pairs below having completed a full turn in training and 29 orange pairs above never having completed one" loading="lazy" />
+        <figcaption>The frequency ladder at base 500,000 with 64 pairs. Everything below the dashed line completed at least one full rotation inside the 8,192-token trained context; the 29 pairs above it saw only an arc of their cycle, and at long range they present the model with phases it has never met.</figcaption>
+      </figure>
+
+      <p>The ladder also explains a change that looks like tuning and is not. Early RoPE models used base 10,000, whose wavelength ceiling is 2&pi; &times; 10,000, about 63,000 tokens. At that base, no pair has a wavelength long enough to tell positions 131,072 apart without wrapping; the encoding cannot represent the distance at all, whatever the training. Raising the base to 500,000 lifts the ceiling to 3.14 million. It is a precondition for long context rather than an optimisation of it, and it has a price: at the higher base, fewer pairs complete a turn during training, which is exactly the 29 above.</p>
+
+      <h2>What &ldquo;relative&rdquo; does not buy</h2>
+
+      <p>A claim you will meet everywhere: RoPE is relative, so a RoPE model generalises to longer contexts for free. The algebra generalises; the model does not. The identity &#x27e8;R&#8344;q, R&#8345;k&#x27e9; = q&#x1d40;R&#8345;&#8331;&#8344;k held in the code above with no assumption about m or n being small. What fails is that the learned function is defined on the phases it has actually seen, and 29 of 64 pairs present out-of-distribution phases the moment the context stretches. The failure is in the weights, not the encoding, the same category error as expecting a polynomial fitted on [0, 1] to behave at x = 16 because the polynomial is defined there. The symptom is a cliff, not a slope: perplexity flat out to roughly the trained length, then up by orders of magnitude within a few hundred tokens. Adding parameters will not move it. The extension methods in production are three policies over the one diagnostic this section computed: position interpolation slows every pair alike, correct at the top of the ladder and destructive at the bottom; NTK-aware scaling raises the base so slow pairs stretch most; and YaRN makes the non-uniformity explicit, leaving well-exercised bands alone and interpolating in proportion to how little each band rotated, with the ramp&rsquo;s lower edge landing precisely on the never-completed-a-turn test.</p>
+
+      <p>Note what became of the teaser question. Why rotation, of all things? Because the demand &ldquo;logits may depend only on relative position, and position zero changes nothing&rdquo; admits essentially one linear solution, and it is the orthogonal, angle-adding, norm-preserving family of rotations. Meet any new positional scheme and the first question to ask is which clause of that demand it gives up.</p>
+
+      <p>Next issue steps between the blocks, to the operation this series has so far taken on faith: normalisation. Why every token&rsquo;s vector is projected back onto a sphere before each block, why modern models dropped the mean-subtraction half of the original recipe and kept the radial half, and what the residual stream that everything reads from and writes to really is.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from the toolkit to scaling laws, quantisation and interpretability, each
+        one question answered by a full derivation with the arithmetic checked by continuous
+        integration, are collected in the book <em>Maths for LLMs</em>. The newsletter stands on
+        its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFF1RKFW" target="_blank" rel="noopener">Maths for LLMs on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-llms/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-llms/03-why-attention-divides-by-root-d.html">&larr; Why attention divides by &radic;d</a>
+      <span>Issue 5 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
