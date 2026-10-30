@@ -51,6 +51,14 @@
           "date": "2026-10-02",
           "readingTime": "6 min",
           "summary": "Given a matrix and the output it produced, recover the input. Two receipts fix the price of an apple and an orange, rank measures how much information a matrix really holds, and when no exact answer exists, least squares finds the best one, which is the first machine-learning model."
+        },
+        {
+          "number": 6,
+          "title": "The directions a matrix refuses to turn",
+          "slug": "06-the-directions-a-matrix-refuses-to-turn",
+          "date": "2026-10-30",
+          "readingTime": "7 min",
+          "summary": "Most vectors come out of a matrix rotated; a special few come out pointing exactly the way they went in, only stretched. Eigenvectors, the SVD's rotate-scale-rotate recipe, and PCA, the tool that lets data choose its own axes, which is how the web was first ranked and how a photograph shrinks to a tenth of its size."
         }
       ]
     },
@@ -105,6 +113,14 @@
           "date": "2026-10-02",
           "readingTime": "4 min",
           "summary": "The call between deterministic code and a language model is usually treated as craft. Read it instead as the interface artifact it is: specification, test cases, schema, dependency pin, variance clause, version. Why hallucination is an unspecified failure mode, and why a vendor model upgrade is just a dependency bump, if you have contract tests to re-run."
+        },
+        {
+          "number": 6,
+          "title": "74 documents vanished, and every dashboard stayed green",
+          "slug": "06-74-documents-vanished",
+          "date": "2026-10-30",
+          "readingTime": "4 min",
+          "summary": "A healthy system accepted nine hundred documents, acknowledged every one, and quietly unmade seventy-four, because its queue was a list in one process's memory. The durable log that fixes it, and the question that follows: once redelivery is a fact of life, what does a duplicate cost, message by message?"
         }
       ]
     },
@@ -151,6 +167,14 @@
           "date": "2026-10-02",
           "readingTime": "7 min",
           "summary": "The verbs arrive: a quantum gate is not described by a matrix, it is one. Matrix-vector multiplication by hand, the NOT gate as a small swap, why reordering two gates changes the circuit, and the unitarity test every legal gate must pass."
+        },
+        {
+          "number": 5,
+          "title": "The bra meets the ket",
+          "slug": "05-the-bra-meets-the-ket",
+          "date": "2026-10-30",
+          "readingTime": "6 min",
+          "summary": "How to compare two states: the inner product, one number with the first vector conjugated. Why the self-overlap is the normalisation rule from issue 3, why orthogonal states are perfectly distinguishable, and why the squared overlap is the chance a measurement finds one state as the other."
         }
       ]
     },
@@ -197,6 +221,14 @@
           "date": "2026-10-02",
           "readingTime": "8 min",
           "summary": "In 1847 Cauchy published a three-page note on solving awkward equations by walking downhill, and that note is now the engine of nearly all modern AI. The update rule run by hand, the one number that decides whether it learns or flies apart, and what changes at a hundred billion knobs. Nothing, except the arithmetic and the electricity bill."
+        },
+        {
+          "number": 5,
+          "title": "The car that has to choose",
+          "slug": "05-the-car-that-has-to-choose",
+          "date": "2026-10-30",
+          "readingTime": "7 min",
+          "summary": "A camera says 40 metres, a radar says 42, and the car must act on one number. The rule that fuses them is a weighted average computable in one line, the fused answer is sharper than either sensor alone, and the filter it comes from was doubted in print before it navigated Apollo to the Moon."
         }
       ]
     },
@@ -243,6 +275,14 @@
           "date": "2026-10-02",
           "readingTime": "8 min",
           "summary": "Attention treats its input as an unordered set, so position must be injected, and demanding that logits depend only on relative distance forces a unique answer: rotate every query and key by an angle proportional to its position. RoPE derived from a functional equation, the wavelength ladder, and the 29 frequency pairs that never completed a turn in training."
+        },
+        {
+          "number": 5,
+          "title": "Everything lands on one sphere",
+          "slug": "05-everything-lands-on-one-sphere",
+          "date": "2026-10-30",
+          "readingTime": "8 min",
+          "summary": "Every change to the transformer's normalisation since 2017 is forced by a page of arithmetic: the dropped mean was worth one part in ten thousand, the Jacobian is a projector that can only delete directions, pre-norm keeps one exact identity term, and QK-norm caps the logit at 11.31. Then the residual stream, read honestly: a shared bus oversubscribed 64 to 1."
         }
       ]
     },
@@ -289,6 +329,14 @@
           "date": "2026-10-02",
           "readingTime": "8 min",
           "summary": "Evaluate a polynomial at the odd powers of psi and convolution becomes pointwise multiplication: the number-theoretic transform, derived from the Chinese Remainder Theorem and checked by hand at q = 17. Splitting by square roots seven times, why ML-KEM stops at 128 quadratics while ML-DSA reaches scalars, and the thirtyfold saving the standards run on."
+        },
+        {
+          "number": 5,
+          "title": "An infinite grid, and its shortest step",
+          "slug": "05-an-infinite-grid-and-its-shortest-step",
+          "date": "2026-10-30",
+          "readingTime": "8 min",
+          "summary": "Every key and ciphertext in the standards is secretly a point in a lattice, an infinite grid with good bases and terrible ones. The determinant no basis can hide, Minkowski's guarantee against the Gaussian heuristic's prediction, and the q-ary grids where finding a short vector is exactly the problem the signatures bet on."
         }
       ]
     }

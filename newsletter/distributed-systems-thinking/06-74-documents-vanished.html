@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>74 documents vanished, and every dashboard stayed green — The Expensive Answers, Issue 6</title>
+  <meta name="description" content="A healthy system accepted nine hundred documents, acknowledged every one, and quietly unmade seventy-four of them. The fix is one of the oldest ideas in distributed systems, and it leads to the question that is the whole of delivery semantics: what does a duplicate cost, message by message?" />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/distributed-systems-thinking/06-74-documents-vanished.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="74 documents vanished, and every dashboard stayed green" />
+  <meta property="og:description" content="A queue with the durability of a rumour, the log that outlives its workers, and the working rule for everything downstream: price the duplicate. Cheap tolerance almost everywhere, expensive certainty exactly where money flows." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/distributed-systems-thinking/06-74-documents-vanished.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/distributed-systems-thinking/img/fig-06-the-pipeline-as-events.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "74 documents vanished, and every dashboard stayed green",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Expensive Answers" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/distributed-systems-thinking/06-74-documents-vanished.html",
+    "description": "A queue with the durability of a rumour, the log that outlives its workers, and the working rule for everything downstream: price the duplicate. Cheap tolerance almost everywhere, expensive certainty exactly where money flows."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/distributed-systems-thinking/">The Expensive Answers</a><span class="sep">·</span>Issue 6
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Expensive Answers · Issue 6</p>
+      <h1 class="article-title">74 documents vanished, and every dashboard stayed green</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>4 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">On a Monday morning, a system I write about accepted nine hundred documents from three clients, acknowledged every one, and began processing. At 09:40 the ingestion service ran out of memory and restarted, clean and healthy, in nine seconds. Its work queue was a list in that process&rsquo;s memory. It came back empty.</p>
+
+      <p>Seventy-four documents vanished. Not failed: failure leaves a mark, an error, an unhappy user. These were accepted, confirmed, and then unmade, with every dashboard green. The gap surfaced on Thursday, when a partner asked about a document she had personally uploaded and was told, confidently and with citations, that it did not exist.</p>
+
+      <h2>A queue with the durability of a rumour</h2>
+
+      <p>The system was asynchronous in shape and synchronous in soul: a queue with the durability of a rumour. The fix is one of the oldest large ideas in distributed systems, and it is worth stating plainly because so many pipelines skip it. Put accepted work in a log that survives the workers. Acknowledge only after the write is durable. Let every downstream stage consume at its own pace and confirm only after its own effect is durable. A crash then loses nothing, because the work is in the log and the log outlives the process.</p>
+
+      <p>But durability creates the next question, and it is the one this piece is really about: how many times will each piece of work happen? Networks fail between doing and confirming, so redelivery is a fact of life, and you must choose a policy. The honest menu has two real options. At-least-once, where duplicates happen and you make them harmless. And exactly-once processing, which is purchasable but expensive. Exactly-once delivery, the thing the configuration flag seems to promise, is not on the menu at the boundaries of your system, whatever the flag says: the ambiguity lives in the crash between a consumer acting and confirming, and no broker setting repeals it.</p>
+
+      <h2>Price the duplicate</h2>
+
+      <p>The working rule I teach: price the duplicate, message by message. Re-parsing a document twice costs nothing. Re-embedding a chunk twice costs cents. Most of your traffic is like this, and for it, at-least-once plus idempotent consumers, dedupe by content hash, write under natural keys, ban auto-generated identifiers in consumers, makes duplicates a Tuesday rather than an incident.</p>
+
+      <h2>The message that becomes an invoice</h2>
+
+      <p>Then there is the message where a duplicate is not cents. In our story, the recovery from the vanished 74 re-ran Monday&rsquo;s uploads and double-counted 212 usage events, which is to say: it nearly billed a client twice for work done once, caught by a person with a spreadsheet before the invoice went out. A billing process that depends on a person with a spreadsheet has not been designed yet. Money buys the expensive guarantee: the usage record and its announcement written in one database transaction (the transactional outbox), published at least once, deduplicated by key on the billing side. Exactly-once in effect, whatever the network does.</p>
+
+      <figure>
+        <img src="/newsletter/distributed-systems-thinking/img/fig-06-the-pipeline-as-events.png" alt="The ingestion pipeline redesigned as events: ingestion, parser and chunker, embedding, and index writer stages connected by durable document and chunk events, with a priority lane and a bulk lane, a dead-letter queue owned by a person, and the note that delivery is at-least-once everywhere with every consumer idempotent, except the usage record, which is exactly-once processed" loading="lazy" />
+        <figcaption>The same pipeline, rebuilt as events in a durable log: every stage acknowledges fast, works at its own pace, and confirms only after its own effect is durable. Delivery is at-least-once everywhere, so every consumer is idempotent, with one exception, the message that becomes an invoice.</figcaption>
+      </figure>
+
+      <p>That asymmetry, cheap tolerance almost everywhere, expensive certainty exactly where money flows, is the whole design. Buying exactly-once everywhere is five Rolls-Royces to park four of them. Buying at-least-once on billing is one nearly-sent invoice.</p>
+
+      <p>A question worth putting to your own team this week, because the answers sort themselves into two piles and the machinery follows the piles: for each message type in your pipeline, what does a duplicate cost, and does the type where it would cost the most get any special treatment today? Next issue stays inside this system and looks at the store the pipeline feeds: the embedding index at the heart of every retrieval system has quietly made one of the oldest decisions in distributed systems on your behalf, choosing availability over consistency, and the interesting part is why that choice is right.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters on the same argument, built around one production RAG platform and
+        finishing on the 5G and 6G edge. The newsletter stands on its own, and you never need the
+        book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HDG88RCB" target="_blank" rel="noopener">Distributed Systems Thinking on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/distributed-systems-thinking/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/distributed-systems-thinking/05-the-prompt-is-an-api-contract.html">&larr; The prompt is an API contract</a>
+      <span>Issue 7 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The car that has to choose — Six Ideas, Issue 5</title>
+  <meta name="description" content="A self-driving car's camera says the obstacle is 40 metres away and its radar says 42, and the car must act on one number. The rule for combining measurements that disagree is a weighted average you can compute in one line, it was doubted by senior engineers before it navigated Apollo to the Moon, and it is the heart of the Kalman filter." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/05-the-car-that-has-to-choose.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The car that has to choose" />
+  <meta property="og:description" content="Two sensors disagree about one obstacle. The rule that fuses them weights each reading by one over its variance, lands closer to the careful sensor, and comes out sharper than either alone. Run it by hand, then meet the man whose filter was doubted before it steered Apollo." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/05-the-car-that-has-to-choose.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/six-ideas-that-run-the-world/img/fig-05-two-sensors-one-answer.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The car that has to choose",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Six Ideas" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/six-ideas-that-run-the-world/05-the-car-that-has-to-choose.html",
+    "description": "Two sensors disagree about one obstacle. The rule that fuses them weights each reading by one over its variance, lands closer to the careful sensor, and comes out sharper than either alone. Run it by hand, then meet the man whose filter was doubted before it steered Apollo."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/six-ideas-that-run-the-world/">Six Ideas</a><span class="sep">·</span>Issue 5
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Six Ideas · Issue 5</p>
+      <h1 class="article-title">The car that has to choose</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">At 100 kilometres an hour a car covers about 28 metres every second. A human driver who takes one second to notice a hazard and move a foot has already travelled those 28 metres before the brakes even begin to bite. A machine can react in about a tenth of that time. That difference, and what a machine does with it, is a matter of arithmetic before it is a matter of ethics, and this issue treats it that way, then admits where the arithmetic stops. Because the core of a self-driving system is not mysterious. It is a rule for combining measurements that disagree, and that rule is a weighted average you can compute in one line.</p>
+
+      <h2>The question, stated plainly</h2>
+
+      <p>A car&rsquo;s camera says the object ahead is 40 metres away, and its radar says 42 metres. They disagree, as real sensors always do, and the car must act on one number. Which number? It is not obvious, because averaging the two readings equally, to get 41, throws away something the car knows: one sensor may be far more trustworthy than the other. The camera judges distance from the size of things in its image and is wobbly; the radar times a reflected pulse and is sharp. A fair rule has to let the careful instrument pull harder.</p>
+
+      <p>Certainty is captured by the spread of a sensor&rsquo;s error, its variance, written &sigma;&sup2;: a small variance means a reliable sensor. The sensible rule weights each measurement by one over its variance, so the combined estimate is x&#770; = (x&#8321;/&sigma;&#8321;&sup2; + x&#8322;/&sigma;&#8322;&sup2;) / (1/&sigma;&#8321;&sup2; + 1/&sigma;&#8322;&sup2;). The answer always lands between the two readings, closer to the more certain one. That single line is the heart of the Kalman filter, the algorithm that fuses sensors in aircraft, spacecraft and self-driving cars, and here it is nothing more than a weighted average.</p>
+
+      <p>Why weight by one over the variance, and not some other way? Because that choice makes the combined estimate as reliable as possible. Write down the uncertainty of a weighted average of two independent measurements, ask which weights make that uncertainty smallest, and the answer that falls out is: weight each by one over its variance. The proof is a short optimisation, the same find-the-bottom-of-the-valley move as the least squares of issue 3, sitting at the edge of the school syllabus. The principle it lands on is worth keeping even if you take the proof on account for now: certainty should buy influence, in exactly this proportion.</p>
+
+      <h2>Run it by hand</h2>
+
+      <p>Put in the numbers. The camera says 40 metres with an uncertainty of 5 metres; the radar says 42 metres with an uncertainty of 1 metre. The radar&rsquo;s variance is 1 and the camera&rsquo;s is 25, so the radar carries 25 times the weight, and the fused estimate comes out at about 41.9 metres. It sits close to the radar, as it should. And here is the quietly remarkable part: the fused answer is also <em>sharper</em> than either sensor alone, with an uncertainty of about 0.98 metres against the radar&rsquo;s 1. Two noisy measurements, properly combined, beat the better one on its own, because each rules out some of the other&rsquo;s error. This is why a car carries a camera and a radar and a laser scanner rather than trusting one instrument. They fail in different ways, and the fusion rule turns their disagreement into a sharper answer.</p>
+
+      <pre><code>x1, s1 = 40.0, 5.0        # camera: 40 m, uncertainty 5 m
+x2, s2 = 42.0, 1.0        # radar:  42 m, uncertainty 1 m
+
+w1, w2 = 1/s1**2, 1/s2**2                 # weight = 1 / variance
+fused  = (w1*x1 + w2*x2) / (w1 + w2)
+spread = (1 / (w1 + w2)) ** 0.5
+
+print(round(fused, 2))    # 41.92 -> the estimate the car acts on
+print(round(spread, 2))   # 0.98 -> sharper than either sensor alone</code></pre>
+
+      <figure>
+        <img src="/newsletter/six-ideas-that-run-the-world/img/fig-05-two-sensors-one-answer.png" alt="The camera's wide bell curve centred at 40 metres with uncertainty 5, the radar's narrow bell curve centred at 42 metres with uncertainty 1, and the fused estimate as a slightly taller and narrower curve at 41.92 metres with uncertainty 0.98, sitting almost on top of the radar" loading="lazy" />
+        <figcaption>Each curve is one sensor&rsquo;s belief about the distance. The careful radar pulls the fused estimate almost all the way to 42, and the fused curve is narrower than either sensor&rsquo;s, because each measurement rules out part of the other&rsquo;s error.</figcaption>
+      </figure>
+
+      <h2>The uncomfortable arithmetic</h2>
+
+      <p>Now the multiplication nobody enjoys. Suppose a perception system misjudges one object in a million frames, and processes thirty frames a second. Thirty frames a second is 108,000 frames an hour, so that is one slip roughly every nine hours of driving, which sounds excellent. Multiply across a fleet of a million cars driving an hour a day and the same system produces on the order of a hundred thousand slips a day, somewhere. Most are harmless. The ethics of deployment start as this kind of calculation, a rate multiplied by an exposure, and the multiplication is the probability idea of this series doing its honest work. But the calculation does not settle whether that rate is acceptable, or who bears the cost of the rare failure. Numbers frame the question. They do not decide it. And a worth-keeping correction to a common picture: a self-driving car does not see and understand the road the way a person does. It measures, estimates, and assigns probabilities, then acts on the numbers, and when it fails it usually fails because the world produced a situation its measurements did not cover.</p>
+
+      <h2>Where school ends</h2>
+
+      <p>The one-line fusion handles a single quantity at a single instant. A real car tracks many objects moving through time, each one held as a vector, the fourth idea of this series, carrying its position and velocity together, and each must be predicted forward and then corrected as new measurements arrive, over and over, thirty times a second. That predict-and-correct loop is the full Kalman filter, and beyond it lies the field of state estimation and control theory, first-year university and past. The hardest part is not the fusion at all: reliably turning camera pixels into a list of objects with uncertainties attached, the perception problem, is a research frontier, not a solved exercise. The arithmetic of combining the measurements is school-level. The measurements themselves are the hard-won part.</p>
+
+      <h2>The man who was doubted</h2>
+
+      <p>The filter at the centre of this story was published in 1960 by Rudolf K&aacute;lm&aacute;n, a Hungarian-born engineer, and it was not welcomed. Several senior figures doubted it, and the paper was rejected by at least one journal he aimed for. What rescued it was an application. Stanley Schmidt, an engineer at a NASA laboratory, heard K&aacute;lm&aacute;n describe the method, saw that it fit the problem of navigating a spacecraft to the Moon, and adapted it for the Apollo programme. The filter guided Apollo, and from there it spread into aircraft, ships, and eventually the car in your driveway. The lesson recurs throughout this series: a powerful idea can arrive to a cool reception, and be saved not by argument but by someone who finds the problem it was made for.</p>
+
+      <p>Next issue takes up the first idea of the whole series, the exponential, and follows one curve into medicine. A drug with a six-hour half-life is taken four times a day, and that is arithmetic rather than habit; a cancer is usually about thirty doublings old before anyone can find it; and a multiplication a fifteen-year-old can do, one in a million times one in a million, is the reason the deadliest diseases are treated with two drugs at once instead of one.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Fourteen chapters, from rockets to the energy budget of the planet, every central result
+        derived with school mathematics and every number referenced, are collected in the book
+        <em>Six Ideas That Run the World</em>. The newsletter stands on its own, and you never
+        need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H9P9B5FX" target="_blank" rel="noopener">Six Ideas That Run the World on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/six-ideas-that-run-the-world/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/six-ideas-that-run-the-world/04-walking-downhill-in-the-dark.html">&larr; Walking downhill in the dark</a>
+      <span>Issue 6 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

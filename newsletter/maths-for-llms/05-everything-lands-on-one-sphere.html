@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Everything lands on one sphere — Attention, Derived, Issue 5</title>
+  <meta name="description" content="Between 2017 and 2026 everything about the transformer's normalisation changed: the mean subtraction went, the bias went, the layer moved, and a new normalisation appeared inside attention. None of it was tuning. Each change is forced by a computation that fits on a page, and the residual stream they all serve turns out to be a shared memory, not a pipeline." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-llms/05-everything-lands-on-one-sphere.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Everything lands on one sphere" />
+  <meta property="og:description" content="RMSNorm is a projection onto a sphere of radius root d, its Jacobian is a projector that can only delete directions, pre-norm wins because of one exact identity term, and the residual stream is a bus oversubscribed 64 to 1." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-llms/05-everything-lands-on-one-sphere.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-llms/img/fig-05-the-sphere-and-the-bus.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Everything lands on one sphere",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Attention, Derived" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-llms/05-everything-lands-on-one-sphere.html",
+    "description": "RMSNorm is a projection onto a sphere of radius root d, its Jacobian is a projector that can only delete directions, pre-norm wins because of one exact identity term, and the residual stream is a bus oversubscribed 64 to 1."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-llms/">Attention, Derived</a><span class="sep">·</span>Issue 5
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Attention, Derived · Issue 5</p>
+      <h1 class="article-title">Everything lands on one sphere</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Between 2017 and 2026 essentially everything about the transformer&rsquo;s normalisation wrapper changed. The mean subtraction went. The bias went. The layer moved from after the residual addition to before it. And a second normalisation appeared inside attention, where there had been none. It would be easy to read that history as a decade of knob-twiddling. It was not. Each of the four changes is forced by a computation that fits on one page, and this issue does all four, then ends on the object the wrapper exists to serve: the residual stream, which is not a pipeline at all but a shared memory that every block reads from and writes to.</p>
+
+      <h2>What the mean subtraction was worth</h2>
+
+      <p>Start with the oldest change. The original LayerNorm subtracts each activation&rsquo;s mean across its features, then rescales; RMSNorm keeps the rescaling and drops the subtraction. What was the subtraction doing? The question has a measurable answer. For an activation x with d features, let &rho; be |mean(x)| divided by RMS(x), the share of the activation&rsquo;s scale carried by its component along the all-ones direction, which is exactly the direction centring deletes. Measure &rho; through the layers of a trained model and it comes out around one part in a hundred at every depth. Since the removed share of the squared norm is &rho;&sup2;, centring was deleting roughly one part in ten thousand of the signal. The model was not using the all-ones direction, so subtracting it bought nothing, and the bias went with it for the same reason: a learned offset on a stream whose mean is one percent of its scale is a parameter you pay for and do not use. On a 7-billion-parameter model the switch saves only about 266,000 parameters, which is 0.004 percent and is not why anyone did it; the real saving is that RMSNorm makes one pass over the features where LayerNorm makes two, on an operation whose cost is memory traffic rather than arithmetic.</p>
+
+      <h2>A projection onto a sphere</h2>
+
+      <p>With centring gone, what remains is strikingly clean. RMSNorm divides x by its RMS and multiplies by a learned gain, and since RMS(x) is &#x2016;x&#x2016;/&radic;d, the map before the gain sends every nonzero activation to a vector of length exactly &radic;d. Long or short, every token&rsquo;s vector lands on one sphere, of radius &radic;d, and the gain then stretches that sphere one axis at a time. That is the whole operation: a radial projection, then a diagonal rescale.</p>
+
+      <p>Two consequences follow, and both live in the backward pass, which is where normalisation actually earns its keep. First, the map is scale-invariant, y(cx) = y(x) for any positive c, so the gradient arriving at a token is rescaled by one over its RMS: a token whose activation happens to run large receives a proportionally smaller update, a per-example adaptive learning rate obtained for free. Second, differentiate the map and the Jacobian comes out as 1/RMS(x) times (I &minus; x&#770;x&#770;&#x1d40;) times the gain, and the middle factor is an orthogonal projector: symmetric, idempotent, rank d &minus; 1, annihilating the direction of x itself. A projector cannot amplify a gradient and cannot rotate one. All it can do is delete a direction. LayerNorm&rsquo;s Jacobian is the same object of rank d &minus; 2, killing the all-ones direction as well, and that one-rank gap is the entire mathematical content of &ldquo;LayerNorm minus the mean&rdquo;. The popular story, that normalisation works by keeping activations zero-mean and unit-variance, survives none of this: the zero-mean part was worth &rho;&sup2;, which is nothing.</p>
+
+      <pre><code>import numpy as np
+
+def rmsnorm(x, g):
+    return x / np.sqrt(np.mean(x**2)) * g
+
+rng = np.random.default_rng(0)
+d = 4096
+x = rng.normal(size=d)                      # one residual-stream activation
+g = np.ones(d)                              # gain, identity for the check
+y = rmsnorm(x, g)
+
+print(round(np.linalg.norm(y), 1))          # 64.0 = sqrt(4096): on the sphere
+print(np.allclose(rmsnorm(3.7 * x, g), y))  # True -> scale invariance
+
+h, xhat = 1e-6, x / np.linalg.norm(x)       # nudge x along its own direction
+radial = (rmsnorm(x + h*xhat, g) - rmsnorm(x - h*xhat, g)) / (2*h)
+print(round(np.linalg.norm(radial), 6))     # 0.0 -> the radial gradient dies</code></pre>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-llms/img/fig-05-the-sphere-and-the-bus-stacked.png" />
+          <img src="/newsletter/maths-for-llms/img/fig-05-the-sphere-and-the-bus.png" alt="Left, activations of different lengths drawn in two dimensions, every one projected onto the same circle of radius root d; right, a log-scale bar chart showing the residual stream's 4,096 dimensions against 8,192 write directions per layer and 262,144 across 32 layers, an oversubscription of 64 to 1" loading="lazy" />
+        </picture>
+        <figcaption>Left, the operation: whatever its length, every activation is projected onto the sphere of radius &radic;d, and the gain then stretches the sphere axis by axis. Right, the consequence of the unrolled stream: 32 layers can write along 262,144 directions into a space with 4,096, so the blocks cannot be keeping to private subspaces.</figcaption>
+      </figure>
+
+      <h2>Where the layer sits, and why it moved</h2>
+
+      <p>The wiring question is whether the normalisation sits after the residual addition, post-norm, as in 2017, or before the block, pre-norm, as now. One page of chain rule separates them. Differentiate the pre-norm update x + F(N(x)) and the layer&rsquo;s Jacobian is I plus a product of block terms: the identity comes from the residual path and nothing multiplies it. Differentiate post-norm and the normalisation Jacobian sits on the path itself, multiplying everything that flows through. Across L layers, the pre-norm product keeps one exact identity term whose size depends on neither L nor the blocks, which bounds the gradient reaching layer one from below whatever the blocks are doing. The post-norm product has no such term; the log of its norm is a sum of L contributions, a random walk that is exponential in depth in whichever direction the draw happens to go, which is why early post-norm training needed careful warmup schedules and deep post-norm models diverged without them. Pre-norm&rsquo;s price, stated honestly: it writes into an unnormalised stream, so the stream&rsquo;s norm grows with depth, a late block&rsquo;s write is attenuated against what has already accumulated, and a final normalisation before the unembedding becomes mandatory rather than cosmetic.</p>
+
+      <h2>Stop assuming, start enforcing</h2>
+
+      <p>The fourth change closes a debt from issue 3. The 1/&radic;d scaling of attention logits was justified by a variance argument that needed q and k independent with well-behaved entries, and neither hypothesis survives training; the symptom, late in a large run, is a maximum logit growing past 50, attention entropy collapsing in a head or two, then an irrecoverable loss spike in low precision. The 2026 fix stops assuming and starts enforcing. QK-norm applies RMS normalisation to q and k separately inside each head before the score, which fixes both lengths at &radic;d&#8341;, and the Cauchy-Schwarz inequality does the rest: the pre-gain logit can never exceed &radic;d&#8341;, which at head dimension 128 is 11.31. The statistical argument is not repaired; it is made unnecessary, because the logit is now a bounded cosine similarity by construction. The cost on a 7-billion-parameter model is 8,192 parameters, about a ten-thousandth of a percent, which makes it the cheapest stability intervention in the architecture. The bound has a price worth knowing: it also caps how peaked attention can be, severely so at small head dimensions, which is a real constraint on that design choice.</p>
+
+      <h2>The stream is a bus, not a pipeline</h2>
+
+      <p>Unroll the pre-norm recursion and the network stops looking like a chain. The final state is the embedding plus the sum of every block&rsquo;s contribution: x&#8343; = x&#8320; + &Sigma; F&#8343;(N(x&#8343;)). Nothing overwrites anything. Every block adds to a running sum, and every block reads from it through linear maps. That makes the residual stream a shared memory with additive writes and linear reads, a bus, rather than a pipeline in which each layer transforms the previous layer&rsquo;s output. And the bus is heavily oversubscribed: in a representative 2026 configuration, each layer&rsquo;s 32 attention heads write at rank up to 128 each and its MLP at rank up to 4,096, which is 8,192 write directions per layer and 262,144 across 32 layers, into a stream with 4,096 dimensions. Sixty-four times more write capacity than there is room. The blocks cannot be using orthogonal subspaces, and what they do instead, features sharing directions in superposition, is where interpretability research now lives. The bus picture also explains, in one sentence each, two facts that otherwise look like luck: fine-tuning works at low rank because adjusting an additive, linearly-read contribution means adding a small correction to one linear map, and interpretability keeps finding meaningful directions rather than meaningful neurons because the stream is a sum in a vector space, where direction is the natural unit.</p>
+
+      <p>Note what the chapter-long accounting has bought. Four architectural changes that read as fashion from the outside, each pinned to a page of arithmetic: a measured &rho; for the mean, a projector rank for the Jacobian, one exact identity term for the wiring, and a Cauchy-Schwarz bound for the logits. Next issue enters the block the stream feeds that this series has so far stepped around: the feed-forward network, which holds roughly two thirds of a transformer&rsquo;s non-embedding parameters, is best read as a key-value memory, and hides in its gating a degree-2 interaction that took the field years to settle on.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from the toolkit to scaling laws, quantisation and interpretability, each
+        one question answered by a full derivation with the arithmetic checked by continuous
+        integration, are collected in the book <em>Maths for LLMs</em>. The newsletter stands on
+        its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFF1RKFW" target="_blank" rel="noopener">Maths for LLMs on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-llms/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-llms/04-position-is-a-rotation.html">&larr; Position is a rotation</a>
+      <span>Issue 6 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

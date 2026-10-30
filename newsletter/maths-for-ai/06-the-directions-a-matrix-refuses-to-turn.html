@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The directions a matrix refuses to turn — The Maths Underneath, Issue 6</title>
+  <meta name="description" content="Most vectors come out of a matrix rotated. A special few come out pointing exactly the way they went in, only stretched, and those directions are how Google first ranked the web, how data confesses which way it spreads, and how a photograph shrinks to a tenth of its size. Eigenvectors, the SVD, and PCA, each run in a few lines of NumPy." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-ai/06-the-directions-a-matrix-refuses-to-turn.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The directions a matrix refuses to turn" />
+  <meta property="og:description" content="Eigenvectors are the directions a matrix only stretches, the SVD factors any matrix into rotate, scale, rotate, and PCA lets the data choose its own axes. One idea, three names, and the tool behind PageRank, compression, and LoRA." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-ai/06-the-directions-a-matrix-refuses-to-turn.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-ai/img/fig-06-the-directions-that-hold.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The directions a matrix refuses to turn",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Maths Underneath" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-ai/06-the-directions-a-matrix-refuses-to-turn.html",
+    "description": "Eigenvectors are the directions a matrix only stretches, the SVD factors any matrix into rotate, scale, rotate, and PCA lets the data choose its own axes. One idea, three names, and the tool behind PageRank, compression, and LoRA."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-ai/">The Maths Underneath</a><span class="sep">·</span>Issue 6
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Maths Underneath · Issue 6</p>
+      <h1 class="article-title">The directions a matrix refuses to turn</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Issue 5 ended on a fact worth repeating: real data usually has fewer independent directions than it has columns. This issue turns that fact into a tool. Feed most vectors through a matrix and they come out rotated, pointing somewhere new. A special few come out pointing exactly the way they went in, only stretched, and those stubborn directions are the key to three of the most-used ideas in all of data work. They are how Google first ranked the web, how a covariance matrix confesses which way the data spreads, and how a photograph is compressed to a tenth of its size while your eye barely notices. One idea, three names: eigenvectors, the SVD, and PCA.</p>
+
+      <h2>The stubborn directions</h2>
+
+      <p>Take A = [[2, 1], [1, 2]] and feed it the vector (1, 0). Out comes (2, 1), which points somewhere new: the matrix turned it. Now feed it (1, 1). Out comes (3, 3), which is exactly 3 times what went in. Same line, three times the length. That direction is special for this matrix, and it has a special name. A vector &#7869; that a matrix only stretches, so that A&#7869; = &lambda;&#7869;, is an eigenvector, and the stretch factor &lambda; is its eigenvalue. Eigen is German for &ldquo;own&rdquo;: an eigenvector is a matrix&rsquo;s own direction, the axis it is built around. This A has a second one, (1, &minus;1), which it stretches by exactly 1, leaving it untouched.</p>
+
+      <pre><code>import numpy as np
+np.set_printoptions(precision=3, suppress=True)
+
+A = np.array([[2.0, 1.0],
+              [1.0, 2.0]])
+
+values, vectors = np.linalg.eigh(A)   # eigh: the right call for symmetric A
+print(values)          # [1. 3.] -> the eigenvalues, smallest first
+print(vectors[:, 1])   # [0.707 0.707] -> the eigenvector for 3
+
+e = vectors[:, 1]
+print(A @ e)           # [2.121 2.121]
+print(3 * e)           # [2.121 2.121] -> the same vector: A only stretched it</code></pre>
+
+      <p>Why care about two stubborn directions? Because once you know them, you know everything the matrix does. Any vector is a combination of (1, 1) and (1, &minus;1), and A simply stretches each part by its own factor. Written in its own eigenvector axes, the matrix is pure scaling, with no mixing between directions, and a large eigenvalue marks a direction the matrix amplifies while one near zero marks a direction it nearly flattens. Wherever the question is &ldquo;which direction dominates this system?&rdquo;, an eigenvector is the answer. Google&rsquo;s original PageRank is precisely that: the leading eigenvector of a giant matrix of web links, whose entries are the rankings of the pages.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-ai/img/fig-06-the-directions-that-hold-stacked.png" />
+          <img src="/newsletter/maths-for-ai/img/fig-06-the-directions-that-hold.png" alt="Left, the matrix with rows 2 1 and 1 2 turns an ordinary vector to a new direction while its two eigenvectors stay on their own lines, one stretched by 3 and one by 1; right, a correlated cloud of 200 data points with the first principal component arrow carrying 94 percent of the variance and the second carrying 6 percent" loading="lazy" />
+        </picture>
+        <figcaption>Left, an ordinary vector is turned by A while the two eigenvectors hold their lines and are only stretched, by 3 and by 1. Right, the same idea applied to data: the eigenvectors of the covariance matrix are the axes the cloud actually lies along, one carrying 94 percent of the spread and the other 6.</figcaption>
+      </figure>
+
+      <h2>Every matrix is a rotate, scale, rotate</h2>
+
+      <p>Eigenvectors have two limitations: they only exist for square matrices, and even then not always in a clean form. The singular value decomposition removes both. It applies to any matrix at all, and it always exists. The SVD factors a matrix into three simple pieces, A = U&Sigma;V&#x1d40;, where V&#x1d40; and U are rotations and &Sigma; is diagonal, holding non-negative numbers called the singular values. Read right to left on an input, the recipe is: rotate, scale each axis by a singular value, rotate again. Any linear transformation, however tangled it looks, is only ever those three steps. The geometry is concrete: feed the whole unit circle through a matrix and it always comes out as an ellipse, and the singular values are the lengths of that ellipse&rsquo;s semi-axes.</p>
+
+      <pre><code>M = np.array([[1.5, 0.9],
+              [0.2, 1.2]])
+
+U, s, Vt = np.linalg.svd(M)
+print(s)                              # [1.965 0.825] -> the singular values
+print(np.allclose((U * s) @ Vt, M))   # True -> the three pieces rebuild M</code></pre>
+
+      <p>The detail that makes the SVD useful rather than merely elegant is that the singular values come sorted, largest first. The first few carry the strongest stretching, and the small ones at the tail often carry almost nothing. Keep the large ones, drop the rest, and you keep most of the matrix while storing far less of it. Run that truncation on a photograph, which is just a matrix of pixel values, and the top 50 singular values of a 512 by 512 image typically hold about 98 percent of its energy in a fifth of the storage, which is why the rebuilt picture is hard to tell from the original. The same factorization is the engine inside recommendation systems: a matrix of users against films, mostly empty, reveals under the SVD a small number of hidden taste dimensions that explain most of the ratings.</p>
+
+      <h2>Let the data choose the axes</h2>
+
+      <p>Now point the idea at data. Plot two correlated features and the cloud does not spread evenly; it stretches far along some slanted direction and stays thin across it. Principal component analysis finds those directions, and the recipe is three lines. Center the data by subtracting the mean, compute the covariance matrix, and take its eigenvectors. The eigenvectors are the principal components, the axes of spread, and their eigenvalues say how much variance lives along each one. This is the payoff of the opening section: the important directions of a dataset are the eigenvectors of its covariance.</p>
+
+      <pre><code>rng = np.random.default_rng(0)
+base = rng.normal(size=(200, 2))
+data = base @ np.array([[2.0, 0.0], [1.2, 0.7]]).T + np.array([5.0, 3.0])
+
+Xc = data - data.mean(axis=0)              # center
+cov = np.cov(Xc.T)                         # 2x2 covariance matrix
+values, vectors = np.linalg.eigh(cov)      # its eigenvectors
+order = np.argsort(values)[::-1]           # largest variance first
+explained = values[order] / values.sum()
+print(explained)                           # [0.94 0.06] -> PC1 holds 94%</code></pre>
+
+      <p>With the directions ranked, reduction is simple: keep the top few components and project the data onto them. The cloud above can be described by one number per point, its position along the first component, and only 6 percent of the variation is lost. The same rule scales to a thousand features, where perhaps fifty components hold 95 percent of everything and the other 950 can go. That is how embeddings with hundreds of dimensions get drawn as flat maps you can look at, how training speeds up when redundant features collapse into a few real ones, and how noise gets stripped before it can be memorised. One caution from the engine room: PCA is sensitive to feature scale, because a feature measured in large units shows large variance for no real reason, so standardise first unless the features already share units. And it only finds straight-line structure; a spiral will defeat it.</p>
+
+      <p>Note that eigenvectors, the SVD, and PCA are three views of one idea, and the bridge is exact. PCA is the SVD applied to centered data, and the explained-variance ratio of a component is the same quantity as the energy fraction of a singular value. Which is why one more modern trick belongs in this family: low-rank fine-tuning. A method called LoRA updates a giant weight matrix in a large language model with a tiny low-rank correction, wagering that the useful change lives in very few directions. Issue 5 said rank is why the bet pays off. This issue is the machinery that finds those directions.</p>
+
+      <p>So far the mathematics has been static: fixed matrices acting on fixed data. Learning is not static. A model starts with bad numbers, measures how wrong it is, and adjusts, and to adjust well it needs to know which way to move every number and by how much. That is a question about rates of change. Next issue begins the calculus: the derivative built from scratch as a shrinking ratio, the handful of rules you actually need, and the gradient, the vector that points straight uphill on the error surface and whose reverse is the single most-travelled direction in machine learning.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">Follow along with the code</p>
+      <p>
+        Everything in this issue runs in the free companion notebook for this series, which opens in
+        your browser with nothing to install. The full sequence, with all the figures and worked
+        examples, is collected in the book <em>Maths for AI</em>. The newsletter stands on its own,
+        and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://colab.research.google.com/github/biddu/maths-for-ai-notebooks/blob/main/04_eigen_svd_pca.ipynb" target="_blank" rel="noopener">Open the notebook</a>
+        <a class="btn btn-outline" href="https://www.amazon.co.uk/dp/B0H7QM2BB6" target="_blank" rel="noopener">Maths for AI on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-ai/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-ai/05-running-the-machine-backwards.html">&larr; Running the machine backwards</a>
+      <span>Issue 7 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
