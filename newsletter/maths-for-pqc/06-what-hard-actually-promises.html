@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What hard actually promises — After Shor, Issue 6</title>
+  <meta name="description" content="The shortest vector problem, the closest vector problem, and their approximation versions, stated properly: where NP-hardness is proven, where it provably runs out, and the polynomial gap in between where every NIST lattice standard actually lives. Plus the half of the story nobody quotes: the worst-case-to-average-case reduction, and exactly what it does and does not buy." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-pqc/06-what-hard-actually-promises.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="What hard actually promises" />
+  <meta property="og:description" content="SVP, CVP, and the approximation factor that changes everything. Hardness proofs run out near small constants, LLL only binds at exponential factors, and cryptography lives in the gap, backed by a reduction that is conditional from beginning to end." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-pqc/06-what-hard-actually-promises.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-pqc/img/fig-06-the-closest-point.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What hard actually promises",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "After Shor" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-pqc/06-what-hard-actually-promises.html",
+    "description": "SVP and CVP stated properly, the approximation factors where NP-hardness is proven and where it provably runs out, the polynomial gap the NIST standards live in, and what the worst-case-to-average-case reduction does and does not buy."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-pqc/">After Shor</a><span class="sep">·</span>Issue 6
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">After Shor · Issue 6</p>
+      <h1 class="article-title">What hard actually promises</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>8 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Issue 5 built the object: a lattice, its good and terrible bases, the shortest vector no basis can hide. This issue asks the question that makes the object a cryptosystem. Given a lattice, how hard is it, actually, to find a short vector, or the lattice point closest to a target that is not on the grid? The word &ldquo;hard&rdquo; turns out to need real care: hard for whom, hard by how much, and hard in what sense, because the answer changes completely depending on which question is being asked. Neither FIPS 203 nor FIPS 204 names these problems directly; the standards specify arithmetic and state security categories. This issue supplies the missing layer, and it is precise about the one thing the sales pitches never are: what &ldquo;hard&rdquo; does and does not promise.</p>
+
+      <h2>Two questions everything else is built from</h2>
+
+      <p>The shortest vector problem, SVP: given a basis of a lattice, find a nonzero lattice vector of minimum length, the &lambda;&#8321; of issue 5. The closest vector problem, CVP: given a basis and a target point t that need not be on the lattice, find the lattice point nearest to t. SVP asks how close the origin is to the rest of the grid; CVP asks the same question of an arbitrary point, and it is the one decryption will actually need, because a ciphertext is a lattice point plus deliberate noise, and reading it means finding the point under the noise. On issue 5&rsquo;s running example, the lattice with basis b&#8321; = (4, 2) and b&#8322; = (1, 3), both problems can simply be done by brute force, which is worth one look before the dimensions climb out of reach.</p>
+
+      <pre><code>import numpy as np
+
+b1, b2 = np.array([4, 2]), np.array([1, 3])
+t = np.array([2.0, 2.0])
+
+best = min(((np.linalg.norm(c1*b1 + c2*b2 - t), c1*b1 + c2*b2)
+            for c1 in range(-6, 7) for c2 in range(-6, 7)),
+           key=lambda p: p[0])
+print(best[1], round(best[0], 3))   # [1 3] 1.414 -> b2 is the closest point, sqrt(2) away</code></pre>
+
+      <p>It is tempting to assume CVP is basically SVP shifted, and in one direction that is even true: SVP reduces to CVP. But history ran the other way. Van Emde Boas proved CVP is NP-hard in 1981 by a fairly direct reduction; exact SVP resisted for another seventeen years, until Ajtai&rsquo;s 1998 proof, and that proof needed a randomised reduction, a strictly weaker kind of guarantee, with no deterministic proof known even today. A general target point gives a reduction far more room to work with than the single, origin-anchored promise &ldquo;find something short&rdquo;.</p>
+
+      <h2>Exact is the wrong question</h2>
+
+      <p>Cryptography never needs exact SVP or CVP to be hard. It needs the approximate versions: &gamma;-SVP asks for a nonzero lattice vector within a factor &gamma; of the shortest, &gamma;-CVP for a lattice point within &gamma; of the true closest. Two facts bracket everything that is known. On one side, hardness proofs run out fast: NP-hardness is known for exact SVP and for small constant factors, always under randomised reductions, and then stops. Aharonov and Regev proved that at &gamma; around &radic;n the problem sits in NP &cap; coNP, where both yes and no answers have short checkable certificates; problems with that property are not believed to be NP-hard, because a well-known complexity collapse would follow. That is genuine evidence, not an absence of proof. On the other side, the famous LLL algorithm of 1982 runs in polynomial time but only guarantees a vector within an exponential factor of the shortest, on the order of 2<sup>n/2</sup>, a bound so loose it only starts to mean anything in the hundreds of dimensions the standards use.</p>
+
+      <p>Cryptographic parameters live squarely in the gap those two facts leave open: polynomial factors, &gamma; = poly(n), far above where NP-hardness has ever been proven and far below where LLL makes the problem easy. Nobody has proven a fast algorithm cannot exist there. Nobody has found one, in more than forty years of trying. That gap, stated exactly, is the honest foundation of every lattice standard, and the misconception to retire is the sentence &ldquo;SVP is NP-hard, so ML-KEM is provably as hard as an NP-hard problem&rdquo;. The NP-hardness theorem is about exact SVP; the factor ML-KEM relies on is polynomial, in the regime where NP-hardness is thought unlikely. Citing one as the reason for the other quotes a true theorem about the wrong problem.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-pqc/img/fig-06-the-closest-point-stacked.png" />
+          <img src="/newsletter/maths-for-pqc/img/fig-06-the-closest-point.png" alt="Left, the running-example lattice with the off-lattice target at 2, 2 marked with a cross, the closest lattice point 1, 3 circled at distance root 2, and a dashed uniqueness circle of radius half lambda-one around the target; right, the approximation-factor line for gamma from 1 to exponential, with the NP-hard zone at small constants, the NP intersect coNP boundary near root n, the polynomial zone where the NIST standards live marked as an open question, and the LLL guarantee far right at 2 to the n over 2" loading="lazy" />
+        </picture>
+        <figcaption>Left, CVP made concrete: the target (2, 2) is off the grid, and brute force confirms b&#8322; = (1, 3) is the nearest lattice point, &radic;2 away. Right, the whole hardness picture on one line: NP-hardness is proven only near &gamma; = 1, provably unlikely past &radic;n, and the standards sit in the polynomial gap between, where the honest label is &ldquo;open, and unbroken for forty years&rdquo;.</figcaption>
+      </figure>
+
+      <h2>The promise that makes keys possible</h2>
+
+      <p>Everything so far concerns one particular lattice, and that is still not what a cryptosystem needs. A scheme cannot hand every attacker one carefully chosen hard lattice; it generates fresh random keys, so it needs random instances to be hard, not only the worst case. Closing that gap is the real achievement of the field. Ajtai showed in 1996 that an algorithm solving the average-case problem behind signatures, for even a noticeable fraction of random instances, would yield an algorithm for worst-case lattice problems on every lattice of that dimension. Regev extended the strategy in 2005 to Learning With Errors, the problem ML-KEM actually rests on, with one structural surprise worth flagging: his reduction uses a quantum algorithm as a subroutine, even though LWE itself is entirely classical to state and to use. The upshot is precise: breaking the average case would break the worst case. A random key is not a lottery ticket that might happen to be easy; if most keys were easy, all lattices would be.</p>
+
+      <p>And here is what the reduction does not buy, stated as plainly as the field&rsquo;s own honest papers state it. It is a conditional statement from beginning to end: if worst-case lattice problems are hard, then the random instances are hard too. It does not supply the if. Worst-case hardness at polynomial factors remains an open question, supported by decades of failed attacks, not by proof. Nor does the reduction name a concrete operation count for a specific parameter set; turning &ldquo;hard&rdquo; into the number behind a security category is a separate costing exercise, and it is the next issue&rsquo;s subject but one. &ldquo;Hard&rdquo;, in this series, from here on, means exactly this: nobody has published an algorithm that breaks it, and there is a genuine mathematical reason to expect that finding one is at least as hard as a problem the field has failed to crack for over forty years. That is the strongest honest claim available in any cryptography built on an unproven assumption, and it is a different claim from a proof.</p>
+
+      <p>One technical gift from the geometry deserves its own sentence, because decryption will spend it later. If a target is promised to lie within less than half of &lambda;&#8321; of some lattice point, that point is unique: two candidates within that radius would differ by a lattice vector shorter than the shortest, which is a contradiction by the triangle inequality. On the running example, &lambda;&#8321; = &radic;10, the shortest vector being b&#8322; &minus; b&#8321; = (&minus;3, 1), so noise of length 0.583 decodes uniquely while a target parked exactly halfway between two lattice points, at distance 1.581 from each, genuinely ties. The half is tight, not convenient, and that uniqueness radius is precisely the room a ciphertext&rsquo;s noise is allowed to occupy.</p>
+
+      <p>The vocabulary is now in place, and the next issue spends it. The problems the standards actually ask an attacker to solve are not SVP or CVP by name but two average-case problems built on issue 5&rsquo;s q-ary lattices: Short Integer Solution, behind the signatures, and Learning With Errors, behind the encryption, each one a worst-case lattice problem wearing a random matrix. Next issue states both properly, shows how a noisy linear system hides a secret, and connects them back, through the reduction sketched above, to the hard problems this issue named.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from what quantum computing actually breaks through lattices, Learning
+        With Errors and the NIST standards read clause by clause, with 196 exercises and full
+        solutions, are collected in the book <em>Maths for Post-Quantum Cryptography</em>. The
+        newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFLYZQ3B/" target="_blank" rel="noopener">Maths for Post-Quantum Cryptography on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-pqc/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-pqc/05-an-infinite-grid-and-its-shortest-step.html">&larr; An infinite grid, and its shortest step</a>
+      <span>Issue 7 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

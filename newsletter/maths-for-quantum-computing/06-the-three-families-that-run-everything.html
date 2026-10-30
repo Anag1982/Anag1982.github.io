@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The three families that run everything — Amplitudes, Issue 6</title>
+  <meta name="description" content="Three families of matrices run all of quantum computing: Hermitian matrices, whose always-real eigenvalues are the numbers a measurement can report; unitary matrices, the length-preservers that every gate must be; and projectors, which satisfy P squared equals P and pick one outcome out of a state. Each family checked in a line of NumPy." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-quantum-computing/06-the-three-families-that-run-everything.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The three families that run everything" />
+  <meta property="og:description" content="Hermitian, unitary, projector: one family holds the measurable numbers, one holds every legal gate, and one does the measuring. Why Hermitian eigenvalues must be real, why gates must preserve length, and why P squared equals P is the whole story of an outcome." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/06-the-three-families-that-run-everything.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-quantum-computing/img/fig-06-three-families.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The three families that run everything",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Amplitudes" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-quantum-computing/06-the-three-families-that-run-everything.html",
+    "description": "Hermitian matrices hold the measurable numbers, unitary matrices hold every legal gate, and projectors do the measuring. The three families of quantum computing, each with its one-line test and a short proof of its central fact."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-quantum-computing/">Amplitudes</a><span class="sep">·</span>Issue 6
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Amplitudes · Issue 6</p>
+      <h1 class="article-title">The three families that run everything</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>6 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Issue 4 established that a gate is a matrix, and issue 5 built the inner product that compares two states. This issue sorts the matrices themselves. Out of all the matrices that exist, quantum computing runs on exactly three special families. Hermitian matrices hold the numbers a measurement can report. Unitary matrices hold every operation a quantum computer is allowed to perform. Projectors do the reporting, picking one outcome out of a state. Each family is defined by one short equation, each equation has a one-line NumPy test, and each earns its place for a reason you can prove in a few lines. Learn the three and the rest of the subject is vocabulary.</p>
+
+      <h2>Hermitian: equal to its own dagger</h2>
+
+      <p>The dagger, from issue 5, is conjugate-transpose: flip the matrix across its diagonal and conjugate every entry. A matrix equal to its own dagger, A = A&dagger;, is called Hermitian. The most famous example in the subject is the Pauli Y matrix, whose entries are purely imaginary and yet whose dagger lands exactly back on itself.</p>
+
+      <pre><code>import numpy as np
+
+Y = np.array([[0, -1j],
+              [1j,  0]])
+
+print(np.allclose(Y, Y.conj().T))   # True -> Y is Hermitian
+print(np.linalg.eigvalsh(Y))        # [-1.  1.] -> both eigenvalues real</code></pre>
+
+      <p>Those eigenvalues being real is not a coincidence of this example. It is the family&rsquo;s defining theorem, and the proof is two lines with issue 5&rsquo;s machinery. Take an eigenvector v of a Hermitian A with eigenvalue &lambda;, and look at the single number v&dagger;Av. Dagger the whole expression and it comes back to itself, because (v&dagger;Av)&dagger; = v&dagger;A&dagger;v = v&dagger;Av, so the number equals its own conjugate, which forces it to be real. But v&dagger;Av is also &lambda; times v&dagger;v, and v&dagger;v is a real positive length. A real number divided by a real number: &lambda; is real. Every eigenvalue of every Hermitian matrix, whatever imaginary soup its entries are, is a real number. That is why physics stores every measurable quantity, energy, spin, position, in a Hermitian matrix: the eigenvalues are the values a measurement can return, and a laboratory instrument cannot display 3 + 2i.</p>
+
+      <h2>Unitary: the length-preservers</h2>
+
+      <p>The second family was introduced in issue 4 as the rule a gate must obey; now it earns its place. A matrix U is unitary when U&dagger;U = I, that is, when its dagger is its own inverse. The consequence that matters sits one line away. Send any state v through U and compute the new length-squared: (Uv)&dagger;(Uv) = v&dagger;U&dagger;Uv = v&dagger;v. The length does not change. Ever, for any input. And length is not decoration here: issue 3 established that the squared amplitudes of a state are probabilities and must total 1. A matrix that changed a state&rsquo;s length would create or destroy probability, and so could not be a legal operation on a qubit. Thus every gate must be unitary, and every unitary is a legal gate. The rule also hands you reversibility for free: U&dagger; undoes U exactly, so a quantum computation can always be run backwards. A classical AND gate, which maps two bits to one and forgets its inputs, has no such inverse, and that difference in reversibility is one of the deepest dividing lines between the two kinds of computing.</p>
+
+      <pre><code>H = np.array([[1,  1],
+              [1, -1]]) / np.sqrt(2)
+
+print(np.allclose(H.conj().T @ H, np.eye(2)))   # True -> H is unitary
+
+v = np.array([0.6, 0.8])
+print(np.linalg.norm(v))       # 1.0
+print(np.linalg.norm(H @ v))   # 0.9999999999999999 -> the length survives</code></pre>
+
+      <p>Note that H passes the Hermitian test too: it equals its own dagger. A matrix can hold dual citizenship, and the Hadamard gate is the celebrated case, both a legal gate and a measurable quantity, its own inverse into the bargain. The families overlap; the membership tests do not blur.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-quantum-computing/img/fig-06-three-families-stacked.png" />
+          <img src="/newsletter/maths-for-quantum-computing/img/fig-06-three-families.png" alt="Left, the unit circle of states with the vector 0.6, 0.8 and its image under the Hadamard gate, both arrows ending exactly on the circle because a unitary preserves length; right, the same state projected by P0 onto the horizontal axis of the 0 outcome, the dashed drop line meeting the axis at 0.6 and the caption noting the squared length 0.36 is the measurement probability" loading="lazy" />
+        </picture>
+        <figcaption>Left, a unitary at work: the state (0.6, 0.8) and its image under H both end on the unit circle, because a gate may turn a state but never stretch it. Right, a projector at work: P&#8320; drops the same state onto the |0&#x27e9; axis, and the squared length of the shadow, 0.36, is the probability that a measurement reports 0.</figcaption>
+      </figure>
+
+      <h2>Projectors: the matrices that choose</h2>
+
+      <p>The third family is the strangest and the most physical. A projector is a Hermitian matrix with P&sup2; = P: applying it twice is the same as applying it once. The simplest one is built from a basis state by the outer product of issue 5, P&#8320; = |0&#x27e9;&#x27e8;0|, which in matrix form has a single 1 in the top-left corner. Feed it any state and it keeps the |0&#x27e9; part and deletes the rest, casting the state&rsquo;s shadow onto one axis. The equation P&sup2; = P is just the geometry talking: once a vector is flat on the floor, flattening it again changes nothing.</p>
+
+      <pre><code>ket0 = np.array([[1.0],
+                 [0.0]])
+P0 = ket0 @ ket0.conj().T
+
+print(np.allclose(P0 @ P0, P0))   # True -> a projector: twice is once
+
+psi = np.array([[0.6],
+                [0.8]])
+prob = (psi.conj().T @ P0 @ psi).real.item()
+print(prob)                       # 0.36 -> the chance a measurement finds 0</code></pre>
+
+      <p>That last number closes the loop with issue 5. For the state &psi; = 0.6|0&#x27e9; + 0.8|1&#x27e9;, the quantity &#x27e8;&psi;|P&#8320;|&psi;&#x27e9; works out to 0.36, which is exactly |&#x27e8;0|&psi;&#x27e9;|&sup2;, the squared overlap that issue 5 named as the probability of finding the state as |0&#x27e9;. A measurement, in the mathematics, is a family of projectors, one per possible outcome, and the state&rsquo;s squared shadow on each one is that outcome&rsquo;s probability. The projector does not have to point along a basis axis either: build P&#8330; = |+&#x27e9;&#x27e8;+| from the diagonal state and every entry is 0.5, and it asks a different question of the same state.</p>
+
+      <p>One honest caution: the three tests are numerical, and np.allclose is doing quiet work in every one of them. Floating-point arithmetic leaves residues of 10&#8315;&sup1;&#8310; in matrices that are exactly Hermitian or unitary on paper, so an equality test written with == will betray you where a tolerance test will not. The companion notebook wraps all three tests into predicate functions, is_hermitian, is_unitary, is_projector, and runs them across a zoo of examples, including the matrices that fool a first guess: diag(1, i) is unitary but not Hermitian, diag(2, 3) is Hermitian but nothing else, and X, like H, is both.</p>
+
+      <p>You can now write states, move them with unitaries, and ask projectors for the probability of each outcome. What this issue did not explain is where the measurement results themselves live: the real eigenvalues of the Hermitian section were asserted to be &ldquo;the numbers a measurement can report&rdquo; without saying which number goes with which state. Next issue makes that exact. The eigen-equation Av = &lambda;v sorts a matrix into its own private directions and the numbers attached to them, diagonalisation rewrites the matrix as nothing but those numbers, and the punchline of the whole subject lands: the eigenvalues are the measurement results, and the eigenvectors are the states the measurement leaves behind.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        The full course, from complex numbers to the Deutsch-Jozsa algorithm, with exercises and
+        solutions and a runnable notebook for every chapter, is the book <em>Maths for Quantum
+        Computing</em>. The newsletter stands on its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.co.uk/dp/B0H7XVWYXN" target="_blank" rel="noopener">Maths for Quantum Computing on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-quantum-computing/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-quantum-computing/05-the-bra-meets-the-ket.html">&larr; The bra meets the ket</a>
+      <span>Issue 7 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

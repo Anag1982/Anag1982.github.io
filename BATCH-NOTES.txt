@@ -1,0 +1,82 @@
+NEWSLETTER BATCH 2026-10-30 (REDO) — 6 NEW issues ready to upload
+==================================================================
+
+IMPORTANT — this batch REPLACES the earlier 2026-10-30 batch from this
+morning. That earlier batch wrongly assumed the 2026-10-16 issues were
+never uploaded and regenerated them; in fact the 16 October batch is live
+on the site. This batch contains six genuinely NEW issues that follow on
+from the live 2026-10-16 ones, honouring every "next issue" teaser they
+made. If this morning's newsletter-batch-2026-10-30.zip is still in your
+Downloads, DISCARD IT and use only this one. (The 2026-10-16 batch you
+uploaded is correct and stays exactly as it is.)
+
+THE SIX NEW ISSUES (all dated 2026-10-30)
+------------------------------------------
+1. The Maths Underneath #7 — "The arrow that points uphill"
+   The derivative as a ratio that stops shrinking, the five rules that
+   cover machine learning, partials, and the gradient every training
+   step walks against. Notebook: 05_derivatives_gradients.ipynb. 6 min.
+
+2. The Expensive Answers #7 — "Why vector databases choose availability"
+   (from Post_07, essentially verbatim)
+   CAP for working architects: retrieval was never exact, stale beats
+   unavailable, the index is derived data, freshness SLO not consistency
+   pretence. Uses cap.png as fig-07-the-cap-triangle.png. 4 min.
+
+3. Amplitudes #6 — "The three families that run everything"
+   Hermitian (real eigenvalues, the measurable numbers), unitary (the
+   length-preservers every gate must be), projectors (P² = P, the squared
+   shadow is the probability). NumPy-only, as issues 1–5. 6 min.
+
+4. Six Ideas #6 — "The multiplication that saves lives"
+   Half-life sets the dosing sawtooth, thirty doublings hide a tumour,
+   and 10⁻⁶ × 10⁻⁶ = 10⁻¹² is why combination therapy wins, with the
+   Frei–Freireich story. 6 min.
+
+5. Attention, Derived #6 — "Where 14336 comes from"
+   The FFN as a key-value memory, GeLU's non-monotone dip, gating as a
+   degree-2 interaction (not an activation function), and the four-step
+   arithmetic behind intermediate_size 14336, worth 19.2% of the model. 7 min.
+
+6. After Shor #6 — "What hard actually promises"
+   SVP, CVP, approximation factors: NP-hard near γ = 1, unlikely past √n,
+   the standards in the polynomial gap; BDD's λ₁/2 uniqueness radius; and
+   what the worst-case-to-average-case reduction does and does not buy. 8 min.
+
+Every live 2026-10-16 issue's "coming soon" issue-nav is patched to link
+to its new successor, and data/newsletters.json gains the six new entries
+(series now at #7/#7/#6/#6/#6/#6).
+
+UPLOAD CHECKLIST
+----------------
+Download newsletter-batch-2026-10-30.zip from the Cowork session, then run:
+
+  unzip -o ~/Downloads/newsletter-batch-2026-10-30.zip -d "$HOME/Biddu's Cowork/avishek-website"
+
+Review, then:
+
+  git add -A && git commit -m "Newsletter batch 2026-10-30" && git push
+
+(or upload the changed files via the GitHub web UI). GitHub Pages redeploys
+automatically. Text copies of everything except the PNG figures are in
+Google Drive → Newsletter Batches → 2026-10-30 (replaced with this redo's
+files); the figures travel only in the zip.
+
+ZIP CONTENTS (mirrors the repo root, 24 content files)
+------------------------------------------------------
+data/newsletters.json                    (full updated file, 6 new entries)
+6 new issue pages                        (one per series, dated 2026-10-30)
+6 patched previous issues                (issue-nav "coming soon" -> real link)
+11 figure PNGs                           (5 matplotlib figures + 5 stacked
+                                          mobile variants + cap.png resized
+                                          to 1400px; all quantised to 256
+                                          colours)
+
+QUALITY GATE
+------------
+All embedded code snippets executed with printed outputs matching the
+in-page comments; figures visually inspected at both widths; HTML tag
+balance, link resolution, placeholder scan, voice/AI-tells scan and JSON
+validation passed; all six new pages rendered in headless Chromium against
+the live CSS at 1280px and 390px, stacked figure variants confirmed
+serving at phone width.

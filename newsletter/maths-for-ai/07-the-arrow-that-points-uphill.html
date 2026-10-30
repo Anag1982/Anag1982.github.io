@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The arrow that points uphill — The Maths Underneath, Issue 7</title>
+  <meta name="description" content="The derivative built from scratch as a ratio that stops shrinking, the five rules that cover most of machine learning, and the gradient, the vector of partial derivatives that points straight uphill on the error surface. Training walks against it, and a few lines of NumPy compute it for any function you can write down." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-ai/07-the-arrow-that-points-uphill.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The arrow that points uphill" />
+  <meta property="og:description" content="Shrink an interval and watch a ratio settle on one number: that is the derivative, and it is the whole engine of learning. The secant that becomes a tangent, the rules you actually need, and the gradient, the arrow every training step walks against." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-ai/07-the-arrow-that-points-uphill.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-ai/img/fig-07-the-slope-and-the-arrow.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The arrow that points uphill",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "The Maths Underneath" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-ai/07-the-arrow-that-points-uphill.html",
+    "description": "The derivative as a ratio that stops shrinking, the handful of differentiation rules machine learning actually uses, and the gradient, the vector of partial derivatives that every training step walks against."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-ai/">The Maths Underneath</a><span class="sep">·</span>Issue 7
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">The Maths Underneath · Issue 7</p>
+      <h1 class="article-title">The arrow that points uphill</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>6 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">The last two issues were static: fixed matrices acting on fixed data. Learning is not static. A model starts with bad numbers, measures how wrong it is, and adjusts, and to adjust well it must know which way to move every number and by how much. That is a question about rates of change, and this issue builds the tool that answers it from nothing. A car has driven d(t) = t&sup2; metres after t seconds. How fast is it going at exactly t = 3? Not on average over a stretch of road. At that instant. The answer to that small question, taken seriously, is the engine of all of modern machine learning.</p>
+
+      <h2>A ratio that stops shrinking</h2>
+
+      <p>Average speed is easy: distance covered over time taken. Between t = 3 and t = 4 the car covers 16 &minus; 9 = 7 metres, so it averaged 7 m/s. But the car was accelerating through that whole second, so 7 is too coarse. Shrink the window and watch. Over half a second the average is 6.5 m/s. Over a tenth, 6.1. Over a thousandth, 6.001. The numbers are closing in on 6 and will not be moved off it. That limit, the value the shrinking ratio settles on, is the derivative of d at t = 3: the speed at the instant, written d&prime;(3) = 6. Geometrically, each shrinking window draws a line through two points of the curve, a secant, and as the points merge the secant turns into the tangent, the line that just grazes the curve. The derivative is the slope of that tangent.</p>
+
+      <p>A computer runs the same shrinking trick with one refinement: step a little to each side of the point and take the slope between those two neighbours, which cancels most of the error of stepping only forward.</p>
+
+      <pre><code>def f(t):
+    return t ** 2
+
+def derivative(f, x, h=1e-5):
+    return (f(x + h) - f(x - h)) / (2 * h)
+
+print(derivative(f, 3.0))   # 6.000000000039306 -> the 6 the ratios closed in on</code></pre>
+
+      <p>One caution from the engine room. The recipe says h should be small, so it is tempting to make it tiny, 1e-15, and expect a better answer. The opposite happens. A computer stores numbers to about 16 digits, and when f(x + h) and f(x &minus; h) agree in nearly all of them, the subtraction wipes out the information before the division can use it. Around 1e-5 is the safe zone, small enough to be accurate, large enough to survive the subtraction. Rounding error is a character in this series, and this is one of its standard entrances.</p>
+
+      <h2>Five rules cover almost everything</h2>
+
+      <p>Running the shrinking ratio by hand every time would be miserable, and nobody does. A handful of rules, each provable from the definition, turn differentiation into bookkeeping. Powers: the derivative of x&#8319; is nx&#8319;&#8315;&sup1;. Sums: differentiate term by term. Products and quotients each have a one-line rule. And two special functions behave memorably: e&#739; is its own derivative, which is why e is everywhere, and ln x has derivative 1/x. That short list covers nearly every function machine learning builds its models from.</p>
+
+      <p>The rules pay off the moment you ask where a function turns. Take f(x) = x&sup3; &minus; 3x. Its derivative is 3x&sup2; &minus; 3, which is zero at x = 1 and x = &minus;1. A zero derivative means a flat tangent, and a flat tangent is where the function stops rising and starts falling or the reverse: a peak or a valley. For this f, the point x = 1 is the bottom of a dip and x = &minus;1 the top of a bump. Thus the hunt for the best setting of anything, the minimum of a cost, the maximum of a likelihood, is a hunt for the places where a derivative is zero. Training a model is this hunt, run in millions of dimensions at once.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-ai/img/fig-07-the-slope-and-the-arrow-stacked.png" />
+          <img src="/newsletter/maths-for-ai/img/fig-07-the-slope-and-the-arrow.png" alt="Left, the curve d equals t squared with three secant lines through t equals 3 steepening from slope 7 to 6.5 to 6.1 and converging on the dashed tangent of slope 6; right, circular contours of the bowl x squared plus y squared with gradient arrows crossing every contour at a right angle and one training step arrow pointing against the gradient toward the minimum" loading="lazy" />
+        </picture>
+        <figcaption>Left, the shrinking ratio drawn: secants through t = 3 with slopes 7, 6.5 and 6.1 settle onto the tangent of slope exactly 6. Right, the gradient on the bowl f(x, y) = x&sup2; + y&sup2;: at every point the arrow crosses the contour at a right angle and points straight uphill, and a training step moves against it.</figcaption>
+      </figure>
+
+      <h2>More than one knob</h2>
+
+      <p>A real model does not have one adjustable number. It has millions, and its error depends on all of them at once. The derivative extends to this case with one honest trick: wiggle one variable while holding the others still. Take f(x, y) = x&sup2; + y&sup2;, a round bowl. Freeze y and differentiate in x alone to get 2x; freeze x and differentiate in y to get 2y. These are partial derivatives, and at the point (2, 1) they are 4 and 2: the bowl rises at 4 per unit step in the x direction and 2 per unit step in y. Stack the partials into a vector and you have the gradient, &nabla;f = (2x, 2y). The same symmetric-difference recipe computes it numerically, one coordinate at a time.</p>
+
+      <pre><code>import numpy as np
+
+def g(v):
+    x, y = v
+    return x ** 2 + y ** 2
+
+def gradient(f, v, h=1e-5):
+    v = np.asarray(v, dtype=float)
+    out = np.zeros_like(v)
+    for i in range(len(v)):
+        e = np.zeros_like(v)
+        e[i] = h
+        out[i] = (f(v + e) - f(v - e)) / (2 * h)
+    return out
+
+print(gradient(g, [1.0, 2.0]))   # [2. 4.] -> exactly (2x, 2y) at (1, 2)</code></pre>
+
+      <p>The gradient is more than a list of slopes. It has a direction, and the direction is the fact the whole field is built on: at any point, the gradient points the way the function increases fastest, straight uphill, and it crosses the contour lines at a right angle. Stand on a hillside and the gradient is the arrow pointing up the steepest path under your feet. Reverse it and you are facing the steepest way down. A model in training computes the gradient of its error with respect to every parameter and steps against it, error falling fastest for the size of step taken, and then does it again, millions of times. The reversed gradient is the single most-travelled direction in machine learning, and you have just computed it with ten lines of Python.</p>
+
+      <p>Note that the numerical recipe above, honest as it is, carries a cost the field had to escape: one function evaluation per coordinate per side means a million-parameter model would need two million evaluations for a single gradient. Next issue is about the escape. The chain rule tracks how a change deep inside a stack of functions reaches the output, and applied systematically through the layers of a network it becomes backpropagation, the algorithm that computes every one of those millions of partial derivatives in roughly the time of two forward passes. It is the reason training is possible at all.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">Follow along with the code</p>
+      <p>
+        Everything in this issue runs in the free companion notebook for this series, which opens in
+        your browser with nothing to install. The full sequence, with all the figures and worked
+        examples, is collected in the book <em>Maths for AI</em>. The newsletter stands on its own,
+        and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://colab.research.google.com/github/biddu/maths-for-ai-notebooks/blob/main/05_derivatives_gradients.ipynb" target="_blank" rel="noopener">Open the notebook</a>
+        <a class="btn btn-outline" href="https://www.amazon.co.uk/dp/B0H7QM2BB6" target="_blank" rel="noopener">Maths for AI on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-ai/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-ai/06-the-directions-a-matrix-refuses-to-turn.html">&larr; The directions a matrix refuses to turn</a>
+      <span>Issue 8 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

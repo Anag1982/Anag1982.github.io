@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Where 14336 comes from — Attention, Derived, Issue 6</title>
+  <meta name="description" content="Two thirds of a dense transformer's non-embedding parameters sit in the feed-forward block every explainer disposes of in one sentence. Read it as a key-value memory with 14336 learned entries, see that gating is a degree-2 interaction rather than an activation function, and derive the width 14336 in four lines of integer arithmetic worth 19.2 percent of the model." />
+  <link rel="canonical" href="https://avisheknag.one/newsletter/maths-for-llms/06-where-14336-comes-from.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Where 14336 comes from" />
+  <meta property="og:description" content="The feed-forward block is a key-value memory, gating lifts the layer to degree 2, and the config line intermediate_size: 14336 decodes as four decisions: times 4, times two thirds, times 1.3, rounded to a multiple of 1024." />
+  <meta property="og:url" content="https://avisheknag.one/newsletter/maths-for-llms/06-where-14336-comes-from.html" />
+  <meta property="og:image" content="https://avisheknag.one/newsletter/maths-for-llms/img/fig-06-the-gate-and-the-saddle.png" />
+  <meta property="article:published_time" content="2026-10-30" />
+  <meta property="article:author" content="Avishek Nag" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/newsletter/newsletter.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Where 14336 comes from",
+    "datePublished": "2026-10-30",
+    "author": {
+      "@type": "Person",
+      "name": "Avishek Nag",
+      "affiliation": "University College Dublin",
+      "url": "https://avisheknag.one/"
+    },
+    "publisher": { "@type": "Person", "name": "Avishek Nag" },
+    "isPartOf": { "@type": "CreativeWorkSeries", "name": "Attention, Derived" },
+    "mainEntityOfPage": "https://avisheknag.one/newsletter/maths-for-llms/06-where-14336-comes-from.html",
+    "description": "The feed-forward block read as a key-value memory, gating exposed as a degree-2 interaction rather than an activation function, and the width 14336 derived in four lines of integer arithmetic worth 19.2 percent of the model."
+  }
+  </script>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <span class="nav-brand"><a href="/">Avishek Nag</a></span>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#publications">Publications</a></li>
+        <li><a href="/#books">Books</a></li>
+        <li><a href="/newsletter/" class="current">Newsletter</a></li>
+        <li><a href="/#teaching">Teaching</a></li>
+        <li><a href="/research-group.html">Research Group</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-narrow">
+    <p class="crumb">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/newsletter/">Newsletter</a><span class="sep">·</span>
+      <a href="/newsletter/maths-for-llms/">Attention, Derived</a><span class="sep">·</span>Issue 6
+    </p>
+
+    <header class="article-head">
+      <p class="article-kicker">Attention, Derived · Issue 6</p>
+      <h1 class="article-title">Where 14336 comes from</h1>
+      <p class="article-meta">
+        <time datetime="2026-10-30">30 October 2026</time><span class="sep">·</span>7 min read<span class="sep">·</span>Avishek Nag
+      </p>
+    </header>
+
+    <article class="article-body">
+
+      <p class="lede">Two thirds of a dense transformer&rsquo;s non-embedding parameters are not in attention. They sit in a two-layer network that every explainer disposes of in one sentence on the way back to the interesting part. Open any 2026 model config and the line is there: "hidden_size": 4096, "intermediate_size": 14336. The ratio is 3.5. It is not the 4 of the original paper, and it is not the two thirds of 4 that the gated convention is supposed to give. This issue answers three questions about that line. What does the block compute, stated as a theorem about the layer rather than a metaphor for it? What did gating actually change, given that the field files it under activation functions and it is not one? And where does 14336 come from? The third answer is four lines of integer arithmetic, and it is worth 19.2 percent of the model.</p>
+
+      <h2>A memory with 14336 entries</h2>
+
+      <p>Write the block out. With x the residual stream at one token, the layer is FFN(x) = &phi;(xW<sub>up</sub>)W<sub>down</sub>, two matrix multiplies with an elementwise nonlinearity &phi; between them. That is where most descriptions stop. Expand it once and the black box opens. The up-projection has 14336 columns; call them keys, k&#11388;. The down-projection has 14336 rows; call them values, v&#11388;. Then the layer is a sum over 14336 units, and every unit does the same two things: it measures the stream against one learned direction, &#x27e8;x, k&#11388;&#x27e9;, and it writes one learned direction back, v&#11388;, in proportion to the thresholded measurement. The block reads the stream against a fixed dictionary and writes back a weighted sum of what it found. That is a key-value memory, and the restatement is an identity, not an analogy: the two forms are the same function, term for term.</p>
+
+      <pre><code>import numpy as np
+from math import erf
+rng = np.random.default_rng(0)
+
+d, dff = 6, 8                       # toy sizes; the real ones are 4096 and 14336
+x = rng.normal(size=(1, d))
+W_up = rng.normal(size=(d, dff))
+W_down = rng.normal(size=(dff, d))
+gelu = np.vectorize(lambda z: z * 0.5 * (1 + erf(z / np.sqrt(2))))
+
+block = gelu(x @ W_up) @ W_down                  # the layer as two matmuls
+units = sum(gelu(x @ W_up[:, j:j+1]).item() * W_down[j]
+            for j in range(dff))                 # the layer as dff read-write units
+print(np.allclose(block, units))                 # True -> same function, term for term</code></pre>
+
+      <p>The contrast with attention is the useful part. Attention&rsquo;s coefficients are a normalised distribution over positions: one full unit of mass, placed somewhere, every time. The FFN&rsquo;s coefficients are unnormalised scores against a dictionary that never changes with the sequence, so the block can return nothing at all when every score falls below threshold. One honest caution before the metaphor runs away: there are 14336 keys in 4096 dimensions, so they cannot all be orthogonal, and a stream state that matches one key generally matches several. One unit is not one concept.</p>
+
+      <h2>Gating is not an activation function</h2>
+
+      <p>The nonlinearity between the matmuls, GeLU, is itself an expectation in disguise: GeLU(z) = z&Phi;(z), the mean of a gate that keeps z with probability set by z&rsquo;s own magnitude. It is also, less famously, not monotone. Its derivative has a root at z = &minus;0.7518, and to the left of that point making a pre-activation larger makes the unit&rsquo;s output smaller, with a minimum value of &minus;0.1700. The dip is small, and it is not an artefact; it is the price of a gate whose probability is a smooth function of the input, and issue 7 will need it, because it is where a backward pass through the block can flip sign.</p>
+
+      <figure>
+        <picture>
+          <source media="(max-width: 640px)" srcset="/newsletter/maths-for-llms/img/fig-06-the-gate-and-the-saddle-stacked.png" />
+          <img src="/newsletter/maths-for-llms/img/fig-06-the-gate-and-the-saddle.png" alt="Left, the GeLU curve with its derivative, the shaded interval where the derivative is negative, and the minimum marked at minus 0.7518, minus 0.1700; right, two contour plots of second-order interaction surfaces, an ungated unit's non-negative valley with one nodal line against a gated unit's saddle with two nodal lines and both signs" loading="lazy" />
+        </picture>
+        <figcaption>Left, GeLU is not monotone: on the shaded interval the derivative is negative, and the curve bottoms out at (&minus;0.7518, &minus;0.1700). Right, what gating buys: an ungated unit can only square one direction, a non-negative valley with one nodal line, while a gated unit multiplies two different directions and gets a saddle, two nodal lines and both signs.</figcaption>
+      </figure>
+
+      <p>Modern models do not use plain GeLU. The config says "hidden_act": "silu" because the block is gated: two up-projections instead of one, the layer computing [&phi;(xW<sub>gate</sub>) &#8857; (xW<sub>up</sub>)]W<sub>down</sub>, an elementwise product of a gate branch and a linear branch. The field lists SwiGLU in the activation-function column of benchmark tables, and that is a category error rendered as a table header. Expand one gated unit to lowest order and its leading term is &frac12;&#x27e8;x, w&#11388;&#x27e9;&#x27e8;x, v&#11388;&#x27e9;: a product of two different learned directions, quadratic in x. No pointwise function of a single projection can produce a term like that. An ungated unit&rsquo;s second-order term is a square, one direction times itself, non-negative, a valley; a gated unit&rsquo;s is an arbitrary rank-1 interaction, a saddle with both signs available. Synthesising one gated unit&rsquo;s quadratic from ungated units takes exactly two of them, and the factor of two is provably unimprovable. Gating changes what the layer can compute, not how sharply it thresholds. The honest footnote: at matched parameters the measured SwiGLU win is single-digit percentage points of perplexity, and the paper the comparison comes from attributes the improvement, in an unusually honest sentence, to divine benevolence.</p>
+
+      <h2>Four decisions in one number</h2>
+
+      <p>Now the number. Gating costs a third matrix, so comparing gated against ungated fairly means holding parameters fixed: an ungated block holds 2 &middot; d &middot; d<sub>ff</sub> parameters, a gated one 3 &middot; d &middot; d&prime;, and equating them gives d&prime; = &#8532;d<sub>ff</sub>. That is the entire two-thirds convention, a comparison protocol from 2020, never a claim about the best width. Watch it get applied, then overridden, in the reference code of the most-cited open model family. Start at the classical width 4d = 16384. Take two thirds: 10922. Multiply by a capacity factor of 1.3, because somebody wanted the parameters back: 14198. Round up to a multiple of 1024, because 14336/8 = 1792 divides evenly across eight-way tensor parallelism and 10922/8 does not: 14336.</p>
+
+      <pre><code>from math import ceil
+
+def ffn_width(d, multiplier=1.3, multiple_of=1024):
+    h = 4 * d
+    h = int(2 * h / 3)
+    h = int(multiplier * h)
+    return multiple_of * ceil(h / multiple_of)
+
+print(ffn_width(4096))   # 14336 -> the config line decoded
+print(ffn_width(8192))   # 28672 -> the published width of the 70B sibling</code></pre>
+
+      <p>The second line is the check that this is the recipe rather than a reverse-engineering of one number: the same four steps at d = 8192 give exactly the published width of the family&rsquo;s 70-billion-parameter member. And the 1.3 is not small change. At width 14336 the FFN holds 176 million parameters per layer, 5.64 billion over 32 layers, which is 80.8 percent of the model&rsquo;s non-embedding total; at the exact two-thirds width the same model would be 19.2 percent smaller. The convention everyone quotes is, in the flagship model everyone cites, not used.</p>
+
+      <p>Note what the block&rsquo;s share of the parameters buys in intuition. The attention mechanism occupies most of the picture in every architecture diagram ever drawn and about a fifth of the parameters; the block the diagrams shrink to a rectangle holds four fifths. That share is why mixture-of-experts sparsifies the FFN and leaves attention dense, and why quantisation and pruning effort goes to the FFN first. One more cost hides in the gating: at equal parameter count the gated block materialises two intermediate tensors where the ungated kept one, a third more peak activation memory, which is why a gated model sometimes will not fit a micro-batch that an ungated model of the same size did. No paper states this. The arithmetic does.</p>
+
+      <p>The forward pass of the transformer is now complete on this series&rsquo; terms: embeddings, attention, normalisation, position, and the feed-forward memory. What has not been touched is the direction the whole machine actually trains in. Next issue runs the derivatives backwards: the chain rule organised into backpropagation, the Jacobians of each block in the order the gradient meets them, the two matrix products every layer must save its inputs for, and the place this issue already flagged, the interval where GeLU&rsquo;s negative slope can flip the sign of a gradient on its way down.</p>
+
+      <p class="article-sign">Avishek Nag<br />Dublin</p>
+
+    </article>
+
+    <div class="cta">
+      <p class="cta-title">The book this series comes from</p>
+      <p>
+        Sixteen chapters, from the toolkit to scaling laws, quantisation and interpretability, each
+        one question answered by a full derivation with the arithmetic checked by continuous
+        integration, are collected in the book <em>Maths for LLMs</em>. The newsletter stands on
+        its own, and you never need the book to follow it.
+      </p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href="https://www.amazon.com/dp/B0HFF1RKFW" target="_blank" rel="noopener">Maths for LLMs on Amazon</a>
+        <a class="btn btn-outline" href="/newsletter/maths-for-llms/">All issues</a>
+      </div>
+    </div>
+
+    <nav class="issue-nav">
+      <a href="/newsletter/maths-for-llms/05-everything-lands-on-one-sphere.html">&larr; Everything lands on one sphere</a>
+      <span>Issue 7 coming soon &rarr;</span>
+    </nav>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-name">Avishek Nag</p>
+          <p class="footer-email">School of Computer Science, University College Dublin, Science Centre Belfield, Dublin 4</p>
+        </div>
+        <p class="footer-copy">© 2026 Avishek Nag · University College Dublin</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

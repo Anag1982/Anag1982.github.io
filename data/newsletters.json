@@ -59,6 +59,14 @@
           "date": "2026-10-16",
           "readingTime": "7 min",
           "summary": "Most vectors come out of a matrix rotated; a special few come out pointing exactly the way they went in, only stretched. Eigenvectors, the SVD's rotate-scale-rotate recipe, and PCA, the tool that lets data choose its own axes, which is how the web was first ranked and how a photograph shrinks to a tenth of its size."
+        },
+        {
+          "number": 7,
+          "title": "The arrow that points uphill",
+          "slug": "07-the-arrow-that-points-uphill",
+          "date": "2026-10-30",
+          "readingTime": "6 min",
+          "summary": "How fast, at exactly this instant? Shrink the window and the ratio settles on one number: the derivative, the slope of the tangent. The five rules that cover nearly every model, the zero-derivative points where functions turn, and the gradient, the vector of partial slopes that points straight uphill on the error surface and whose reverse is the single most-travelled direction in machine learning."
         }
       ]
     },
@@ -121,6 +129,14 @@
           "date": "2026-10-16",
           "readingTime": "4 min",
           "summary": "A healthy system accepted nine hundred documents, acknowledged every one, and quietly unmade seventy-four, because its queue was a list in one process's memory. The durable log that fixes it, and the question that follows: once redelivery is a fact of life, what does a duplicate cost, message by message?"
+        },
+        {
+          "number": 7,
+          "title": "Why vector databases choose availability",
+          "slug": "07-why-vector-databases-choose-availability",
+          "date": "2026-10-30",
+          "readingTime": "4 min",
+          "summary": "The embedding index at the heart of every retrieval system has quietly made one of the oldest decisions in distributed systems on your behalf, and it decided correctly. Retrieval was never exact, a twenty-minute-stale answer set is indistinguishable from a fresh one, and the whole index can be rebuilt from sources plus a model version. Stale is survivable; unavailable is not: give it a freshness SLO, not a consistency pretence."
         }
       ]
     },
@@ -175,6 +191,14 @@
           "date": "2026-10-16",
           "readingTime": "6 min",
           "summary": "How to compare two states: the inner product, one number with the first vector conjugated. Why the self-overlap is the normalisation rule from issue 3, why orthogonal states are perfectly distinguishable, and why the squared overlap is the chance a measurement finds one state as the other."
+        },
+        {
+          "number": 6,
+          "title": "The three families that run everything",
+          "slug": "06-the-three-families-that-run-everything",
+          "date": "2026-10-30",
+          "readingTime": "6 min",
+          "summary": "Quantum computing runs on three families of matrices. Hermitian matrices, equal to their own dagger, whose always-real eigenvalues are the numbers a measurement can report; unitary matrices, the length-preservers every legal gate must belong to, reversibility included; and projectors, with P² = P, which cast a state's shadow onto an outcome and whose squared shadow is its probability. Each family has a one-line NumPy test, and the Hadamard gate belongs to all of them at once."
         }
       ]
     },
@@ -229,6 +253,14 @@
           "date": "2026-10-16",
           "readingTime": "7 min",
           "summary": "A camera says 40 metres, a radar says 42, and the car must act on one number. The rule that fuses them is a weighted average computable in one line, the fused answer is sharper than either sensor alone, and the filter it comes from was doubted in print before it navigated Apollo to the Moon."
+        },
+        {
+          "number": 6,
+          "title": "The multiplication that saves lives",
+          "slug": "06-the-multiplication-that-saves-lives",
+          "date": "2026-10-30",
+          "readingTime": "6 min",
+          "summary": "A drug with a six-hour half-life is taken four times a day, and that is arithmetic rather than habit. One exponential curve sets the dosing sawtooth, hides a tumour for thirty doublings, and then hands probability the decisive move: resistance to each of two independent drugs at one in a million makes resistance to both one in a million million, which is why the deadliest diseases are treated with combinations, and why a 1960s trial called reckless became the cure for childhood leukemia."
         }
       ]
     },
@@ -283,6 +315,14 @@
           "date": "2026-10-16",
           "readingTime": "8 min",
           "summary": "Every change to the transformer's normalisation since 2017 is forced by a page of arithmetic: the dropped mean was worth one part in ten thousand, the Jacobian is a projector that can only delete directions, pre-norm keeps one exact identity term, and QK-norm caps the logit at 11.31. Then the residual stream, read honestly: a shared bus oversubscribed 64 to 1."
+        },
+        {
+          "number": 6,
+          "title": "Where 14336 comes from",
+          "slug": "06-where-14336-comes-from",
+          "date": "2026-10-30",
+          "readingTime": "7 min",
+          "summary": "Two thirds of a dense transformer's non-embedding parameters sit in the block every explainer skips. Read as a sum over units, the feed-forward network is a key-value memory with 14336 fixed entries; gating, filed by the field under activation functions, is actually a degree-2 interaction that changes what the layer can compute; and the width 14336 itself decodes as four decisions, times 4, times two thirds, times 1.3, rounded to a multiple of 1024, the last factor worth 19.2 percent of the model."
         }
       ]
     },
@@ -337,6 +377,14 @@
           "date": "2026-10-16",
           "readingTime": "8 min",
           "summary": "Every key and ciphertext in the standards is secretly a point in a lattice, an infinite grid with good bases and terrible ones. The determinant no basis can hide, Minkowski's guarantee against the Gaussian heuristic's prediction, and the q-ary grids where finding a short vector is exactly the problem the signatures bet on."
+        },
+        {
+          "number": 6,
+          "title": "What hard actually promises",
+          "slug": "06-what-hard-actually-promises",
+          "date": "2026-10-30",
+          "readingTime": "8 min",
+          "summary": "The shortest vector problem, the closest vector problem, and the approximation factor that changes everything: NP-hardness is proven only near exact answers, provably unlikely past √n, and the NIST standards live in the polynomial gap between, unbroken for forty years but unproven. Plus the reduction that makes random keys trustworthy, what it buys, what it does not, and the half-of-lambda-one uniqueness radius that decryption will later spend."
         }
       ]
     }
